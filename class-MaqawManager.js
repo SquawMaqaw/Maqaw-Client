@@ -21,7 +21,7 @@ function MaqawManager(display) {
 
     this.peer.on('clients', function(clients) {
         console.log(clients.msg);
-        that.visitors = clients.msg;
+        that.visitors = parseVisitors(clients.msg);
         that.activeSession && that.activeSession.setVisitors && that.activeSession.setVisitors();
     });
 
@@ -57,6 +57,14 @@ function MaqawManager(display) {
         that.repSession = that.activeSession;
         that.activeSession = that.clientSession;
         that.updateDisplay();
+    }
+
+    function parseVisitors(visitors){
+        var list = [];
+        for(var i = 0; i < visitors.length; i ++){
+            list.push(new Visitor('Visitor'+i, visitors[i]));
+        }
+        return list;
     }
 }
 

@@ -3,10 +3,10 @@
 // name - visitor name
 // key - webrtc chat key
 // chatDisplayContainer - the div that will show the visitors chat session
-function Visitor(name, key) {
+function Visitor(name, id) {
     this.name = name;
-    this.key = key;
+    this.key = id;
 
     // each visitor has a unique chat session
-    this.chatSession = new ChatSession(key, name, 'dst');
+    this.chatSession = new ChatSession(name, 'dst');
 }
