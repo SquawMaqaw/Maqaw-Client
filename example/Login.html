@@ -1,0 +1,93 @@
+<html>
+  <head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> 
+    <script type="text/javascript" src="peer.js"></script>
+    <script>
+      var connected = false;
+      var conn; 
+      var peer = new Peer({key: 'cat', host: "ec2-54-212-11-221.us-west-2.compute.amazonaws.com", port: 3000});
+      peer.on('open', function(id) {
+        $('#pid').text(id);
+        $('#formId').val(id);
+      });
+      peer.on('connection', connect);
+      function connect(c) {
+        connected = true; 
+        $("#p2Mouse").show();
+        conn = c;
+        $('#messages').empty().append('Now connected with ' + conn.peer);
+        conn.on('data', function(data) {
+          $("#p2Mouse").css({"left": data.x, "top": data.y}); 
+        });
+        conn.on('close', function(err){ connected = false; alert(conn.peer + 'has left the chat.') });
+      }
+
+      peer.on('representatives', function(reps) {
+        console.log(reps.msg);
+      });
+
+      peer.on('clients', function(clients) {
+        console.log(clients.msg);
+      });
+
+      $(document).ready(function() {
+        $("#submit").click(function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+          var username = $("#username").val();
+          var password = $("#password").val();
+          var id = $("#formId").val();
+
+          $.ajax({
+            type: 'POST',
+            url: "http://ec2-54-212-11-221.us-west-2.compute.amazonaws.com:3000/login", 
+            data: { username: username, password: password, user : { id: id, key: 'cat'} },
+            success: function() {
+              console.log("success");
+            }
+          });
+        });
+        $("#connect").click(function() {
+          var c = peer.connect($('#rid').val());
+          c.on('open', function(){
+            connect(c);
+          });
+          c.on('error', function(err){alert(err) });
+        });
+        $(window).mousemove(function(event) {
+          if (connected === true) {
+            var msg = {'x': event.pageX, 'y': event.pageY};  
+            conn.send(msg);
+          }
+        });
+      });
+    </script>
+    </head>
+  <body>
+    Your PeerJS id is : <span id="pid"></span><br><br>
+    Connect to peer: <input type="text" id="rid" placeholder="Someone else's id">
+                     <input type="button" value="Connect" id="connect"><br><br>
+                       
+                     <div id="messages"></div>
+      <div id="p2Mouse" style="position: absolute; top:0px; left: 0px; background-color: red; width: 10px; height: 10px; display: none;">
+      
+      </div>
+
+      <!-- TODO: Should use AJAX here so that page doesn't redirect -->
+
+      <form>
+        <div>
+          <label>Username:</label>
+          <input id="username" type="text" name="username"/><br/>
+        </div>
+        <div>
+          <label>Password:</label>
+          <input id="password" type="password" name="password"/>
+        </div>
+        <input id="formId" type="hidden" name="user[id]" value="">
+        <input type="hidden" name="user[key]" value="cat">
+      </form>
+      <a href="" id="submit"> Submit </a>
+    </div>
+  </body>
+</html>
