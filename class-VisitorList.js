@@ -19,32 +19,35 @@ function VisitorList(listDisplayContainer, chatManager) {
 }
 
 // add a visitor to the existing list
-VisitorList.prototype.addVisitor = function (visitor) {
-    this.visitors.push(visitor);
+VisitorList.prototype.setVisitors = function (visitors) {
+    this.visitors = visitors;
+     this.tBody.innerHTML = '';
 
-    // add an entry to the table for this visitor
-    var row = document.createElement("tr");
-    row.className = 'visitor-list-entry';
-    // each row contains a single cell containing the visitor name
-    var cell = document.createElement("td");
-    var cellText = document.createTextNode(visitor.name);
-    cell.appendChild(cellText);
-    row.appendChild(cell);
+    for (var i = 0; i < visitors.length; i++) {
+        // add an entry to the table for this visitor
+        var row = document.createElement("tr");
+        row.className = 'visitor-list-entry';
+        // each row contains a single cell containing the visitor name
+        var cell = document.createElement("td");
+        var cellText = document.createTextNode(visitors[i]);
+        cell.appendChild(cellText);
+        row.appendChild(cell);
 
-    // When the visitor's row is clicked they should be selected as active
-    var that = this;
-    row.addEventListener('click', function () {
-            // unselect old row
-            if (that.selectedRow) that.selectedRow.className = 'visitor-list-entry';
-            // style row to show click
-            row.className = 'selected-visitor';
-            that.selectedRow = row;
+        // When the visitor's row is clicked they should be selected as active
+        var that = this;
+        row.addEventListener('click', function () {
+                // unselect old row
+                if (that.selectedRow) that.selectedRow.className = 'visitor-list-entry';
+                // style row to show click
+                row.className = 'selected-visitor';
+                that.selectedRow = row;
 
-            // tell chat manager to display this visitor if they are new,
-            that.chatManager.showVisitorChat(visitor);
-        }
-        , false);
+                // tell chat manager to display this visitor if they are new,
+                that.chatManager.showVisitorChat(visitor);
+            }
+            , false);
 
 // add the row to the end of the table body
-    this.tBody.appendChild(row);
+        this.tBody.appendChild(row);
+    }
 }
