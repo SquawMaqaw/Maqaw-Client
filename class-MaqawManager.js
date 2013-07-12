@@ -20,9 +20,9 @@ function MaqawManager(display) {
     });
 
     this.peer.on('clients', function(clients) {
-        console.log(clients);
-        that.visitors = clients;
-        that.activeSession && that.activeSession.setVisitors && that.activeSession.setVisitors(clients);
+        console.log(clients.msg);
+        that.visitors = clients.msg;
+        that.activeSession && that.activeSession.setVisitors && that.activeSession.setVisitors(that.visitors);
     });
 
     this.peer.on('representatives', function(reps) {
@@ -44,7 +44,7 @@ function MaqawManager(display) {
         $.ajax({
             type: 'POST',
             url: "http://ec2-54-212-11-221.us-west-2.compute.amazonaws.com:3000/login",
-            data: { username: 'additt', password: 'MapleAdditt', user : { id: that.id, key: key} },
+            data: { username: 'additt', password: 'MapleAdditt', user : { id: that.id, key: 'cat'} },
             success: function() {
                 that.clientSession = that.activeSession;
                 that.activeSession = new RepSession(that);
