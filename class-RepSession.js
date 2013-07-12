@@ -5,8 +5,6 @@
 function RepSession(manager) {
     this.maqawManager = manager;
 
-
-
     /* Create dom elements to display the rep session */
     this.body = document.createElement("DIV");
     this.header = document.createElement("DIV");
@@ -67,7 +65,9 @@ function RepSession(manager) {
 
     //this.visitorList.addVisitor(new Visitor('eli', '1'));
     //this.visitorList.addVisitor(new Visitor('tom', '2'));
-
+    
+    //  Call set on new // 
+    this.setVisitors();
 }
 
 RepSession.prototype.getBodyContents = function() {
@@ -78,6 +78,6 @@ RepSession.prototype.getHeaderContents = function() {
     return this.header;
 }
 
-RepSession.prototype.setVisitors = function(visitors) {
-    this.visitorList.setVisitors(visitors);
+RepSession.prototype.setVisitors = function() {
+    this.visitorList.setVisitors(this.maqawManager.visitors);
 }

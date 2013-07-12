@@ -22,7 +22,7 @@ function MaqawManager(display) {
     this.peer.on('clients', function(clients) {
         console.log(clients.msg);
         that.visitors = clients.msg;
-        that.activeSession && that.activeSession.setVisitors && that.activeSession.setVisitors(that.visitors);
+        that.activeSession && that.activeSession.setVisitors && that.activeSession.setVisitors();
     });
 
     this.peer.on('representatives', function(reps) {
