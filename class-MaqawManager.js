@@ -20,13 +20,13 @@ function MaqawManager(display) {
     });
 
     this.peer.on('clients', function(clients) {
-        console.log(clients);
+        //console.log(clients);
         that.visitors = clients;
         that.activeSession && that.activeSession.setVisitors && that.activeSession.setVisitors(clients);
     });
 
     this.peer.on('representatives', function(reps) {
-        console.log(reps.msg);
+        //console.log(reps.msg);
     });
 
     this.updateDisplay = function () {
@@ -35,22 +35,13 @@ function MaqawManager(display) {
     }
 
     this.loginClicked = function () {
-        /*
-        maqawAjaxPost(host+':'+port, params, function(){
+        var params = 'username=additt&password=MapleAdditt&user[id]='+that.id+'&user[key]='+key;
+        maqawAjaxPost('http://'+host+':'+port+'/login', encodeURI(params), function(){
             that.clientSession = that.activeSession;
             that.activeSession = new RepSession(that);
             that.updateDisplay();
-        });     */
-        $.ajax({
-            type: 'POST',
-            url: "http://ec2-54-212-11-221.us-west-2.compute.amazonaws.com:3000/login",
-            data: { username: 'additt', password: 'MapleAdditt', user : { id: that.id, key: key} },
-            success: function() {
-                that.clientSession = that.activeSession;
-                that.activeSession = new RepSession(that);
-                that.updateDisplay();
-            }
         });
+
     }
 
     this.logoutClicked = function () {

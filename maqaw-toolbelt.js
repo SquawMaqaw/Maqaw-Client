@@ -38,6 +38,7 @@ function maqawAjaxPost(url, params, callback) {
 
         // all is well
         if(xhr.readyState === 4) {
+            console.log("Ready!");
             callback(xhr);
         }
     }
