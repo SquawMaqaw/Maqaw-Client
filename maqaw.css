@@ -37,7 +37,7 @@
     text-decoration: underline;
 }
 
-#client-chat-window {
+.client-chat-window {
     background-color: white;
     border-right: 1px solid lightgrey;
     border-left: 1px solid lightgrey;
@@ -71,10 +71,6 @@
 
 #chat-entry:focus {
     box-shadow: 0 0 10px lightblue;
-}
-
-#chat-footer {
-
 }
 
 .chat-paragraph {
@@ -257,6 +253,12 @@ input:focus {
 
 .selected-visitor:hover {
 
+}
+
+#maqaw-no-rep-window {
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 

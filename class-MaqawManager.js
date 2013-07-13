@@ -2,15 +2,18 @@
  MaqawManager is the top level class for managing the Maqaw client
  */
 function MaqawManager(display) {
+    var that = this;
     var key = 'cat',
         host= 'ec2-54-212-11-221.us-west-2.compute.amazonaws.com',
         port= 3000;
 
+    // this id is used whenever the client makes a connection with peerjs
     this.id;
-    var that = this;
-    this.visitors = [];
-
-    var that = this;
+    // an array of all visitors on the site. This is kept updated with web sockets
+    this.visitors;
+    // an array of ids of representatives that are available for chat
+    this.representatives;
+    // The visitor or representative session currently being used
     this.activeSession = undefined;
     this.maqawDisplay = display;
     this.peer = new Peer({key: key, host: host, port: port});
@@ -27,6 +30,8 @@ function MaqawManager(display) {
 
     this.peer.on('representatives', function(reps) {
         console.log(reps.msg);
+        that.representatives = reps.msg;
+        updateReps();
     });
 
     this.updateDisplay = function () {
@@ -59,12 +64,19 @@ function MaqawManager(display) {
         that.updateDisplay();
     }
 
+    // take the list of visitors from the server and parse them into Visitor objects
     function parseVisitors(visitors){
         var list = [];
         for(var i = 0; i < visitors.length; i ++){
-            list.push(new Visitor('Visitor'+i, visitors[i]));
+            list.push(new Visitor(that, 'Visitor '+i, visitors[i]));
         }
         return list;
+    }
+
+    // updates the status of the available reps for visitor chat
+    function updateReps(){
+        // this function only works for ClientSession
+      that.activeSession.setIsRepAvailable(that.representatives.length !== 0);
     }
 }
 

@@ -23,7 +23,7 @@ VisitorList.prototype.setVisitors = function (visitors) {
     this.visitors = visitors;
     this.tBody.innerHTML = '';
     var that = this;
-    for (var i = 0; i < visitors.length; i++) {
+    for (var i = 0; i < that.visitors.length; i++) {
         // add an entry to the table for this visitor   W
         var row = document.createElement("tr");
         row.className = 'visitor-list-entry';

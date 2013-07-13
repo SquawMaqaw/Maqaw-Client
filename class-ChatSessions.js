@@ -2,13 +2,18 @@
  Creates a chat window with a unique key to talk
  to a visitor.
  */
-function ChatSession(srcName, dstName) {
+function ChatSession(chatSessionContainer, peer, srcName, srcId, dstName, dstId) {
     this.srcName = srcName;
     this.dstName = dstName;
+    this.srcId = srcId;
+    this.dstId = dstId;
     var that = this;
+    this.peer = peer;
+    var isConnected;
+    var conn;
 
     // parent div to display chat session
-    this.mainContainer = document.createElement('DIV');
+    this.mainContainer = chatSessionContainer;
 
     // add div to display chat text
     var textDisplay;
@@ -52,11 +57,47 @@ function ChatSession(srcName, dstName) {
     function handleInput(text) {
         // test if string is not just whitespace
         if (/\S/.test(text)) {
+            //send data to other side
+            if(conn) conn.send(text);
             // append new text to existing chat text
             textDisplay.innerHTML = textDisplay.innerHTML + "<p class='chat-paragraph'>" +
                 "<span class='chat-src-name'>" + that.srcName + ": </span>" + text + "</p>";
         }
     }
+
+    function handleResponse(text) {
+        // test if string is not just whitespace
+        if (/\S/.test(text)) {
+            // append new text to existing chat text
+            textDisplay.innerHTML = textDisplay.innerHTML + "<p class='chat-paragraph'>" +
+                "<span class='chat-dest-name'>" + that.dstName + ": </span>" + text + "</p>";
+        }
+    }
+
+    /* Set up peerjs connection handling for this chat session */
+    this.peer.on('connection', connect);
+    function connect(c) {
+        isConnected = true;
+        conn = c;
+        conn.on('data', function (data) {
+            console.log(data);
+            handleResponse(data);
+        });
+        conn.on('close', function (err) {
+            isConnected = false;
+            handleInput('Your chat buddy has disconnected :(');
+        });
+    }
+
+    var c = this.peer.connect(that.dstId);
+    c.on('open', function () {
+        connect(c);
+    });
+    c.on('error', function (err) {
+        console.log(err);
+    });
+
+
 }
 
 // Returns the main div container for the chat session
@@ -64,12 +105,3 @@ ChatSession.prototype.getContainer = function () {
     return this.mainContainer;
 }
 
-// Takes response text and updates the chat session
-ChatSession.prototype.handleResponse = function (text) {
-    // test if string is not just whitespace
-    if (/\S/.test(text)) {
-        // append new text to existing chat text
-        clientChatDisplay.innerHTML = clientChatDisplay.innerHTML + "<p class='chat-paragraph'>" +
-            "<span class='chat-dest-name'>" + this.dstName + ": </span>" + text + "</p>";
-    }
-}
