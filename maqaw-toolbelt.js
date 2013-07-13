@@ -38,12 +38,11 @@ function maqawAjaxPost(url, params, callback) {
 
         // all is well
         if(xhr.readyState === 4) {
-            console.log("Ready!");
             callback(xhr);
         }
     }
 
-    //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.send(params);
 }
