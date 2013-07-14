@@ -1,11 +1,11 @@
 <html>
   <head>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> 
-    <script type="text/javascript" src="peer.js"></script>
+    <script type="text/javascript" src="../peer.js"></script>
     <script>
       var connected = false;
       var conn; 
-      var peer = new Peer({key: 'cat', host: "ec2-54-212-11-221.us-west-2.compute.amazonaws.com", port: 3000});
+      var peer = new Peer('123abc', {key: 'cat', host: "ec2-54-212-11-221.us-west-2.compute.amazonaws.com", port: 3000});
       peer.on('open', function(id) {
         $('#pid').text(id);
         $('#formId').val(id);
