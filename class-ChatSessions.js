@@ -2,10 +2,9 @@
  Creates a chat window with a unique key to talk
  to a visitor.
  */
-function ChatSession(chatSessionContainer, peer, srcName, srcId, dstName, dstId) {
+function ChatSession(chatSessionContainer, peer, srcName, dstName, dstId) {
     this.srcName = srcName;
     this.dstName = dstName;
-    this.srcId = srcId;
     this.dstId = dstId;
     var that = this;
     this.peer = peer;
@@ -58,7 +57,7 @@ function ChatSession(chatSessionContainer, peer, srcName, srcId, dstName, dstId)
         // test if string is not just whitespace
         if (/\S/.test(text)) {
             //send data to other side
-            if(conn) conn.send(text);
+            if (conn) conn.send(text);
             // append new text to existing chat text
             textDisplay.innerHTML = textDisplay.innerHTML + "<p class='chat-paragraph'>" +
                 "<span class='chat-src-name'>" + that.srcName + ": </span>" + text + "</p>";
@@ -77,6 +76,7 @@ function ChatSession(chatSessionContainer, peer, srcName, srcId, dstName, dstId)
     /* Set up peerjs connection handling for this chat session */
     this.peer.on('connection', connect);
     function connect(c) {
+        console.log("Opening connection");
         isConnected = true;
         conn = c;
         conn.on('data', function (data) {
@@ -89,13 +89,17 @@ function ChatSession(chatSessionContainer, peer, srcName, srcId, dstName, dstId)
         });
     }
 
-    var c = this.peer.connect(that.dstId);
-    c.on('open', function () {
-        connect(c);
-    });
-    c.on('error', function (err) {
-        console.log(err);
-    });
+    // only open a connection if an id was passed in
+    if (this.dstId) {
+        console.log("connecting to "+this.dstId);
+        var c = this.peer.connect(that.dstId);
+        c.on('open', function () {
+            connect(c);
+        });
+        c.on('error', function (err) {
+            console.log("Connection error: "+err);
+        });
+    }
 
 
 }

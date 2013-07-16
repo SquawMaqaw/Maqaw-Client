@@ -4,7 +4,7 @@
  */
 function VisitorSession(manager) {
     var that = this;
-    this.chatSession = undefined;
+    this.chatSession;
     this.maqawManager = manager;
     // Whether or not there is a rep available to chat
     this.isRepAvailable = false;
@@ -112,10 +112,15 @@ function VisitorSession(manager) {
     this.setIsRepAvailable = function(boolean){
         if(boolean !== that.isRepAvailable){
             if(boolean) {
-                new ChatSession(chatSessionContainer, that.maqawManager.peer, 'src', that.maqawManager.id, 'dst', that.maqawManager.representatives[0]);
+                // don't include a connection id so that no connection is started from this end. Leave
+                // it to the rep to start a connection
+                chatSessionContainer.innerHTML = '';
+                that.chatSession = new ChatSession(chatSessionContainer, that.maqawManager.peer, 'src', 'dst');
                 setClientChat();
             }
-            else setNoRepPage();
+            else {
+                setNoRepPage();
+            }
         }
         this.isRepAvailable = boolean;
     }

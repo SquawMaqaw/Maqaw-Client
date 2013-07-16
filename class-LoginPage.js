@@ -88,9 +88,7 @@ function LoginPage(manager) {
         var password = passwordField.value;
 
         var params = 'username='+username+'&password='+password+'&user[id]='+id+'&user[key]='+key;
-        console.log(params);
         var encodedParams = encodeURI(params);
-        console.log(encodedParams);
 
         // submit post request
         maqawAjaxPost(loginEndpoint, encodedParams, handleLoginPostResponse);

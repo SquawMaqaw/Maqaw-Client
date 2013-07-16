@@ -32,6 +32,7 @@ function MaqawManager(display) {
     /* listen for peer js events */
     this.peer.on('open', function (id) {
         that.id = id;
+        console.log(id);
         docCookies.setItem('peerId', id, Infinity);
     });
 
