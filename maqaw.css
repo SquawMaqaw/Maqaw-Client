@@ -261,6 +261,12 @@ input:focus {
     font-weight: bold;
 }
 
+#maqaw-login-error-message {
+    color:red;
+    font-style: italic;
+    text-align: center;
+}
+
 
 
 

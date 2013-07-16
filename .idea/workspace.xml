@@ -2,25 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="739a5f13-cb7a-4e13-a0d7-19187853a207" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class-ChatSessions.js" afterPath="$PROJECT_DIR$/class-ChatSessions.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class-ClientSession.js" afterPath="$PROJECT_DIR$/class-ClientSession.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/chat_test.html" afterPath="$PROJECT_DIR$/chat_test.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class-LoginPage.js" afterPath="$PROJECT_DIR$/class-LoginPage.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class-MaqawManager.js" afterPath="$PROJECT_DIR$/class-MaqawManager.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class-Visitor.js" afterPath="$PROJECT_DIR$/class-Visitor.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class-VisitorList.js" afterPath="$PROJECT_DIR$/class-VisitorList.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/class-RepSession.js" afterPath="$PROJECT_DIR$/class-RepSession.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/maqaw-toolbelt.js" afterPath="$PROJECT_DIR$/maqaw-toolbelt.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/maqaw.css" afterPath="$PROJECT_DIR$/maqaw.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Maqaw-Client.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373669991892" ignored="false" />
+    <file path="/Dummy.txt" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373994318282" ignored="false" />
     <file path="/Login.html" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373657396247" ignored="false" />
-    <file path="/class-MaqawManager.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373691163558" ignored="false" />
-    <file path="/class-RepSession.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373659023766" ignored="false" />
-    <file path="/maqaw-toolbelt.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373658266017" ignored="false" />
+    <file path="/class-MaqawManager.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373998655854" ignored="false" />
+    <file path="/class-RepSession.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373997834473" ignored="false" />
+    <file path="/maqaw-toolbelt.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373996948966" ignored="false" />
     <file path="/class-VisitorList.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373691383280" ignored="false" />
-    <file path="/chat_test.html" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373659310054" ignored="false" />
+    <file path="/chat_test.html" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373952956833" ignored="false" />
     <file path="/class-Visitor.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373691098769" ignored="false" />
-    <file path="/class-ClientSession.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373690976438" ignored="false" />
-    <file path="/maqaw.css" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373687798144" ignored="false" />
+    <file path="/class-ClientSession.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373953217875" ignored="false" />
+    <file path="/maqaw.css" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373996830797" ignored="false" />
     <file path="/class-ChatSessions.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373691500412" ignored="false" />
+    <file path="/class-LoginPage.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373998400836" ignored="false" />
+    <file path="/maqaw.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373955036540" ignored="false" />
+    <file path="/class-VisitorSession.js" changelist="739a5f13-cb7a-4e13-a0d7-19187853a207" time="1373954338363" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,15 +45,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="class-VisitorList.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/class-VisitorList.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="55" selection-start="905" selection-end="905" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="class-ChatSessions.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class-ChatSessions.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -58,19 +54,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="class-ClientSession.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/class-ClientSession.js">
+      <file leaf-file-name="class-VisitorSession.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/class-VisitorSession.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="177" column="44" selection-start="6485" selection-end="6485" vertical-scroll-proportion="0.6551339">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="class-RepSession.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/class-RepSession.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="80" column="47" selection-start="2746" selection-end="2746" vertical-scroll-proportion="0.0">
+            <state line="79" column="62" selection-start="2840" selection-end="2840" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -79,16 +66,43 @@
       <file leaf-file-name="class-MaqawManager.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/class-MaqawManager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="67" column="49" selection-start="2449" selection-end="2449" vertical-scroll-proportion="0.0">
+            <state line="87" column="81" selection-start="3154" selection-end="3154" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="class-Visitor.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/class-Visitor.js">
+      <file leaf-file-name="class-RepSession.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/class-RepSession.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="88" selection-start="442" selection-end="442" vertical-scroll-proportion="0.0">
+            <state line="17" column="69" selection-start="583" selection-end="583" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-MaqawDisplay.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/class-MaqawDisplay.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-LoginPage.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/class-LoginPage.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="64" column="60" selection-start="2314" selection-end="2314" vertical-scroll-proportion="0.36049107">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="class-Representative.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/class-Representative.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="60" selection-start="133" selection-end="133" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -96,10 +110,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Login.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/example/Login.html">
+      <file leaf-file-name="maqaw-toolbelt.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/maqaw-toolbelt.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="62" selection-start="1242" selection-end="1242" vertical-scroll-proportion="2.5">
+            <state line="30" column="25" selection-start="813" selection-end="813" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -125,15 +139,18 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/../Maqaw/examples/Login.html" />
-        <option value="$PROJECT_DIR$/class-RepSession.js" />
-        <option value="$PROJECT_DIR$/maqaw-toolbelt.js" />
-        <option value="$PROJECT_DIR$/chat_test.html" />
-        <option value="$PROJECT_DIR$/maqaw.css" />
-        <option value="$PROJECT_DIR$/class-ClientSession.js" />
-        <option value="$PROJECT_DIR$/class-MaqawManager.js" />
         <option value="$PROJECT_DIR$/class-VisitorList.js" />
         <option value="$PROJECT_DIR$/class-ChatSessions.js" />
         <option value="$PROJECT_DIR$/class-Visitor.js" />
+        <option value="$PROJECT_DIR$/class-ClientSession.js" />
+        <option value="$PROJECT_DIR$/class-VisitorSession.js" />
+        <option value="$PROJECT_DIR$/maqaw.js" />
+        <option value="$PROJECT_DIR$/chat_test.html" />
+        <option value="$PROJECT_DIR$/maqaw.css" />
+        <option value="$PROJECT_DIR$/maqaw-toolbelt.js" />
+        <option value="$PROJECT_DIR$/class-RepSession.js" />
+        <option value="$PROJECT_DIR$/class-MaqawManager.js" />
+        <option value="$PROJECT_DIR$/class-LoginPage.js" />
       </list>
     </option>
   </component>
@@ -150,7 +167,7 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="1" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
@@ -195,8 +212,9 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="vcs.Git" />
+    <property name="options.lastSelected" value="fileTemplates" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="FullScreen" value="false" />
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
   </component>
@@ -244,7 +262,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17289221" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17662753" sideWeight="0.670282" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -253,7 +271,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329718" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -320,88 +338,14 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/class-RepSession.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="47" selection-start="2746" selection-end="2746" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/class-MaqawManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="54" selection-start="827" selection-end="827" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/peer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-33.900448">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maqaw.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Maqaw/examples/Login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="73" selection-start="1046" selection-end="1046" vertical-scroll-proportion="0.01954023">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/chat_test.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="110" selection-start="1142" selection-end="1142" vertical-scroll-proportion="0.5275862">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maqaw-toolbelt.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="44" selection-start="700" selection-end="700" vertical-scroll-proportion="0.45535713">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/maqaw.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="40" selection-start="808" selection-end="808" vertical-scroll-proportion="-3.94">
-          <folding />
-        </state>
+        <state line="28" column="73" selection-start="1046" selection-end="1046" vertical-scroll-proportion="0.01954023" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/class-ChatManager.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/class-RepSession.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="80" column="47" selection-start="2746" selection-end="2746" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/class-MaqawManager.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="49" selection-start="2449" selection-end="2449" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/Login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="62" selection-start="1242" selection-end="1242" vertical-scroll-proportion="2.5">
           <folding />
         </state>
       </provider>
@@ -413,6 +357,69 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/example/Login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="68" selection-start="2037" selection-end="2037" vertical-scroll-proportion="-37.26923">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class-Visitor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="88" selection-start="442" selection-end="442" vertical-scroll-proportion="0.11383928">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class-MaqawDisplay.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maqaw.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="34" selection-start="428" selection-end="428" vertical-scroll-proportion="0.20870535">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chat_test.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="0" selection-start="712" selection-end="712" vertical-scroll-proportion="0.37126437">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maqaw.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="266" column="23" selection-start="4330" selection-end="4330" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/maqaw-toolbelt.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="25" selection-start="813" selection-end="813" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class-RepSession.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="69" selection-start="583" selection-end="583" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class-MaqawManager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="81" selection-start="3154" selection-end="3154" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/class-ChatSessions.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="82" column="30" selection-start="2805" selection-end="2805" vertical-scroll-proportion="0.0">
@@ -420,18 +427,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class-Visitor.js">
+    <entry file="file://$PROJECT_DIR$/class-VisitorSession.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="88" selection-start="442" selection-end="442" vertical-scroll-proportion="0.0">
+        <state line="79" column="62" selection-start="2840" selection-end="2840" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/class-Representative.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="60" selection-start="133" selection-end="133" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/class-ClientSession.js">
+    <entry file="file://$PROJECT_DIR$/class-LoginPage.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="177" column="44" selection-start="6485" selection-end="6485" vertical-scroll-proportion="0.6551339">
+        <state line="64" column="60" selection-start="2314" selection-end="2314" vertical-scroll-proportion="0.36049107">
           <folding />
         </state>
       </provider>

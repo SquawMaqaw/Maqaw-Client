@@ -9,8 +9,6 @@ maqawDisplay.setup();
 // Initialize the MaqawManager to deal with clients and representatives
 var maqawManager = new MaqawManager(maqawDisplay);
 
-// Init a new client session
-var session = new ClientSession(maqawManager);
-maqawManager.setActiveSession(session);
-
-maqawManager.updateDisplay();
+// Start the visitor session
+maqawManager.setVisitorSession(new VisitorSession(maqawManager));
+maqawManager.showVisitorSession();

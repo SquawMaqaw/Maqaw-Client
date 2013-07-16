@@ -2,8 +2,9 @@
  RepSession manages all of the details of a logged in
  representatives session
  */
-function RepSession(manager) {
+function RepSession(manager, rep) {
     this.maqawManager = manager;
+    this.rep = rep;
 
     /* Create dom elements to display the rep session */
     this.body = document.createElement("DIV");

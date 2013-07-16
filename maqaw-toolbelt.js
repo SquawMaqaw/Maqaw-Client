@@ -28,22 +28,15 @@ function maqawAjaxPost(url, params, callback) {
     xhr.onreadystatechange = ensureReadiness;
 
     function ensureReadiness() {
-        if(xhr.readyState < 4) {
-            return;
-        }
-
-        if(xhr.status !== 200) {
-            return;
-        }
-
-        // all is well
+        // post completed
         if(xhr.readyState === 4) {
             callback(xhr);
         }
     }
 
-    //xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
     xhr.open('POST', url, true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.send(params);
 }
 
