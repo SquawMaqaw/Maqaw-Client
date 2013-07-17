@@ -8,5 +8,5 @@ function Visitor(manager, name, id) {
     this.key = id;
 
     // each visitor has a unique chat session
-    this.chatSession = new ChatSession(document.createElement("DIV"), manager.peer, 'You', manager.id, name, id);
+    this.chatSession = new ChatSession(document.createElement("DIV"), manager.peer, 'You', name, id);
 }
