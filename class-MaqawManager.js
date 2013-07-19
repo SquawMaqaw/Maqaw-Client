@@ -4,14 +4,12 @@
 function MaqawManager(display) {
     var that = this,
         key = 'cat',
-        host = 'ec2-54-212-11-221.us-west-2.compute.amazonaws.com',
+        host = 'ec2-54-214-126-127.us-west-2.compute.amazonaws.com',
         port = 3000;
 
     // this id is used whenever the client makes a connection with peerjs
     this.id = docCookies.getItem('peerId');
     this.key = key;
-    // an array of all visitors on the site. This is kept updated with web sockets
-    this.visitors;
     // an array of ids of representatives that are available for chat
     this.representatives;
     this.maqawDisplay = display;
@@ -19,6 +17,8 @@ function MaqawManager(display) {
     this.repSession;
     // a LoginPage object that is initialized the first time the login page is visited
     this.loginPage;
+    // the most recent list of visitors from the server
+    this.visitors = [];
 
 
     if (this.id) {
@@ -36,10 +36,10 @@ function MaqawManager(display) {
         docCookies.setItem('peerId', id, Infinity);
     });
 
-    this.peer.on('clients', function (clients) {
-        console.log('clients: '+clients.msg);
-        that.visitors = parseVisitors(clients.msg);
-        that.repSession && that.repSession.setVisitors();
+    this.peer.on('clients', function (visitors) {
+        console.log('visitors: '+visitors.msg);
+        that.visitors = visitors.msg;
+        that.repSession && that.repSession.updateVisitorList(visitors.msg);
     });
 
     this.peer.on('representatives', function (reps) {
@@ -52,17 +52,33 @@ function MaqawManager(display) {
         if(!that.loginPage) that.loginPage = new LoginPage(that);
         that.maqawDisplay.setHeaderContents(that.loginPage.getHeaderContents());
         that.maqawDisplay.setBodyContents(that.loginPage.getBodyContents());
-    }
+    };
 
 
     this.logoutClicked = function () {
         that.showVisitorSession();
-    }
+    };
 
+    // displays the saved visitor session
     this.showVisitorSession = function() {
         that.maqawDisplay.setHeaderContents(that.visitorSession.getHeaderContents());
         that.maqawDisplay.setBodyContents(that.visitorSession.getBodyContents());
-    }
+    };
+
+    // tries to load a previously saved visitor session. If no session can be found
+    // a new one is created
+    this.startVisitorSession = function() {
+        // create new visitor session
+        var visitorSession = new VisitorSession(that);
+        // try to pull previously saved session data
+        var storedSessionData = JSON.parse(localStorage.getItem('maqawVisitorSession'));
+        // if previous data was found load it into the visitorSession
+        if(storedSessionData){
+          visitorSession.loadSessionData(storedSessionData);
+        }
+        // save the session
+        that.visitorSession = visitorSession;
+    };
 
     // changes the maqaw client to display a Representative Session
     // a Representative object can be passed in to start a new rep session
@@ -88,27 +104,32 @@ function MaqawManager(display) {
         // display the rep session
         that.maqawDisplay.setHeaderContents(that.repSession.getHeaderContents());
         that.maqawDisplay.setBodyContents(that.repSession.getBodyContents());
-    }
+    };
 
-    // take the list of visitors from the server and parse them into Visitor objects
-    function parseVisitors(visitors) {
-        var list = [];
-        for (var i = 0; i < visitors.length; i++) {
-            list.push(new Visitor(that, 'Visitor ' + i, visitors[i]));
-        }
-        return list;
-    }
+
 
     // updates the status of the available reps for visitor chat
     function updateReps() {
         that.visitorSession.setIsRepAvailable(that.representatives.length !== 0);
     }
+
+    // setup an event listener for when the page is changed so that we can save the
+    // visitor session
+    function saveVisitorSession() {
+        if(typeof that.visitorSession !== 'undefined'){
+            var sessionData = that.visitorSession.getSessionData();
+            var jsonSession = JSON.stringify(sessionData);
+            localStorage.setItem('maqawVisitorSession', jsonSession);
+        }
+    }
+    window.addEventListener('unload', saveVisitorSession, false);
 }
 
-
+// takes a VisitorSession object and loads it as the current visitor session
 MaqawManager.prototype.setVisitorSession = function(visitorSession) {
     this.visitorSession = visitorSession;
-}
+};
+
 
 
 

@@ -46,7 +46,7 @@ MaqawDisplay.prototype.setup = function () {
         }
     }
     this.clientHeader.addEventListener('click', toggleMinimized, false);
-}
+};
 
 /*
 Set the contents of the header. Erases any previous content
@@ -56,7 +56,7 @@ MaqawDisplay.prototype.setHeaderContents = function(content) {
     // erase any current content and replace in with the new content
     this.clientHeader.innerHTML = '';
     this.clientHeader.appendChild(content);
-}
+};
 
 /*
 Sets the body contents of the client. Erases any previous content
@@ -67,5 +67,5 @@ MaqawDisplay.prototype.setBodyContents = function(content) {
     // erase any current content and replace in with the new content
     this.clientBody.innerHTML = '';
     this.clientBody.appendChild(content);
-}
+};
 

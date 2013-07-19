@@ -43,7 +43,8 @@ function maqawAjaxPost(url, params, callback) {
 var docCookies = {
   //
   // Thank you, Mozilla 
-  //
+  // Documentation at https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
+
   getItem: function (sKey) {
     return decodeURI(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURI(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
   },

@@ -10,5 +10,5 @@ maqawDisplay.setup();
 var maqawManager = new MaqawManager(maqawDisplay);
 
 // Start the visitor session
-maqawManager.setVisitorSession(new VisitorSession(maqawManager));
+maqawManager.startVisitorSession();
 maqawManager.showVisitorSession();

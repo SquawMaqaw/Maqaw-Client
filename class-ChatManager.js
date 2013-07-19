@@ -20,10 +20,10 @@ ChatManager.prototype.showVisitorChat = function(visitor) {
     // reset chat window and then show this visitor's chat session
     this.chatWindow.innerHTML = '';
     this.chatWindow.appendChild(visitor.chatSession.getContainer());
-}
+};
 
 // Clears any current chat sessions displayed
 ChatManager.prototype.clear = function() {
     this.chatWindow.innerHTML = '';
     this.chatWindow.appendChild(this.noChatSession);
-}
+};

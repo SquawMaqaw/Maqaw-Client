@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     color: black;
-    background-color: none;
+    background-color: transparent;
     position: fixed;
     left: 20px;
     bottom: 0;
@@ -41,7 +41,7 @@
     background-color: white;
     border-right: 1px solid lightgrey;
     border-left: 1px solid lightgrey;
-    height: 210px;
+    height: 212px;
     width: 248px;
 }
 
@@ -225,7 +225,9 @@ input:focus {
 }
 
 #visitor-list-container {
-
+   overflow-y: auto;
+    height: 175px;
+    width: 248px;
 }
 
 #visitor-list-table {

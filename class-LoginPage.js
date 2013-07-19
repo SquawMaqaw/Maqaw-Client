@@ -5,7 +5,7 @@
 
 function LoginPage(manager) {
     var that = this;
-    var loginEndpoint = 'http://ec2-54-212-11-221.us-west-2.compute.amazonaws.com:3000/login';
+    var loginEndpoint = 'http://ec2-54-214-126-127.us-west-2.compute.amazonaws.com:3000/login';
     var user = 'additt';
     var password = 'MapleAdditt';
 
@@ -111,8 +111,8 @@ function LoginPage(manager) {
 
 LoginPage.prototype.getBodyContents = function () {
     return this.body;
-}
+};
 
 LoginPage.prototype.getHeaderContents = function () {
     return this.header;
-}
+};

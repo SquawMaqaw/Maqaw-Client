@@ -5,6 +5,7 @@
 function RepSession(manager, rep) {
     this.maqawManager = manager;
     this.rep = rep;
+    var that = this;
 
     /* Create dom elements to display the rep session */
     this.body = document.createElement("DIV");
@@ -62,23 +63,26 @@ function RepSession(manager, rep) {
     this.chatManager = new ChatManager(chatSessions);
 
     // create new visitor list
-    this.visitorList = new VisitorList(visitorListContainer, this.chatManager);
+    this.visitorList = new VisitorList(visitorListContainer, this.chatManager, this.maqawManager);
 
     //this.visitorList.addVisitor(new Visitor('eli', '1'));
     //this.visitorList.addVisitor(new Visitor('tom', '2'));
-    
-    //  Call set on new // 
-    this.setVisitors();
+
+    // takes an array of ids representing visitors on the site
+    this.updateVisitorList = function(visitors){
+        // pass the list along to the VisitorList so it can take care of updates
+        that.visitorList.setVisitorList(visitors);
+    }
+
+    // initialize the visitor list to have whatever visitors the manager knows about
+    this.updateVisitorList(this.maqawManager.visitors);
 }
 
 RepSession.prototype.getBodyContents = function() {
     return this.body;
-}
+};
 
 RepSession.prototype.getHeaderContents = function() {
     return this.header;
-}
+};
 
-RepSession.prototype.setVisitors = function() {
-    this.visitorList.setVisitors(this.maqawManager.visitors);
-}

@@ -1488,7 +1488,7 @@ Peer.browser = util.browserisms;
  * Provides a clean method for checking if there's an active connection to the
  * peer server.
  */
-Peer.prototype.isConnected = function() {
+Peer.prototype.getIsConnected = function() {
   return !this.disconnected;
 };
 
