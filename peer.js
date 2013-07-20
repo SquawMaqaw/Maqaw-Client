@@ -163,9 +163,9 @@ Unpacker.prototype.unpack = function(){
 }
 
 Unpacker.prototype.unpack_uint8 = function(){
-  var byte = this.dataView[this.index] & 0xff;
+  var _byte = this.dataView[this.index] & 0xff;
   this.index++;
-  return byte;
+  return _byte;
 };
 
 Unpacker.prototype.unpack_uint16 = function(){
