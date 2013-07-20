@@ -38,6 +38,7 @@ function maqawAjaxPost(url, params, callback) {
     xhr.open('POST', url, true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.send(params);
+
 }
 
 var docCookies = {
@@ -72,7 +73,7 @@ var docCookies = {
 
   removeItem: function (sKey, sPath) {
     if (!sKey || !this.hasItem(sKey)) { return false; }
-    document.cookie = encodeURI(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sPath ? "; path=" + sPath : "") + (sDomain ? "; domain=" + sDomain : "");
+    document.cookie = encodeURI(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sPath ? "; path=" + sPath : "");
     return true;
   },
 

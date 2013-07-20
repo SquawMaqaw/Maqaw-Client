@@ -20,6 +20,7 @@ function LoginPage(manager) {
     this.loginHeader.className = 'maqaw-chat-header-text';
     this.header.appendChild(this.loginHeader);
 
+
 // create login window
     this.body = document.createElement('DIV');
     this.body.id = 'login-window';
@@ -78,7 +79,7 @@ function LoginPage(manager) {
 // add login footer text
     var loginFooter = document.createElement('DIV');
     loginFooter.id = 'login-footer';
-    loginFooter.innerHTML = "Don't have an account? Sign up at <a href='http://www.maqaw.com'>Maqaw.com</a>!";
+    loginFooter.innerHTML = "Don't have an account? Sign up at <a href='http://maqaw.com'>Maqaw.com</a>!";
     this.body.appendChild(loginFooter);
 
     function submitLoginCredentials() {
@@ -87,25 +88,38 @@ function LoginPage(manager) {
         var username = usernameField.value;
         var password = passwordField.value;
 
-        var params = 'username='+username+'&password='+password+'&user[id]='+id+'&user[key]='+key;
-        var encodedParams = encodeURI(params);
+        var params = encodeURI('username='+username+'&password='+password+'&user[id]='+id+'&user[key]='+key);
+
+        // store a cookie with this login data, so the rep can reload the page without logging in again
+        // the cookie has no expiration date set, so it will be cleared when the browser is closed
+        docCookies.setItem('maqawRepLoginCookie', params);
 
         // submit post request
-        maqawAjaxPost(loginEndpoint, encodedParams, handleLoginPostResponse);
+        maqawAjaxPost(loginEndpoint, params, handleLoginPostResponse);
     }
 
     function handleLoginPostResponse(xhr) {
         // if credentials were denied show error message
         if(xhr.status === 401) {
             errorMessage.style.display = 'block';
+            // clear stored params
+            docCookies.removeItem('maqawRepLoginCookie');
         } else if(xhr.status === 200) {
             // success! hide error message
             errorMessage.style.display = 'none';
             // create new Representative object with response data
-            var rep = new Representative('test');
+            var rep = new Representative('RepName');
             // tell manager to change to rep mode using our representative data
-            that.maqawManager.showRepSession(rep);
+            that.maqawManager.startNewRepSession(rep);
+            clearInterval(that.loginInterval);
         }
+    }
+
+    // attempts a login with the supplied parameters
+    this.loginWithParams = function(params){
+        that.loginInterval = setInterval(function(){
+                maqawAjaxPost(loginEndpoint, params, handleLoginPostResponse);
+        }, 100);
     }
 }
 

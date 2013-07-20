@@ -98,7 +98,6 @@ function ChatSession(chatSessionContainer, peer, srcName, dstName, dstId, connec
     /* Set up peerjs connection handling for this chat session */
     this.peer.on('connection', connect);
     function connect(c) {
-        console.log("Opening connection");
         isConnected = true;
         updateConnectionCallback();
         conn = c;
@@ -134,7 +133,6 @@ function ChatSession(chatSessionContainer, peer, srcName, dstName, dstId, connec
     // and an id has been provided
     this.openConnection = function () {
         if (that.dstId) {
-            console.log("connecting to " + that.dstId);
             var c = that.peer.connect(that.dstId);
             c.on('open', function () {
                 connect(c);
@@ -186,7 +184,6 @@ function ChatSession(chatSessionContainer, peer, srcName, dstName, dstId, connec
         if (that.textInput) {
             that.textInput.disabled = false;
         }
-        console.log('allow messages');
     }
 
     // Finish by attempting to open a connection if applicable

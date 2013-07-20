@@ -55,7 +55,7 @@ function VisitorSession(manager) {
     var maqawLink;
     maqawLink = document.createElement('DIV');
     maqawLink.id = 'maqaw-link';
-    maqawLink.innerHTML = 'POWERED BY <a href="http://www.maqaw.com">MAQAW</a>';
+    maqawLink.innerHTML = 'POWERED BY <a href="http://maqaw.com">MAQAW</a>';
     chatFooter.appendChild(maqawLink);
 
     /* Create container for when no rep is available */
@@ -93,7 +93,7 @@ function VisitorSession(manager) {
     var maqawLink;
     maqawLink = document.createElement('DIV');
     maqawLink.id = 'maqaw-link';
-    maqawLink.innerHTML = 'POWERED BY <a href="http://www.maqaw.com">MAQAW</a>';
+    maqawLink.innerHTML = 'POWERED BY <a href="http://maqaw.com">MAQAW</a>';
     noRepFooter.appendChild(maqawLink);
 
 

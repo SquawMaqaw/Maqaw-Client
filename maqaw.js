@@ -9,6 +9,14 @@ maqawDisplay.setup();
 // Initialize the MaqawManager to deal with clients and representatives
 var maqawManager = new MaqawManager(maqawDisplay);
 
-// Start the visitor session
+// start a visitor session
 maqawManager.startVisitorSession();
-maqawManager.showVisitorSession();
+
+// try to restore a previously logged in rep session if one exists
+var repSessionStarted = maqawManager.loadRepSession();
+
+// if no rep session could be loaded, display the visitor session
+if(!repSessionStarted){
+    maqawManager.showVisitorSession();
+}
+

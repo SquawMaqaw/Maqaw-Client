@@ -22,8 +22,14 @@ ChatManager.prototype.showVisitorChat = function(visitor) {
     this.chatWindow.appendChild(visitor.chatSession.getContainer());
 };
 
-// Clears any current chat sessions displayed
-ChatManager.prototype.clear = function() {
-    this.chatWindow.innerHTML = '';
-    this.chatWindow.appendChild(this.noChatSession);
+// Clears the displayed chat session.
+// if a visitor object is passed in, the chat is only cleared if that
+// visitor is being displayed. If no argument is passed in then the
+// window is always cleared
+ChatManager.prototype.clear = function(visitor) {
+    if(!visitor || visitor && visitor === this.activeVisitor){
+        this.chatWindow.innerHTML = '';
+        this.chatWindow.appendChild(this.noChatSession);
+    }
+
 };

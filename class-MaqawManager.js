@@ -15,8 +15,8 @@ function MaqawManager(display) {
     this.maqawDisplay = display;
     this.visitorSession;
     this.repSession;
-    // a LoginPage object that is initialized the first time the login page is visited
-    this.loginPage;
+    // a LoginPage object that can be used to login with rep details
+    this.loginPage = new LoginPage(this);
     // the most recent list of visitors from the server
     this.visitors = [];
 
@@ -32,73 +32,71 @@ function MaqawManager(display) {
     /* listen for peer js events */
     this.peer.on('open', function (id) {
         that.id = id;
-        console.log(id);
+        console.log("My id: "+id);
         docCookies.setItem('peerId', id, Infinity);
     });
 
     this.peer.on('clients', function (visitors) {
-        console.log('visitors: '+visitors.msg);
+        console.log('visitors: ' + visitors.msg);
         that.visitors = visitors.msg;
         that.repSession && that.repSession.updateVisitorList(visitors.msg);
     });
 
     this.peer.on('representatives', function (reps) {
-        console.log('Reps: '+reps.msg);
+        console.log('Reps: ' + reps.msg);
         that.representatives = reps.msg;
         updateReps();
     });
 
     this.loginClicked = function () {
-        if(!that.loginPage) that.loginPage = new LoginPage(that);
         that.maqawDisplay.setHeaderContents(that.loginPage.getHeaderContents());
         that.maqawDisplay.setBodyContents(that.loginPage.getBodyContents());
     };
 
 
     this.logoutClicked = function () {
+        // clear cookies and local data for the rep
+        docCookies.removeItem('maqawRepLoginCookie');
+        localStorage.removeItem('maqawRepSession');
         that.showVisitorSession();
     };
 
     // displays the saved visitor session
-    this.showVisitorSession = function() {
+    this.showVisitorSession = function () {
         that.maqawDisplay.setHeaderContents(that.visitorSession.getHeaderContents());
         that.maqawDisplay.setBodyContents(that.visitorSession.getBodyContents());
     };
 
     // tries to load a previously saved visitor session. If no session can be found
     // a new one is created
-    this.startVisitorSession = function() {
+    this.startVisitorSession = function () {
         // create new visitor session
         var visitorSession = new VisitorSession(that);
         // try to pull previously saved session data
         var storedSessionData = JSON.parse(localStorage.getItem('maqawVisitorSession'));
         // if previous data was found load it into the visitorSession
-        if(storedSessionData){
-          visitorSession.loadSessionData(storedSessionData);
+        if (storedSessionData) {
+            visitorSession.loadSessionData(storedSessionData);
         }
         // save the session
         that.visitorSession = visitorSession;
     };
 
-    // changes the maqaw client to display a Representative Session
-    // a Representative object can be passed in to start a new rep session
-    // for that rep. If no representative object is passed in an existing rep
-    // session is used. If no previous rep session exists, nothing is done
-    // rep - A
-    this.showRepSession = function(rep) {
-     var repSession;
-        // if a rep was passed, create a new session for it
-        if(typeof rep !== "undefined") {
-            repSession = new RepSession(that, rep);
-            that.repSession = repSession;
-        }
-        // otherwise check if an existing session can be used
-        else if(typeof that.repSession !== "undefined") {
-            repSession = that.repSession;
-        }
-        // otherwise we have no rep to work with so just return
-        else {
-            return;
+    // Creates and displays a new RepSession using the Representative object that
+    // is passed in.
+    this.startNewRepSession = function (rep) {
+        that.repSession = new RepSession(that, rep);
+
+        // if we are loading a saved session, retrieve stored data
+        if (that.loadPreviousRepSession) {
+            // attempt to reload previous rep session data
+            var storedSessionData = JSON.parse(localStorage.getItem('maqawRepSession'));
+            // if previous data was found load it into the repSession
+            if (storedSessionData) {
+                that.repSession.loadSessionData(storedSessionData);
+                // update the loaded data with the current visitor list
+                that.repSession.updateVisitorList(that.visitors);
+            }
         }
 
         // display the rep session
@@ -106,6 +104,20 @@ function MaqawManager(display) {
         that.maqawDisplay.setBodyContents(that.repSession.getBodyContents());
     };
 
+    // checks for a login cookie for a rep. If one is found we attempt to reload the session
+    // return true if a rep session is successfully loaded and false otherwise
+    this.loadRepSession = function () {
+        // check for a login cookie, return false if one can't be found
+        var loginCookie = docCookies.getItem('maqawRepLoginCookie');
+        if (loginCookie === null) {
+            return false;
+        }
+
+        // otherwise reload the rep session
+        that.loginPage.loginWithParams(loginCookie);
+        that.loadPreviousRepSession = true;
+        return true;
+    }
 
 
     // updates the status of the available reps for visitor chat
@@ -116,17 +128,34 @@ function MaqawManager(display) {
     // setup an event listener for when the page is changed so that we can save the
     // visitor session
     function saveVisitorSession() {
-        if(typeof that.visitorSession !== 'undefined'){
+        if (typeof that.visitorSession !== 'undefined') {
             var sessionData = that.visitorSession.getSessionData();
             var jsonSession = JSON.stringify(sessionData);
             localStorage.setItem('maqawVisitorSession', jsonSession);
         }
     }
-    window.addEventListener('unload', saveVisitorSession, false);
+
+    // save the logs and details of the rep session (if there is one)
+    // in local storage so it can be reloaded on page change
+    function saveRepSession() {
+        if (typeof that.repSession !== 'undefined') {
+            var sessionData = that.repSession.getSessionData();
+            var jsonSession = JSON.stringify(sessionData);
+            console.log(jsonSession);
+            localStorage.setItem('maqawRepSession', jsonSession);
+        }
+    }
+
+    function saveSession() {
+        saveVisitorSession();
+        saveRepSession();
+    }
+
+    window.addEventListener('unload', saveSession, false);
 }
 
 // takes a VisitorSession object and loads it as the current visitor session
-MaqawManager.prototype.setVisitorSession = function(visitorSession) {
+MaqawManager.prototype.setVisitorSession = function (visitorSession) {
     this.visitorSession = visitorSession;
 };
 
