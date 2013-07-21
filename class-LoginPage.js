@@ -3,7 +3,7 @@
  * Date: 7/15/13
  */
 
-function LoginPage(manager) {
+function MaqawLoginPage(manager) {
     var that = this;
     var loginEndpoint = 'http://ec2-54-214-126-127.us-west-2.compute.amazonaws.com:3000/login';
     var user = 'additt';
@@ -92,7 +92,7 @@ function LoginPage(manager) {
 
         // store a cookie with this login data, so the rep can reload the page without logging in again
         // the cookie has no expiration date set, so it will be cleared when the browser is closed
-        docCookies.setItem('maqawRepLoginCookie', params);
+        maqawCookies.setItem('maqawRepLoginCookie', params);
 
         // submit post request
         maqawAjaxPost(loginEndpoint, params, handleLoginPostResponse);
@@ -103,12 +103,12 @@ function LoginPage(manager) {
         if(xhr.status === 401) {
             errorMessage.style.display = 'block';
             // clear stored params
-            docCookies.removeItem('maqawRepLoginCookie');
+            maqawCookies.removeItem('maqawRepLoginCookie');
         } else if(xhr.status === 200) {
             // success! hide error message
             errorMessage.style.display = 'none';
-            // create new Representative object with response data
-            var rep = new Representative('RepName');
+            // create new MaqawRepresentative object with response data
+            var rep = new MaqawRepresentative('RepName');
             // tell manager to change to rep mode using our representative data
             that.maqawManager.startNewRepSession(rep);
             clearInterval(that.loginInterval);
@@ -123,10 +123,10 @@ function LoginPage(manager) {
     }
 }
 
-LoginPage.prototype.getBodyContents = function () {
+MaqawLoginPage.prototype.getBodyContents = function () {
     return this.body;
 };
 
-LoginPage.prototype.getHeaderContents = function () {
+MaqawLoginPage.prototype.getHeaderContents = function () {
     return this.header;
 };

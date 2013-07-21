@@ -2,7 +2,7 @@
  Creates a chat window with a unique key to talk
  to a visitor.
  */
-function ChatSession(chatSessionContainer, peer, srcName, dstName, dstId, connectionCallback) {
+function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, connectionCallback) {
     this.srcName = srcName;
     this.dstName = dstName;
     this.dstId = dstId;
@@ -107,7 +107,6 @@ function ChatSession(chatSessionContainer, peer, srcName, dstName, dstId, connec
         });
         conn.on('close', function (err) {
             isConnected = false;
-            handleInput('Your chat buddy has disconnected :(');
             updateConnectionCallback();
         });
 
@@ -191,7 +190,7 @@ function ChatSession(chatSessionContainer, peer, srcName, dstName, dstId, connec
 }
 
 // Returns the main div container for the chat session
-ChatSession.prototype.getContainer = function () {
+MaqawChatSession.prototype.getContainer = function () {
     return this.mainContainer;
 };
 

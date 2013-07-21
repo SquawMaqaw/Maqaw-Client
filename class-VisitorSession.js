@@ -2,7 +2,7 @@
  ClientSession manages client information and interactions
  with Maqaw.
  */
-function VisitorSession(manager) {
+function MaqawVisitorSession(manager) {
     var that = this;
     this.chatSession;
     this.maqawManager = manager;
@@ -29,11 +29,11 @@ function VisitorSession(manager) {
     var chatSessionContainer = document.createElement("DIV");
     this.visitorChatWindow.appendChild(chatSessionContainer);
 
-    // create ChatSession
+    // create MaqawChatSession
     // don't include a connection id so that no connection is started from this end. Leave
     // it to the rep to start a connection
     chatSessionContainer.innerHTML = '';
-    this.chatSession = new ChatSession(chatSessionContainer, that.maqawManager.peer, 'src', 'dst');
+    this.chatSession = new MaqawChatSession(chatSessionContainer, that.maqawManager.peer, 'src', 'dst');
 
     // add footer
     var chatFooter;
@@ -146,11 +146,11 @@ function VisitorSession(manager) {
     }
 }
 
-VisitorSession.prototype.getBodyContents = function () {
+MaqawVisitorSession.prototype.getBodyContents = function () {
     return this.body;
 }
 
-VisitorSession.prototype.getHeaderContents = function () {
+MaqawVisitorSession.prototype.getHeaderContents = function () {
     return this.header;
 }
 

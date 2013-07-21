@@ -1,6 +1,6 @@
 /*
 This object contains all the information for a representative's account
  */
-function Representative(name) {
+function MaqawRepresentative(name) {
    this.name = name;
 }

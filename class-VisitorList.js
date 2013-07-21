@@ -3,7 +3,7 @@
  listDisplayContainer - The div that will contain the table of visitors
  chatManager - the ChatManager object that will manage chat sessions
  */
-function VisitorList(listDisplayContainer, chatManager, maqawManager) {
+function MaqawVisitorList(listDisplayContainer, chatManager, maqawManager) {
     var that = this;
     // hashmap of all visitors on the site. Their id is the key, and their visitor object the value
     this.visitors = {};
@@ -66,13 +66,13 @@ function VisitorList(listDisplayContainer, chatManager, maqawManager) {
         }
     };
 
-    // create a new visitor using the specified id, and wrap the visitor in a VisitorWrapper object
+    // create a new visitor using the specified id, and wrap the visitor in a MaqawVisitorWrapper object
     // to help manage selecting and displaying the visitor
     function createNewVisitorWithWrapper(id) {
         var visitorName = 'Visitor ' + that.visitorCounter;
         that.visitorCounter++;
         // use rowIndex of -1 so the row is added at the end of the table
-        return new VisitorWrapper(id, visitorName, that, -1);
+        return new MaqawVisitorWrapper(id, visitorName, that, -1);
     }
 
     this.setSelectedVisitor = function (visitorWrapper) {
@@ -94,7 +94,7 @@ function VisitorList(listDisplayContainer, chatManager, maqawManager) {
         that.selectedVisitor = visitorWrapper;
     };
 
-    // a visitorwrapper calls this to tell the VisitorList that it is going inactive
+    // a visitorwrapper calls this to tell the MaqawVisitorList that it is going inactive
     // the visitor list needs to make sure that it doesn't have this visitor set
     // as selected
     this.hideVisitor = function (visitorWrapper) {
@@ -136,7 +136,7 @@ function VisitorList(listDisplayContainer, chatManager, maqawManager) {
             // create and update a visitorWrapper using this data
             // ideally we would like the visitors to show up in the same order in the table, but right now
             // we just append it to the end by passing rowIndex of -1
-            var visitorWrapper = new VisitorWrapper(dataObject['id'], dataObject['name'], that, -1);
+            var visitorWrapper = new MaqawVisitorWrapper(dataObject['id'], dataObject['name'], that, -1);
             if(dataObject['isSelected']) {
                 that.selectedVisitor = visitorWrapper;
                 visitorWrapper.select();
@@ -153,7 +153,7 @@ function VisitorList(listDisplayContainer, chatManager, maqawManager) {
 
 
 // this wrapper class monitors the status of a visitor
-function VisitorWrapper(id, name, visitorList, rowIndex) {
+function MaqawVisitorWrapper(id, name, visitorList, rowIndex) {
     var that = this;
     this.visitorList = visitorList;
 
@@ -168,7 +168,7 @@ function VisitorWrapper(id, name, visitorList, rowIndex) {
     // connection takes five seconds to notice.
     this.isChatConnected = false;
 
-    this.visitor = new Visitor(this.visitorList.maqawManager, name, id, visitorConnectionCallback);
+    this.visitor = new MaqawVisitor(this.visitorList.maqawManager, name, id, visitorConnectionCallback);
 
 
     // create row to display this visitor in the table

@@ -1,6 +1,6 @@
 // Displays the visitors chat sessions
 // chatWindow - the div that displays the chats
-function ChatManager(chatWindow) {
+function MaqawChatManager(chatWindow) {
     this.chatWindow = chatWindow;
     this.activeVisitor = undefined;
 
@@ -15,7 +15,7 @@ function ChatManager(chatWindow) {
 
 // Displays a visitors chat session
 // visitor - the visitor object whose chat session will be displayed
-ChatManager.prototype.showVisitorChat = function(visitor) {
+MaqawChatManager.prototype.showVisitorChat = function(visitor) {
     this.activeVisitor = visitor;
     // reset chat window and then show this visitor's chat session
     this.chatWindow.innerHTML = '';
@@ -26,7 +26,7 @@ ChatManager.prototype.showVisitorChat = function(visitor) {
 // if a visitor object is passed in, the chat is only cleared if that
 // visitor is being displayed. If no argument is passed in then the
 // window is always cleared
-ChatManager.prototype.clear = function(visitor) {
+MaqawChatManager.prototype.clear = function(visitor) {
     if(!visitor || visitor && visitor === this.activeVisitor){
         this.chatWindow.innerHTML = '';
         this.chatWindow.appendChild(this.noChatSession);

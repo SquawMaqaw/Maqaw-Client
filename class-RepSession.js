@@ -2,7 +2,7 @@
  RepSession manages all of the details of a logged in
  representatives session
  */
-function RepSession(manager, rep) {
+function MaqawRepSession(manager, rep) {
     this.maqawManager = manager;
     this.rep = rep;
     var that = this;
@@ -60,17 +60,17 @@ function RepSession(manager, rep) {
     loggedInDashboard.appendChild(visitorListContainer);
 
     // create new chat manager
-    this.chatManager = new ChatManager(chatSessions);
+    this.chatManager = new MaqawChatManager(chatSessions);
 
     // create new visitor list
-    this.visitorList = new VisitorList(visitorListContainer, this.chatManager, this.maqawManager);
+    this.visitorList = new MaqawVisitorList(visitorListContainer, this.chatManager, this.maqawManager);
 
-    //this.visitorList.addVisitor(new Visitor('eli', '1'));
-    //this.visitorList.addVisitor(new Visitor('tom', '2'));
+    //this.visitorList.addVisitor(new MaqawVisitor('eli', '1'));
+    //this.visitorList.addVisitor(new MaqawVisitor('tom', '2'));
 
     // takes an array of ids representing visitors on the site
     this.updateVisitorList = function(visitors){
-        // pass the list along to the VisitorList so it can take care of updates
+        // pass the list along to the MaqawVisitorList so it can take care of updates
         that.visitorList.setVisitorList(visitors);
     }
 
@@ -90,11 +90,11 @@ function RepSession(manager, rep) {
     this.updateVisitorList(this.maqawManager.visitors);
 }
 
-RepSession.prototype.getBodyContents = function() {
+MaqawRepSession.prototype.getBodyContents = function() {
     return this.body;
 };
 
-RepSession.prototype.getHeaderContents = function() {
+MaqawRepSession.prototype.getHeaderContents = function() {
     return this.header;
 };
 

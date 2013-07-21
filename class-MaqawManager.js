@@ -8,15 +8,15 @@ function MaqawManager(display) {
         port = 3000;
 
     // this id is used whenever the client makes a connection with peerjs
-    this.id = docCookies.getItem('peerId');
+    this.id = maqawCookies.getItem('peerId');
     this.key = key;
     // an array of ids of representatives that are available for chat
     this.representatives;
     this.maqawDisplay = display;
     this.visitorSession;
     this.repSession;
-    // a LoginPage object that can be used to login with rep details
-    this.loginPage = new LoginPage(this);
+    // a MaqawLoginPage object that can be used to login with rep details
+    this.loginPage = new MaqawLoginPage(this);
     // the most recent list of visitors from the server
     this.visitors = [];
 
@@ -33,7 +33,7 @@ function MaqawManager(display) {
     this.peer.on('open', function (id) {
         that.id = id;
         console.log("My id: "+id);
-        docCookies.setItem('peerId', id, Infinity);
+        maqawCookies.setItem('peerId', id, Infinity);
     });
 
     this.peer.on('clients', function (visitors) {
@@ -56,7 +56,7 @@ function MaqawManager(display) {
 
     this.logoutClicked = function () {
         // clear cookies and local data for the rep
-        docCookies.removeItem('maqawRepLoginCookie');
+        maqawCookies.removeItem('maqawRepLoginCookie');
         localStorage.removeItem('maqawRepSession');
         that.showVisitorSession();
     };
@@ -71,7 +71,7 @@ function MaqawManager(display) {
     // a new one is created
     this.startVisitorSession = function () {
         // create new visitor session
-        var visitorSession = new VisitorSession(that);
+        var visitorSession = new MaqawVisitorSession(that);
         // try to pull previously saved session data
         var storedSessionData = JSON.parse(localStorage.getItem('maqawVisitorSession'));
         // if previous data was found load it into the visitorSession
@@ -82,10 +82,10 @@ function MaqawManager(display) {
         that.visitorSession = visitorSession;
     };
 
-    // Creates and displays a new RepSession using the Representative object that
+    // Creates and displays a new MaqawRepSession using the MaqawRepresentative object that
     // is passed in.
     this.startNewRepSession = function (rep) {
-        that.repSession = new RepSession(that, rep);
+        that.repSession = new MaqawRepSession(that, rep);
 
         // if we are loading a saved session, retrieve stored data
         if (that.loadPreviousRepSession) {
@@ -108,7 +108,7 @@ function MaqawManager(display) {
     // return true if a rep session is successfully loaded and false otherwise
     this.loadRepSession = function () {
         // check for a login cookie, return false if one can't be found
-        var loginCookie = docCookies.getItem('maqawRepLoginCookie');
+        var loginCookie = maqawCookies.getItem('maqawRepLoginCookie');
         if (loginCookie === null) {
             return false;
         }
@@ -154,7 +154,7 @@ function MaqawManager(display) {
     window.addEventListener('unload', saveSession, false);
 }
 
-// takes a VisitorSession object and loads it as the current visitor session
+// takes a MaqawVisitorSession object and loads it as the current visitor session
 MaqawManager.prototype.setVisitorSession = function (visitorSession) {
     this.visitorSession = visitorSession;
 };

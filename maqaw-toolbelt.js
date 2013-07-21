@@ -41,7 +41,7 @@ function maqawAjaxPost(url, params, callback) {
 
 }
 
-var docCookies = {
+var maqawCookies = {
   //
   // Thank you, Mozilla 
   // Documentation at https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
