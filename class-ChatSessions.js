@@ -140,10 +140,14 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
 
     // Attempts to open a peerjs connection if the connection is currently closed,
     // and an id has been provided
-    this.openConnection = function () {
+    this.openConnection = function (onOpenCallback) {
         if (that.dstId) {
+            console.log("attempting connection");
             var c = that.peer.connect(that.dstId);
             c.on('open', function () {
+                console.log("Connection opened");
+                // invoke the callback if one was provided
+                onOpenCallback && onOpenCallback();
                 connect(c);
             });
             c.on('error', function (err) {
@@ -212,7 +216,36 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     disallowMessages();
 
     // Finish by attempting to open a connection if applicable
-    this.openConnection();
+    if(that.dstId){
+        attemptConnection();
+    }
+
+
+    function attemptConnection(){
+        // how many milliseconds we will wait until trying to connect again
+        var retryInterval = 6000;
+        var isConnected = false;
+
+        // this function is called when a successful connection is opened
+        function successCallback(){
+            isConnected =  true;
+        }
+
+        // create a function that will attempt to open a connection, and will retry
+        // every retryInterval milliseconds until a connection is established
+        // this function is immediately invoked
+        (function tryOpeningConnection(){
+            // start the connection opening process
+            if(!isConnected){
+                that.openConnection(successCallback);
+
+                // schedule it to try again in a bit.
+                setTimeout(tryOpeningConnection, retryInterval);
+            }
+        })();
+
+
+    }
 }
 
 // Returns the main div container for the chat session

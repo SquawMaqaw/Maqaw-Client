@@ -4,7 +4,7 @@
 function MaqawManager(display) {
     var that = this,
         key = 'cat',
-        host = 'ec2-54-214-126-127.us-west-2.compute.amazonaws.com',
+        host = 'ec2-54-212-11-221.us-west-2.compute.amazonaws.com',
         port = 3000;
 
     // this id is used whenever the client makes a connection with peerjs
