@@ -63,6 +63,7 @@ function MaqawRepSession(manager, rep) {
     this.chatManager = new MaqawChatManager(chatSessions);
 
     // create new visitor list
+
     this.visitorList = new MaqawVisitorList(visitorListContainer, this.chatManager, this.maqawManager);
 
     //this.visitorList.addVisitor(new MaqawVisitor('eli', '1'));

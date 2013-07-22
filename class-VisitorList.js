@@ -94,6 +94,7 @@ function MaqawVisitorList(listDisplayContainer, chatManager, maqawManager) {
         that.selectedVisitor = visitorWrapper;
     };
 
+
     // a visitorwrapper calls this to tell the MaqawVisitorList that it is going inactive
     // the visitor list needs to make sure that it doesn't have this visitor set
     // as selected
@@ -136,6 +137,7 @@ function MaqawVisitorList(listDisplayContainer, chatManager, maqawManager) {
             // create and update a visitorWrapper using this data
             // ideally we would like the visitors to show up in the same order in the table, but right now
             // we just append it to the end by passing rowIndex of -1
+
             var visitorWrapper = new MaqawVisitorWrapper(dataObject['id'], dataObject['name'], that, -1);
             if(dataObject['isSelected']) {
                 that.selectedVisitor = visitorWrapper;
@@ -153,6 +155,7 @@ function MaqawVisitorList(listDisplayContainer, chatManager, maqawManager) {
 
 
 // this wrapper class monitors the status of a visitor
+
 function MaqawVisitorWrapper(id, name, visitorList, rowIndex) {
     var that = this;
     this.visitorList = visitorList;
@@ -168,11 +171,10 @@ function MaqawVisitorWrapper(id, name, visitorList, rowIndex) {
     // connection takes five seconds to notice.
     this.isChatConnected = false;
 
+
     this.visitor = new MaqawVisitor(this.visitorList.maqawManager, name, id, visitorConnectionCallback);
 
-
     // create row to display this visitor in the table
-
     this.row = visitorList.table.insertRow(rowIndex);
     this.row.className = 'visitor-list-entry';
     // the row contains a single cell containing the visitor name
@@ -247,7 +249,7 @@ function MaqawVisitorWrapper(id, name, visitorList, rowIndex) {
 
         // if they are disconnected, tell the chat session to disallow sending messages
         updateChatSending();
-    }
+    };
 
     // tells the chat session whether or not they should allow messages to be sent by the rep
     // if either the visitor is not currently connected to the server, or the chat connection

@@ -15,8 +15,10 @@ function MaqawManager(display) {
     this.maqawDisplay = display;
     this.visitorSession;
     this.repSession;
+
     // a MaqawLoginPage object that can be used to login with rep details
     this.loginPage = new MaqawLoginPage(this);
+
     // the most recent list of visitors from the server
     this.visitors = [];
 
@@ -33,7 +35,9 @@ function MaqawManager(display) {
     this.peer.on('open', function (id) {
         that.id = id;
         console.log("My id: "+id);
+
         maqawCookies.setItem('peerId', id, Infinity);
+
     });
 
     this.peer.on('clients', function (visitors) {
@@ -108,6 +112,7 @@ function MaqawManager(display) {
     // return true if a rep session is successfully loaded and false otherwise
     this.loadRepSession = function () {
         // check for a login cookie, return false if one can't be found
+
         var loginCookie = maqawCookies.getItem('maqawRepLoginCookie');
         if (loginCookie === null) {
             return false;

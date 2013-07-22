@@ -4,6 +4,7 @@
 // key - webrtc chat key
 // chatDisplayContainer - the div that will show the visitors chat session
 function MaqawVisitor(manager, name, id, connectionCallback) {
+
     var that = this;
     this.name = name;
     this.id = id;

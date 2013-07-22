@@ -29,6 +29,7 @@ function MaqawVisitorSession(manager) {
     var chatSessionContainer = document.createElement("DIV");
     this.visitorChatWindow.appendChild(chatSessionContainer);
 
+
     // create MaqawChatSession
     // don't include a connection id so that no connection is started from this end. Leave
     // it to the rep to start a connection

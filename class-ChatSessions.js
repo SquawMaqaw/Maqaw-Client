@@ -3,17 +3,18 @@
  to a visitor.
  */
 function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, connectionCallback) {
+
     this.srcName = srcName;
     this.dstName = dstName;
     this.dstId = dstId;
     var that = this;
     this.peer = peer;
-    var isConnected = false;
+    this.isConnected = false;
     var conn;
 
     // whether or not the chat session should allow a rep to send a message
     // this will be updated based on the connection status with the visitor
-    this.isSendingAllowed = false;
+    this.isSendingAllowed;
 
     // callback function for when the connection status changes. True is passed if a connection
     // becomes open, and false is passed if the connection closes
@@ -87,27 +88,36 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
 
     }
 
-    // if a connection callback function has been provided, let it know
-    // the current connection status
-    function updateConnectionCallback() {
+    // takes a boolean representing if the peer is connected or not
+    // updates the setting, and turns off the text input box if
+    // a connection is not active. Calls a connectionCallback as well
+    // if one was provided
+    function setConnectionStatus(connectionStatus) {
+        that.isConnected = connectionStatus;
+
+        // change status of text input depending on connection
+        if (connectionStatus) {
+            allowMessages();
+        } else {
+            disallowMessages();
+        }
+
         if (that.connectionCallback) {
-            that.connectionCallback(that.getIsConnected());
+            that.connectionCallback(connectionStatus);
         }
     }
 
     /* Set up peerjs connection handling for this chat session */
     this.peer.on('connection', connect);
     function connect(c) {
-        isConnected = true;
-        updateConnectionCallback();
+        setConnectionStatus(true);
         conn = c;
         conn.on('data', function (data) {
             console.log(data);
             handleResponse(data);
         });
         conn.on('close', function (err) {
-            isConnected = false;
-            updateConnectionCallback();
+            setConnectionStatus(false);
         });
 
 
@@ -143,15 +153,13 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     };
 
     this.getIsConnected = function () {
-        return isConnected;
+        return that.isConnected;
     };
 
     // if the connection is open, close it
     this.disconnect = function () {
-        if (isConnected) {
+        if (that.isConnected) {
             conn.close();
-            //isConnectedToServer = false;
-            //updateConnectionCallback();
         }
     };
 
@@ -166,14 +174,22 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
             } else {
                 disallowMessages();
             }
-            that.isSendingAllowed = allowMessageSending;
         }
     }
 
     // prevent a message from being sent
+    var savedTextValue = null;
+
     function disallowMessages() {
         if (that.textInput) {
+            that.isSendingAllowed = false;
             that.textInput.disabled = true;
+            // change text to reflect this, if it hasn't already been saved
+            if (savedTextValue == null) {
+                savedTextValue = that.textInput.value;
+                console.log("Saving value: " + savedTextValue);
+                that.textInput.value = "Connecting to peer...";
+            }
         }
         console.log('disallow messages');
     }
@@ -181,9 +197,19 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     // allow messages to be sent
     function allowMessages() {
         if (that.textInput) {
+            that.isSendingAllowed = true;
             that.textInput.disabled = false;
+            // restore original text
+            if (savedTextValue !== null) {
+                console.log("Restoring value: " + savedTextValue);
+                that.textInput.value = savedTextValue;
+                savedTextValue = null;
+            }
         }
     }
+
+    // disallow sending messages until a connection is opened
+    disallowMessages();
 
     // Finish by attempting to open a connection if applicable
     this.openConnection();

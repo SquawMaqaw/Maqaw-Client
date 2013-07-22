@@ -27,6 +27,7 @@ MaqawChatManager.prototype.showVisitorChat = function(visitor) {
 // visitor is being displayed. If no argument is passed in then the
 // window is always cleared
 MaqawChatManager.prototype.clear = function(visitor) {
+
     if(!visitor || visitor && visitor === this.activeVisitor){
         this.chatWindow.innerHTML = '';
         this.chatWindow.appendChild(this.noChatSession);

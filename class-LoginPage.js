@@ -103,6 +103,7 @@ function MaqawLoginPage(manager) {
         if(xhr.status === 401) {
             errorMessage.style.display = 'block';
             // clear stored params
+
             maqawCookies.removeItem('maqawRepLoginCookie');
         } else if(xhr.status === 200) {
             // success! hide error message
