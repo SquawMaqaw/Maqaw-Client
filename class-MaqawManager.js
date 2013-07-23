@@ -8,6 +8,7 @@ function MaqawManager(options, display) {
 
     // the key that peers will use to connect to each other on the peer server
     this.key = options.key;
+    this.chatName = options.name;
 
     // this id is used whenever the client makes a connection with peerjs
     this.id = maqawCookies.getItem('peerId');
@@ -29,7 +30,7 @@ function MaqawManager(options, display) {
         this.peer = new Peer(this.id, {key: this.key, host: host, port: port});
     } else {
         //  No peer id cookie found. Retrieve new id from browser
-        this.peer = new Peer({key: key, host: host, port: port});
+        this.peer = new Peer({key: this.key, host: host, port: port});
     }
 
     /* listen for peer js events */

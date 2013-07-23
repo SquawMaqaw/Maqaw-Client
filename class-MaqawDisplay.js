@@ -4,7 +4,7 @@
  */
 
 function MaqawDisplay(startMinimized) {
-    this.startMinimized = false;
+    this.startMinimized = startMinimized;
 }
 
 /*
@@ -29,9 +29,9 @@ MaqawDisplay.prototype.setup = function () {
     // check if the window should be minimized by default
     var isMinimized = this.startMinimized;
     if(isMinimized){
-        this.clientBody.style.dislay = 'none';
+        this.clientBody.style.display = 'none';
     } else {
-        this.clientBody.style.dislay = 'block';
+        this.clientBody.style.display = 'block';
     }
 
     // when the header is clicked it should toggle between minimized and shown

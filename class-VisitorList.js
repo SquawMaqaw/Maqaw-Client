@@ -12,7 +12,7 @@ function MaqawVisitorList(listDisplayContainer, chatManager, maqawManager) {
     this.maqawManager = maqawManager;
     // a visitor wrapper object representing the visitor that is selected in the table
     this.selectedVisitor;
-    this.visitorCounter = 0;
+    this.visitorCounter = 1;
 
     // create table of visitors
     this.table = document.createElement('table');
@@ -131,6 +131,9 @@ function MaqawVisitorList(listDisplayContainer, chatManager, maqawManager) {
         that.visitors = {};
         that.tBody.innerHTML = '';
 
+        // set the visitor counter to be the number of visitors stored
+        that.visitorCounter = listData.length;
+
         // go through each entry in the list data and restore it
         for(var index in listData){
             var dataObject = listData[index];
@@ -139,6 +142,7 @@ function MaqawVisitorList(listDisplayContainer, chatManager, maqawManager) {
             // we just append it to the end by passing rowIndex of -1
 
             var visitorWrapper = new MaqawVisitorWrapper(dataObject['id'], dataObject['name'], that, -1);
+
             if(dataObject['isSelected']) {
                 that.selectedVisitor = visitorWrapper;
                 visitorWrapper.select();
