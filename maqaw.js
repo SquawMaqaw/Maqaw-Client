@@ -7,7 +7,7 @@ var maqawDisplay = new MaqawDisplay(false);
 maqawDisplay.setup();
 
 // Initialize the MaqawManager to deal with clients and representatives
-var maqawManager = new MaqawManager(maqawDisplay);
+var maqawManager = new MaqawManager(maqawOptions, maqawDisplay);
 
 // start a visitor session
 maqawManager.startVisitorSession();

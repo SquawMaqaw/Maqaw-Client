@@ -1,15 +1,16 @@
 /*
  MaqawManager is the top level class for managing the Maqaw client
  */
-function MaqawManager(display) {
+function MaqawManager(options, display) {
     var that = this,
-        key = 'cat',
         host = 'ec2-54-212-11-221.us-west-2.compute.amazonaws.com',
         port = 3000;
 
+    // the key that peers will use to connect to each other on the peer server
+    this.key = options.key;
+
     // this id is used whenever the client makes a connection with peerjs
     this.id = maqawCookies.getItem('peerId');
-    this.key = key;
     // an array of ids of representatives that are available for chat
     this.representatives;
     this.maqawDisplay = display;
@@ -25,7 +26,7 @@ function MaqawManager(display) {
 
     if (this.id) {
         //  peer id has been stored in the browser. Use it
-        this.peer = new Peer(this.id, {key: key, host: host, port: port});
+        this.peer = new Peer(this.id, {key: this.key, host: host, port: port});
     } else {
         //  No peer id cookie found. Retrieve new id from browser
         this.peer = new Peer({key: key, host: host, port: port});
