@@ -89,9 +89,6 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     }
 
 
-
-
-
     // scroll chat window to most recent text
     this.scrollToBottom = function () {
         that.textDisplay.scrollTop = that.textDisplay.scrollHeight;
@@ -111,17 +108,19 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     // and an id has been provided
     this.openConnection = function (onOpenCallback) {
         if (that.dstId) {
-            console.log(that+": attempting connection with "+that.dstId+"at "+(new Date()).toLocaleTimeString());
+            console.log(that + ": attempting connection with " + that.dstId + "at " + (new Date()).toLocaleTimeString());
             that.conn = that.peer.connect(that.dstId, {reliable: false});
-            that.conn.on('open', function () {
-                console.log(that+": Connection opened with "+that.dstId+" at "+(new Date()).toLocaleTimeString());
-                // invoke the callback if one was provided
-                onOpenCallback && onOpenCallback();
-                connect(that.conn);
-            });
-            that.conn.on('error', function (err) {
-                console.log("Connection error: " + err);
-            });
+            if (that.conn) {
+                that.conn.on('open', function () {
+                    console.log(that + ": Connection opened with " + that.dstId + " at " + (new Date()).toLocaleTimeString());
+                    // invoke the callback if one was provided
+                    onOpenCallback && onOpenCallback();
+                    connect(that.conn);
+                });
+                that.conn.on('error', function (err) {
+                    console.log("Connection error: " + err);
+                });
+            }
         }
     };
 
@@ -143,7 +142,7 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     }
 
     // An on Connection event that was triggered by receiving a connection from a peer
-    function receiveRequestFromPeer(conn){
+    function receiveRequestFromPeer(conn) {
         console.log("in receiveRequestFromPeer");
         //setConnectionStatus(true);
         that.conn = conn;
@@ -155,7 +154,7 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
 
         that.conn.on('data', function (data) {
             console.log(data);
-            if(!that.isConnected){
+            if (!that.isConnected) {
                 setConnectionStatus(true);
             }
             handleResponse(data);
@@ -175,7 +174,7 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     // if one was provided
     function setConnectionStatus(connectionStatus) {
         that.isConnected = connectionStatus;
-        console.log("Setting connection status to "+connectionStatus);
+        console.log("Setting connection status to " + connectionStatus);
 
         // change status of text input depending on connection
         if (connectionStatus) {
@@ -220,7 +219,7 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     disallowMessages();
 
     // Finish by attempting to open a connection if applicable
-    if(that.dstId){
+    if (that.dstId) {
         attemptConnection();
     }
 
@@ -256,9 +255,7 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     }
 
 
-
-
-    function attemptConnection(){
+    function attemptConnection() {
         // how many milliseconds we will wait until trying to connect again
         var retryInterval = 8000;
         var isConnected = false;
@@ -268,16 +265,16 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
         var numAttempts = 0;
 
         // this function is called when a successful connection is opened
-        function successCallback(){
-            isConnected =  true;
+        function successCallback() {
+            isConnected = true;
         }
 
         // create a function that will attempt to open a connection, and will retry
         // every retryInterval milliseconds until a connection is established
         // this function is immediately invoked
-        (function tryOpeningConnection(){
+        (function tryOpeningConnection() {
             // start the connection opening process
-            if(!isConnected && numAttempts < retryLimit){
+            if (!isConnected && numAttempts < retryLimit) {
                 numAttempts++;
                 that.openConnection(successCallback);
 

@@ -43,7 +43,7 @@ function MaqawLoginPage(manager) {
     var usernameField = document.createElement("input");
     usernameField.setAttribute('type', "text");
     usernameField.setAttribute('name', "username");
-    usernameField.setAttribute('size', "31");
+    usernameField.setAttribute('id', "maqaw-login-user-field");
     usernameField.setAttribute('placeholder', 'username');
     usernameField.value = user;
     this.body.appendChild(usernameField);
@@ -51,7 +51,7 @@ function MaqawLoginPage(manager) {
     var passwordField = document.createElement("input");
     passwordField.setAttribute('type', "password");
     passwordField.setAttribute('name', "password");
-    passwordField.setAttribute('size', "31");
+    passwordField.setAttribute('id', "maqaw-login-password-field");
     passwordField.setAttribute('placeholder', 'password');
     passwordField.value = password;
     this.body.appendChild(passwordField);
@@ -68,7 +68,7 @@ function MaqawLoginPage(manager) {
 
 // back button
     var loginBackButton = document.createElement('DIV');
-    loginBackButton.id = 'login-back-button';
+    loginBackButton.id = 'maqaw-login-back-button';
     loginBackButton.className = 'maqaw-login-page-button';
     loginBackButton.innerHTML = 'Back';
     this.body.appendChild(loginBackButton);
@@ -112,15 +112,26 @@ function MaqawLoginPage(manager) {
             var rep = new MaqawRepresentative('RepName');
             // tell manager to change to rep mode using our representative data
             that.maqawManager.startNewRepSession(rep);
-            clearInterval(that.loginInterval);
+            that.loginSuccess = true;
         }
     }
 
     // attempts a login with the supplied parameters
     this.loginWithParams = function(params){
-        that.loginInterval = setInterval(function(){
-                maqawAjaxPost(loginEndpoint, params, handleLoginPostResponse);
-        }, 100);
+        that.loginSuccess = false;
+        var retryRate = 100;
+        var maxAttempts = 10;
+        var numAttempts = 0;
+
+        (function tryLogin(){
+            maqawAjaxPost(loginEndpoint, params, handleLoginPostResponse);
+            numAttempts++
+            if(!that.loginSuccess && numAttempts < maxAttempts){
+                setTimeout(tryLogin, retryRate);
+            } else if (numAttempts >= maxAttempts){
+                that.maqawManager.showVisitorSession();
+            }
+        })();
     }
 }
 

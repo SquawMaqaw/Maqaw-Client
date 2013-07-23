@@ -1,242 +1,323 @@
 #maqaw-chat-container {
-    margin: 0;
-    padding: 0;
-    color: black;
-    background-color: transparent;
-    position: fixed;
-    left: 20px;
-    bottom: 0;
+    position: fixed !important;
+    left: 20px !important;
+    bottom: 0 !important;
+    top: auto !important;
+    right: auto !important;
+
+    z-index: 101 !important;
+
+    color: black !important;
+    background: transparent none repeat scroll 0 0 !important;
+
+    float: none !important;
+    clear: none !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 solid #000 !important;
+
+    min-height: 0 !important;
+    max-height: none !important;
+    height: auto !important;
+
+    min-width: 0 !important;
+    max-width: none !important;
+    width: auto !important;
+
+    font: normal normal normal 11px/1.5 arial, verdana, sans-serif !important;
+    list-style: disc outside none !important;
+    letter-spacing: normal !important;
+    text-align: left !important;
+    text-decoration: none !important;
+    text-indent: 0 !important;
+    text-transform: none !important;
+    white-space: normal !important;
+    word-spacing: normal !important;
+    vertical-align: baseline !important;
+
+    unicode-bidi: normal !important;
+    direction: ltr !important;
+
+    clip: auto !important;
+    overflow: hidden !important;
+    visibility: visible !important;
+    outline: invert none medium !important;
+
+    /** odditites which will need specified separately for each property that it goes against **/
+    display: inline !important;
+    cursor: auto !important;
 }
 
 #maqaw-client-header {
-    padding-top: 8px;
-    padding-left: 10px;
-    color: white;
-    font-family: helvetica;
-    font-size: 15px;
+    padding-top: 8px !important;
+    padding-left: 10px !important;
+    color: white !important;
+    font-family: "helvetica", 'arial' !important;
+    font-size: 15px !important;
 }
 
 .maqaw-default-client-header {
-    cursor: pointer;
-    width: 250px;
-    height: 35px;
-    background-color: #fc5f43;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    cursor: pointer !important;
+    width: 250px !important;
+    height: 35px !important;
+    background-color: #fc5f43 !important;
+    border-top-left-radius: 5px !important;
+    border-top-right-radius: 5px !important;
 }
 
 .maqaw-chat-header-text {
-    padding-top: 8px;
-    padding-left: 10px;
-    color: white;
-    font-family: helvetica;
-    font-size: 15px;
+    padding-top: 8px !important;
+    padding-left: 10px !important;
+    color: white !important;
+    font-family: "helvetica" !important;
+    font-size: 15px !important;
 }
 
+
 #maqaw-chat-header-text:hover {
-    text-decoration: underline;
+    text-decoration: underline !important;
 }
 
 .maqaw-client-chat-window {
-    background-color: white;
-    border-right: 1px solid lightgrey;
-    border-left: 1px solid lightgrey;
-    height: 212px;
-    width: 248px;
+    background-color: white !important;
+    border-right: 1px solid lightgrey !important;
+    border-left: 1px solid lightgrey !important;
+    height: 212px !important;
+    width: 248px !important;
 }
 
 .maqaw-chat-display {
-    border-bottom: 1px solid lightgrey;
-    padding: 10px;
-    height: 140px;
-    overflow-y: auto;
-    white-space: pre-wrap; /* CSS3 */
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -pre-wrap; /* Opera <7 */
-    white-space: -o-pre-wrap; /* Opera 7 */
-    word-wrap: break-word; /* IE */
-
+    border-bottom: 1px solid lightgrey !important;
+    padding: 10px !important;
+    height: 140px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    white-space: pre-wrap !important; /* CSS3 */
+    white-space: -moz-pre-wrap !important; /* Firefox */
+    white-space: -o-pre-wrap !important; /* Opera 7 */
+    word-wrap: break-word !important; /* IE */
 }
 
 #maqaw-client-chat-display {
 
 }
 
-.maqaw-chat-entry {
-    width: 238px;
-    height: 20px;
-    margin: 2px;
-    resize: none;
-}
-
-#maqaw-chat-entry:focus {
-    box-shadow: 0 0 10px lightblue;
-}
-
-.maqaw-chat-paragraph {
-    line-height: .94;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    margin: 0;
-}
-
-.maqaw-chat-src-name {
-    color: red;
-}
-
-.maqaw-chat-dest-name {
-    color: blue;
-}
-
-#maqaw-login-button {
-    padding-top: 2px;
-    padding-left: 3px;
-    color: blue;
-    font-size: 10px;
-    float: left;
-    cursor: pointer;
-}
-
-#maqaw-login-button:hover {
-    color: red;
-}
-
-#maqaw-link {
-    float: right;
-    padding-top: 2px;
-    padding-right: 7px;
-    color: grey;
-    text-align: right;
-    font-size: 11px;
-}
-
-#maqaw-login-window {
-    background-color: white;
-    border-right: 1px solid lightgrey;
-    border-left: 1px solid lightgrey;
-    height: 210px;
-    width: 248px;
-}
-
-#maqaw-login-title {
-    font-family: helvetica;
-    font-size: 20px;
-    text-align: center;
-    font-weight: bold;
-    margin: 0 auto;
-    padding-top: 20px;
-}
-
-#maqaw-chat-container input {
-    margin-left: 20px;
-    margin-top: 8px;
-}
-
-#maqaw-chat-container input:focus {
-    box-shadow: 0 0 10px lightblue;
-}
-
-.maqaw-login-page-button {
-    border-radius: 5px;
-    padding: 3px;
-    border: 1px solid grey;
-    background-color: deepskyblue;
-    color: white;
-    cursor: pointer;
-    margin-top: 8px;
-    width: 50px;
-    height: 20px;
-    text-align: center;
-    margin-left: 20px;
-}
-
-.maqaw-login-page-button:hover {
-    background-color: black;
-}
-
-#maqaw-login-submit-button {
-    float: left;
-}
-
-#maqaw-login-back-button {
-    float: left;
-}
-
-#maqaw-login-footer {
-    margin-left: 20px;
-    margin-right: 20px;
-    padding-top: 20px;
-    clear: both;
-    font-size: 12px;
-}
-
-#maqaw-logged-in-chat-window {
-    float: left;
-    background-color: white;
-    border-right: 1px solid lightgrey;
-    border-left: 1px solid lightgrey;
-    height: 211px;
-    width: 248px;
-}
-
-#maqaw-logged-in-dashboard {
-    border-top-right-radius: 5px;
-    float: right;
-    background-color: white;
-    border-right: 1px solid lightgrey;
-    border-top: 1px solid lightgrey;
-    height: 210px;
-    width: 248px;
-}
-
-#maqaw-logged-in-chat-footer {
-
+#maqaw-chat-footer {
     position: absolute;
-    padding: 5px;
     bottom: 0;
 }
 
+
+
+textarea.maqaw-chat-entry {
+    padding: 3px;
+    color: black;
+    background-color: white;
+    width: 235px !important;
+    height: 20px !important;
+    margin: 2px !important;
+    resize: none !important;
+}
+
+#maqaw-chat-entry:focus {
+    box-shadow: 0 0 10px lightblue !important;
+}
+
+.maqaw-chat-paragraph {
+    line-height: .94 !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    margin: 0 !important;
+}
+
+.maqaw-chat-src-name {
+    color: red !important;
+    display: inline !important;
+    margin: 0 !important;
+}
+
+.maqaw-chat-dest-name {
+    color: blue !important;
+    display: inline !important;
+    margin: 0 !important
+}
+
+#maqaw-login-button {
+    padding-top: 2px !important;
+    padding-left: 3px !important;
+    color: blue !important;
+    font-size: 10px !important;
+    float: left !important;
+    cursor: pointer !important;
+}
+
+#maqaw-login-button:hover {
+    color: red !important;
+}
+
+#maqaw-link {
+    float:right;
+    margin-left: 95px;
+    padding-top: 2px !important;
+    padding-right: 7px !important;
+    color: grey !important;
+    text-align: right !important;
+    font-size: 11px !important;
+}
+
+#maqaw-login-window {
+    background-color: white !important;
+    border-right: 1px solid lightgrey !important;
+    border-left: 1px solid lightgrey !important;
+    height: 210px !important;
+    width: 248px !important;
+}
+
+#maqaw-login-title {
+    font-family: helvetica !important;
+    font-size: 20px !important;
+    text-align: center !important;
+    font-weight: bold !important;
+    margin: 0 auto !important;
+    padding-top: 20px !important;
+}
+
+input[type="text"]#maqaw-login-user-field{
+    margin: 8px 0 0 20px !important;
+    padding: 3px !important;
+    border: 1px solid grey !important;
+    background-color: white !important;
+    color: black !important;
+    font-size: 13px !important;
+    width: 200px !important;
+    height: 15px !important;
+}
+
+input[type="text"]:focus#maqaw-login-user-field {
+    box-shadow: 0 0 10px lightblue !important;
+    -moz-box-shadow: 0 0 10px lightblue !important;
+    -webkit-box-shadow: 0 0 10px lightblue !important;
+}
+
+input[type="password"]#maqaw-login-password-field {
+    margin: 8px 0 0 20px !important;
+    padding: 3px !important;
+    border: 1px solid grey !important;
+    background-color: white !important;
+    color: black !important;
+    font-size: 13px !important;
+    width: 200px !important;
+    height: 15px !important;
+}
+
+input[type="password"]:focus#maqaw-login-password-field {
+    box-shadow: 0 0 10px lightblue !important;
+    -moz-box-shadow: 0 0 10px lightblue !important;
+    -webkit-box-shadow: 0 0 10px lightblue !important;
+}
+
+.maqaw-login-page-button {
+    font-size: 14px !important;
+    border-radius: 5px !important;
+    padding: 3px !important;
+    border: 1px solid grey !important;
+    background-color: deepskyblue !important;
+    color: white !important;
+    cursor: pointer !important;
+    margin-top: 8px !important;
+    width: 50px !important;
+    height: 20px !important;
+    text-align: center !important;
+    margin-left: 20px !important;
+}
+
+.maqaw-login-page-button:hover {
+    background-color: black !important;
+}
+
+#maqaw-login-submit-button {
+    float: left !important;
+}
+
+#maqaw-login-back-button {
+    float: left !important;
+}
+
+#maqaw-login-footer {
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+    padding-top: 20px !important;
+    clear: both !important;
+    font-size: 12px !important;
+}
+
+#maqaw-logged-in-chat-window {
+    float: left !important;
+    background-color: white !important;
+    border-right: 1px solid lightgrey !important;
+    border-left: 1px solid lightgrey !important;
+    height: 211px !important;
+    width: 248px !important;
+}
+
+#maqaw-logged-in-dashboard {
+    border-top-right-radius: 5px !important;
+    float: right !important;
+    background-color: white !important;
+    border-right: 1px solid lightgrey !important;
+    border-top: 1px solid lightgrey !important;
+    height: 210px !important;
+    width: 248px !important;
+}
+
+#maqaw-logged-in-chat-footer {
+    position: absolute !important;
+    padding-left: 5px !important;
+    padding-bottom: 2px !important;
+    bottom: 0 !important;
+}
+
 #maqaw-logout-button {
-    color: blue;
-    cursor: pointer;
-    font-size: 12px;
+    color: blue !important;
+    cursor: pointer !important;
+    font-size: 12px !important;
 }
 
 #maqaw-logout-button:hover {
-    color: red;
+    color: red !important;
 }
-
 
 #maqaw-no-chat-session-selected {
-    text-align: center;
-    margin: 0 auto;
-    font-size: 20px;
-    font-family: helvetica;
-    padding-top: 70px;
+    text-align: center !important;
+    margin: 0 auto !important;
+    font-size: 20px !important;
+    font-family: helvetica !important;
+    padding-top: 70px !important;
 }
 
-
 #maqaw-dashboard-title {
-    text-align: center;
-    padding-top: 10px;
-    font-size: 17px;
-    font-weight: bold;
+
+    text-align: center !important;
+    padding-top: 10px !important;
+    font-size: 17px !important;
+    font-weight: bold !important;
 }
 
 #maqaw-visitor-list-container {
-   overflow-y: auto;
-    height: 175px;
-    width: 248px;
+    overflow-y: auto !important;
+    height: 175px !important;
+    width: 248px !important;
 }
 
 #maqaw-visitor-list-table {
-    cursor: pointer;
-    overflow: auto;
-    width: 100%;
+    cursor: pointer !important;
+    overflow: auto !important;
+    width: 100% !important;
 
-    -webkit-user-select: none; /* Chrome/Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* IE10+ */
+    -webkit-user-select: none !important; /* Chrome/Safari */
+    -moz-user-select: none !important; /* Firefox */
+    -ms-user-select: none !important; /* IE10+ */
 }
 
 .maqaw-visitor-list-entry {
@@ -244,12 +325,13 @@
 }
 
 .maqaw-visitor-list-entry:hover {
-    background-color: lightcoral;
+    background-color: lightcoral !important;
 }
 
 .maqaw-selected-visitor {
-    background-color: lightcoral;
-    font-weight: bold;
+    background-color: lightcoral !important;
+    font-weight: bold !important;
+
 }
 
 .maqaw-selected-visitor:hover {
@@ -257,15 +339,15 @@
 }
 
 #maqaw-no-rep-window {
-    text-align: center;
-    font-size: 25px;
-    font-weight: bold;
+    text-align: center !important;
+    font-size: 25px !important;
+    font-weight: bold !important;
 }
 
 #maqaw-login-error-message {
-    color:red;
-    font-style: italic;
-    text-align: center;
+    color: red !important;
+    font-style: italic !important;
+    text-align: center !important;
 }
 
 

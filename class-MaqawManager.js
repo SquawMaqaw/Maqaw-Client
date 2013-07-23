@@ -19,7 +19,7 @@ function MaqawManager(options, display) {
     this.repSession;
 
     // a MaqawLoginPage object that can be used to login with rep details
-    this.loginPage = new MaqawLoginPage(this);
+    this.loginPage;
 
     // the most recent list of visitors from the server
     this.visitors = [];
@@ -54,7 +54,12 @@ function MaqawManager(options, display) {
         updateReps();
     });
 
+    // function called the VisitorSession when the login button is clicked
     this.loginClicked = function () {
+        // create and display a new LoginPage object if one doesn't already exist
+        if(!that.loginPage){
+            that.loginPage = new MaqawLoginPage(that);
+        }
         that.maqawDisplay.setHeaderContents(that.loginPage.getHeaderContents());
         that.maqawDisplay.setBodyContents(that.loginPage.getBodyContents());
     };
@@ -121,6 +126,9 @@ function MaqawManager(options, display) {
         }
 
         // otherwise reload the rep session
+        if(!that.loginPage){
+            that.loginPage = new MaqawLoginPage(that);
+        }
         that.loginPage.loginWithParams(loginCookie);
         that.loadPreviousRepSession = true;
         return true;
@@ -167,6 +175,7 @@ function MaqawManager(options, display) {
 MaqawManager.prototype.setVisitorSession = function (visitorSession) {
     this.visitorSession = visitorSession;
 };
+
 
 
 
