@@ -142,10 +142,10 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     // and an id has been provided
     this.openConnection = function (onOpenCallback) {
         if (that.dstId) {
-            console.log("attempting connection");
-            var c = that.peer.connect(that.dstId);
+            console.log("attempting connection with "+that.dstId+"at "+(new Date()).toLocaleTimeString());
+            var c = that.peer.connect(that.dstId, {reliable: false});
             c.on('open', function () {
-                console.log("Connection opened");
+                console.log("Connection opened with "+that.dstId+" at "+(new Date()).toLocaleTimeString());
                 // invoke the callback if one was provided
                 onOpenCallback && onOpenCallback();
                 connect(c);
@@ -223,7 +223,7 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
 
     function attemptConnection(){
         // how many milliseconds we will wait until trying to connect again
-        var retryInterval = 6000;
+        var retryInterval = 8000;
         var isConnected = false;
 
         // this function is called when a successful connection is opened

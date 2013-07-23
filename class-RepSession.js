@@ -66,9 +66,6 @@ function MaqawRepSession(manager, rep) {
 
     this.visitorList = new MaqawVisitorList(visitorListContainer, this.chatManager, this.maqawManager);
 
-    //this.visitorList.addVisitor(new MaqawVisitor('eli', '1'));
-    //this.visitorList.addVisitor(new MaqawVisitor('tom', '2'));
-
     // takes an array of ids representing visitors on the site
     this.updateVisitorList = function(visitors){
         // pass the list along to the MaqawVisitorList so it can take care of updates
@@ -86,9 +83,6 @@ function MaqawRepSession(manager, rep) {
         // the only thing that really matters is the information on the visitors in the list
          return that.visitorList.getListData();
     }
-
-    // initialize the visitor list to have whatever visitors the manager knows about
-    this.updateVisitorList(this.maqawManager.visitors);
 }
 
 MaqawRepSession.prototype.getBodyContents = function() {

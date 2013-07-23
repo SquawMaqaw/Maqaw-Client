@@ -98,10 +98,11 @@ function MaqawManager(display) {
             // if previous data was found load it into the repSession
             if (storedSessionData) {
                 that.repSession.loadSessionData(storedSessionData);
-                // update the loaded data with the current visitor list
-                that.repSession.updateVisitorList(that.visitors);
             }
         }
+
+        // update the session with the current list of visitors
+        that.repSession.updateVisitorList(that.visitors);
 
         // display the rep session
         that.maqawDisplay.setHeaderContents(that.repSession.getHeaderContents());
@@ -112,7 +113,6 @@ function MaqawManager(display) {
     // return true if a rep session is successfully loaded and false otherwise
     this.loadRepSession = function () {
         // check for a login cookie, return false if one can't be found
-
         var loginCookie = maqawCookies.getItem('maqawRepLoginCookie');
         if (loginCookie === null) {
             return false;
@@ -148,12 +148,14 @@ function MaqawManager(display) {
             var jsonSession = JSON.stringify(sessionData);
             console.log(jsonSession);
             localStorage.setItem('maqawRepSession', jsonSession);
+
         }
     }
 
     function saveSession() {
         saveVisitorSession();
         saveRepSession();
+
     }
 
     window.addEventListener('unload', saveSession, false);
