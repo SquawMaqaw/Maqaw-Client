@@ -226,6 +226,10 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
         var retryInterval = 8000;
         var isConnected = false;
 
+        //  The max number of times a connection will be attempted
+        var retryLimit = 5;
+        var numAttempts = 0;
+
         // this function is called when a successful connection is opened
         function successCallback(){
             isConnected =  true;
@@ -236,7 +240,8 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
         // this function is immediately invoked
         (function tryOpeningConnection(){
             // start the connection opening process
-            if(!isConnected){
+            if(!isConnected && numAttempts < retryLimit){
+                numAttempts++;
                 that.openConnection(successCallback);
 
                 // schedule it to try again in a bit.
