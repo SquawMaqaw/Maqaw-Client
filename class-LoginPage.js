@@ -23,12 +23,12 @@ function MaqawLoginPage(manager) {
 
 // create login window
     this.body = document.createElement('DIV');
-    this.body.id = 'login-window';
+    this.body.id = 'maqaw-login-window';
 
 // add title to login window
     var loginTitle;
     loginTitle = document.createElement('DIV');
-    loginTitle.id = 'login-title';
+    loginTitle.id = 'maqaw-login-title';
     loginTitle.innerHTML = 'Login to your account';
     this.body.appendChild(loginTitle);
 
@@ -58,8 +58,8 @@ function MaqawLoginPage(manager) {
 
 // submit button
     var loginSubmitButton = document.createElement('DIV');
-    loginSubmitButton.id = 'login-submit-button';
-    loginSubmitButton.className = 'login-page-button';
+    loginSubmitButton.id = 'maqaw-login-submit-button';
+    loginSubmitButton.className = 'maqaw-login-page-button';
     loginSubmitButton.innerHTML = 'Login';
     this.body.appendChild(loginSubmitButton);
 
@@ -69,7 +69,7 @@ function MaqawLoginPage(manager) {
 // back button
     var loginBackButton = document.createElement('DIV');
     loginBackButton.id = 'login-back-button';
-    loginBackButton.className = 'login-page-button';
+    loginBackButton.className = 'maqaw-login-page-button';
     loginBackButton.innerHTML = 'Back';
     this.body.appendChild(loginBackButton);
 
@@ -78,7 +78,7 @@ function MaqawLoginPage(manager) {
 
 // add login footer text
     var loginFooter = document.createElement('DIV');
-    loginFooter.id = 'login-footer';
+    loginFooter.id = 'maqaw-login-footer';
     loginFooter.innerHTML = "Don't have an account? Sign up at <a href='http://maqaw.com'>Maqaw.com</a>!";
     this.body.appendChild(loginFooter);
 

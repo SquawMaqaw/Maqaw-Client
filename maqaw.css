@@ -1,4 +1,4 @@
-#chat-container {
+#maqaw-chat-container {
     margin: 0;
     padding: 0;
     color: black;
@@ -33,11 +33,11 @@
     font-size: 15px;
 }
 
-#chat-header-text:hover {
+#maqaw-chat-header-text:hover {
     text-decoration: underline;
 }
 
-.client-chat-window {
+.maqaw-client-chat-window {
     background-color: white;
     border-right: 1px solid lightgrey;
     border-left: 1px solid lightgrey;
@@ -45,7 +45,7 @@
     width: 248px;
 }
 
-.chat-display {
+.maqaw-chat-display {
     border-bottom: 1px solid lightgrey;
     padding: 10px;
     height: 140px;
@@ -58,37 +58,37 @@
 
 }
 
-#client-chat-display {
+#maqaw-client-chat-display {
 
 }
 
-.chat-entry {
+.maqaw-chat-entry {
     width: 238px;
     height: 20px;
     margin: 2px;
     resize: none;
 }
 
-#chat-entry:focus {
+#maqaw-chat-entry:focus {
     box-shadow: 0 0 10px lightblue;
 }
 
-.chat-paragraph {
+.maqaw-chat-paragraph {
     line-height: .94;
     padding-top: 3px;
     padding-bottom: 3px;
     margin: 0;
 }
 
-.chat-src-name {
+.maqaw-chat-src-name {
     color: red;
 }
 
-.chat-dest-name {
+.maqaw-chat-dest-name {
     color: blue;
 }
 
-#login-button {
+#maqaw-login-button {
     padding-top: 2px;
     padding-left: 3px;
     color: blue;
@@ -97,7 +97,7 @@
     cursor: pointer;
 }
 
-#login-button:hover {
+#maqaw-login-button:hover {
     color: red;
 }
 
@@ -110,7 +110,7 @@
     font-size: 11px;
 }
 
-#login-window {
+#maqaw-login-window {
     background-color: white;
     border-right: 1px solid lightgrey;
     border-left: 1px solid lightgrey;
@@ -118,7 +118,7 @@
     width: 248px;
 }
 
-#login-title {
+#maqaw-login-title {
     font-family: helvetica;
     font-size: 20px;
     text-align: center;
@@ -127,16 +127,16 @@
     padding-top: 20px;
 }
 
-input {
+#maqaw-chat-container input {
     margin-left: 20px;
     margin-top: 8px;
 }
 
-input:focus {
+#maqaw-chat-container input:focus {
     box-shadow: 0 0 10px lightblue;
 }
 
-.login-page-button {
+.maqaw-login-page-button {
     border-radius: 5px;
     padding: 3px;
     border: 1px solid grey;
@@ -150,19 +150,19 @@ input:focus {
     margin-left: 20px;
 }
 
-.login-page-button:hover {
+.maqaw-login-page-button:hover {
     background-color: black;
 }
 
-#login-submit-button {
+#maqaw-login-submit-button {
     float: left;
 }
 
-#login-back-button {
+#maqaw-login-back-button {
     float: left;
 }
 
-#login-footer {
+#maqaw-login-footer {
     margin-left: 20px;
     margin-right: 20px;
     padding-top: 20px;
@@ -170,7 +170,7 @@ input:focus {
     font-size: 12px;
 }
 
-#logged-in-chat-window {
+#maqaw-logged-in-chat-window {
     float: left;
     background-color: white;
     border-right: 1px solid lightgrey;
@@ -179,7 +179,7 @@ input:focus {
     width: 248px;
 }
 
-#logged-in-dashboard {
+#maqaw-logged-in-dashboard {
     border-top-right-radius: 5px;
     float: right;
     background-color: white;
@@ -189,25 +189,25 @@ input:focus {
     width: 248px;
 }
 
-#logged-in-chat-footer {
+#maqaw-logged-in-chat-footer {
 
     position: absolute;
     padding: 5px;
     bottom: 0;
 }
 
-#logout-button {
+#maqaw-logout-button {
     color: blue;
     cursor: pointer;
     font-size: 12px;
 }
 
-#logout-button:hover {
+#maqaw-logout-button:hover {
     color: red;
 }
 
 
-#no-chat-session-selected {
+#maqaw-no-chat-session-selected {
     text-align: center;
     margin: 0 auto;
     font-size: 20px;
@@ -216,21 +216,20 @@ input:focus {
 }
 
 
-#dashboard-title {
-
+#maqaw-dashboard-title {
     text-align: center;
     padding-top: 10px;
     font-size: 17px;
     font-weight: bold;
 }
 
-#visitor-list-container {
+#maqaw-visitor-list-container {
    overflow-y: auto;
     height: 175px;
     width: 248px;
 }
 
-#visitor-list-table {
+#maqaw-visitor-list-table {
     cursor: pointer;
     overflow: auto;
     width: 100%;
@@ -240,20 +239,20 @@ input:focus {
     -ms-user-select: none; /* IE10+ */
 }
 
-.visitor-list-entry {
+.maqaw-visitor-list-entry {
 
 }
 
-.visitor-list-entry:hover {
+.maqaw-visitor-list-entry:hover {
     background-color: lightcoral;
 }
 
-.selected-visitor {
+.maqaw-selected-visitor {
     background-color: lightcoral;
     font-weight: bold;
 }
 
-.selected-visitor:hover {
+.maqaw-selected-visitor:hover {
 
 }
 

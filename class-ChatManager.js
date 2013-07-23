@@ -6,7 +6,7 @@ function MaqawChatManager(chatWindow) {
 
     // create div for when no chat session is selected
     this.noChatSession = document.createElement('DIV');
-    this.noChatSession.id = 'no-chat-session-selected';
+    this.noChatSession.id = 'maqaw-no-chat-session-selected';
     this.noChatSession.innerHTML = 'No visitor selected';
 
     // default to showing noChatSession

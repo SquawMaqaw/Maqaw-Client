@@ -23,7 +23,7 @@ function MaqawVisitorSession(manager) {
 
     // create div to hold chat info
     this.visitorChatWindow = document.createElement('DIV');
-    this.visitorChatWindow.className = 'client-chat-window';
+    this.visitorChatWindow.className = 'maqaw-client-chat-window';
 
     // add chat session
     var chatSessionContainer = document.createElement("DIV");
@@ -39,13 +39,13 @@ function MaqawVisitorSession(manager) {
     // add footer
     var chatFooter;
     chatFooter = document.createElement('DIV');
-    chatFooter.id = 'chat-footer';
+    chatFooter.id = 'maqaw-chat-footer';
     this.visitorChatWindow.appendChild(chatFooter);
 
     // add login button to footer
     var loginButton;
     loginButton = document.createElement('DIV');
-    loginButton.id = 'login-button';
+    loginButton.id = 'maqaw-login-button';
     loginButton.innerHTML = "Login"
     chatFooter.appendChild(loginButton);
 
@@ -62,11 +62,11 @@ function MaqawVisitorSession(manager) {
     /* Create container for when no rep is available */
     this.noRepWindow = document.createElement("DIV");
     this.noRepWindow.id = 'maqaw-no-rep-window';
-    this.noRepWindow.className = 'client-chat-window'
+    this.noRepWindow.className = 'maqaw-client-chat-window'
     this.noRepWindow.innerHTML = '';
 
     var noRepText = document.createElement("DIV");
-    noRepText.className = 'chat-display';
+    noRepText.className = 'maqaw-chat-display';
     noRepText.innerHTML = 'Sorry, there are no representatives available to chat';
     this.noRepWindow.appendChild(noRepText);
 
@@ -77,13 +77,13 @@ function MaqawVisitorSession(manager) {
     // add footer
     var noRepFooter;
     noRepFooter = document.createElement('DIV');
-    noRepFooter.id = 'chat-footer';
+    noRepFooter.id = 'maqaw-chat-footer';
     this.noRepWindow.appendChild(noRepFooter);
 
     // add login button to footer
     var noRepLoginButton;
     noRepLoginButton = document.createElement('DIV');
-    noRepLoginButton.id = 'login-button';
+    noRepLoginButton.id = 'maqaw-login-button';
     noRepLoginButton.innerHTML = "Login"
     noRepFooter.appendChild(noRepLoginButton);
 

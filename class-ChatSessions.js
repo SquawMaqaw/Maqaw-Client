@@ -26,7 +26,7 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     // add div to display chat text
     this.textDisplay;
     this.textDisplay = document.createElement('DIV');
-    this.textDisplay.className = 'chat-display';
+    this.textDisplay.className = 'maqaw-chat-display';
     this.mainContainer.appendChild(this.textDisplay);
 
     this.textDisplay.addEventListener('load', function () {
@@ -39,7 +39,7 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
     // add box for text entry
     this.textInput;
     this.textInput = document.createElement('textarea');
-    this.textInput.className = 'chat-entry';
+    this.textInput.className = 'maqaw-chat-entry';
     this.textInput.setAttribute('placeholder', 'Type and hit enter to chat');
     this.mainContainer.appendChild(this.textInput);
 
@@ -71,8 +71,8 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
             //send data to other side
             if (that.conn) that.conn.send(text);
             // append new text to existing chat text
-            that.textDisplay.innerHTML = that.textDisplay.innerHTML + "<p class='chat-paragraph'>" +
-                "<span class='chat-src-name'>" + that.srcName + ": </span>" + text + "</p>";
+            that.textDisplay.innerHTML = that.textDisplay.innerHTML + "<p class='maqaw-chat-paragraph'>" +
+                "<span class='maqaw-chat-src-name'>" + that.srcName + ": </span>" + text + "</p>";
         }
     }
 
@@ -80,8 +80,8 @@ function MaqawChatSession(chatSessionContainer, peer, srcName, dstName, dstId, c
         // test if string is not just whitespace
         if (/\S/.test(text)) {
             // append new text to existing chat text
-            that.textDisplay.innerHTML = that.textDisplay.innerHTML + "<p class='chat-paragraph'>" +
-                "<span class='chat-dest-name'>" + that.dstName + ": </span>" + text + "</p>";
+            that.textDisplay.innerHTML = that.textDisplay.innerHTML + "<p class='maqaw-chat-paragraph'>" +
+                "<span class='maqaw-chat-dest-name'>" + that.dstName + ": </span>" + text + "</p>";
 
             that.scrollToBottom();
         }

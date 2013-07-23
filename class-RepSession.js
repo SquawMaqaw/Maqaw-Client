@@ -23,7 +23,7 @@ function MaqawRepSession(manager, rep) {
     this.body.appendChild(loggedInWindow);
 
     var loggedInChatWindow = document.createElement('DIV');
-    loggedInChatWindow.id = 'logged-in-chat-window';
+    loggedInChatWindow.id = 'maqaw-logged-in-chat-window';
     loggedInWindow.appendChild(loggedInChatWindow);
 
 // create div to hold chat sessions
@@ -32,12 +32,12 @@ function MaqawRepSession(manager, rep) {
 
 // add footer for logged in chat window
     var loggedInChatFooter = document.createElement('DIV');
-    loggedInChatFooter.id = 'logged-in-chat-footer';
+    loggedInChatFooter.id = 'maqaw-logged-in-chat-footer';
     loggedInChatWindow.appendChild(loggedInChatFooter);
 
 // add logout button
     var logoutButton = document.createElement('DIV');
-    logoutButton.id = 'logout-button';
+    logoutButton.id = 'maqaw-logout-button';
     logoutButton.innerHTML = 'Logout';
     loggedInChatFooter.appendChild(logoutButton);
 // add logout listener
@@ -45,18 +45,18 @@ function MaqawRepSession(manager, rep) {
 
 // create dashboard for logged in users
     var loggedInDashboard = document.createElement('DIV');
-    loggedInDashboard.id = 'logged-in-dashboard';
+    loggedInDashboard.id = 'maqaw-logged-in-dashboard';
     loggedInWindow.appendChild(loggedInDashboard);
 
 // create title for dashboard
     var dashboardTitle = document.createElement('DIV');
-    dashboardTitle.id = 'dashboard-title';
+    dashboardTitle.id = 'maqaw-dashboard-title';
     dashboardTitle.innerHTML = 'Visitors';
     loggedInDashboard.appendChild(dashboardTitle);
 
 // div to hold table of visitors
     var visitorListContainer = document.createElement('DIV');
-    visitorListContainer.id = 'visitor-list-container';
+    visitorListContainer.id = 'maqaw-visitor-list-container';
     loggedInDashboard.appendChild(visitorListContainer);
 
     // create new chat manager

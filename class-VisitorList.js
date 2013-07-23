@@ -16,7 +16,7 @@ function MaqawVisitorList(listDisplayContainer, chatManager, maqawManager) {
 
     // create table of visitors
     this.table = document.createElement('table');
-    this.table.id = 'visitor-list-table';
+    this.table.id = 'maqaw-visitor-list-table';
     this.tBody = document.createElement('tbody');
     this.table.appendChild(this.tBody);
     this.listDisplayContainer.appendChild(this.table);
@@ -180,7 +180,7 @@ function MaqawVisitorWrapper(id, name, visitorList, rowIndex) {
 
     // create row to display this visitor in the table
     this.row = visitorList.table.insertRow(rowIndex);
-    this.row.className = 'visitor-list-entry';
+    this.row.className = 'maqaw-visitor-list-entry';
     // the row contains a single cell containing the visitor name
     var cell = document.createElement("td");
     var cellText = document.createTextNode(this.visitor.name);
@@ -206,7 +206,7 @@ function MaqawVisitorWrapper(id, name, visitorList, rowIndex) {
     this.select = function () {
         that.isSelected = true;
         // change class to selected
-        that.row.className = 'selected-visitor';
+        that.row.className = 'maqaw-selected-visitor';
         // show visitor chat window
         that.visitorList.chatManager.showVisitorChat(that.visitor)
     };
@@ -215,7 +215,7 @@ function MaqawVisitorWrapper(id, name, visitorList, rowIndex) {
     this.deselect = function () {
         that.isSelected = false;
         // change class to default
-        that.row.className = 'visitor-list-entry';
+        that.row.className = 'maqaw-visitor-list-entry';
         // clear chat window
         that.visitorList.chatManager.clear(that.visitor);
     };
@@ -282,7 +282,7 @@ function MaqawVisitorWrapper(id, name, visitorList, rowIndex) {
         that.visitorList.hideVisitor(that);
         that.isSelected = false;
         // change class to default
-        that.row.className = 'visitor-list-entry';
+        that.row.className = 'maqaw-visitor-list-entry';
         // clear chat window
         that.visitorList.chatManager.clear(that.visitor);
     }

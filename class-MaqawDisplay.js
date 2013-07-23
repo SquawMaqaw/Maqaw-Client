@@ -14,7 +14,7 @@ MaqawDisplay.prototype.setup = function () {
     // create the parent div to hold the client
     var clientContainer;
     clientContainer = document.createElement('DIV');
-    clientContainer.id = 'chat-container';
+    clientContainer.id = 'maqaw-chat-container';
     document.body.appendChild(clientContainer);
 
     // The header sits on top of the client body. It is always visible, and clicking
