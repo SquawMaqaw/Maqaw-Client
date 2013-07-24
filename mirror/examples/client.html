@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <script src="http://cdn.peerjs.com/0/peer.min.js"></script>
+    <script src="../tree_mirror.js"></script>
+    <script src="../mutation_summary.js"></script>
+    <script src="../class-MaqawMirror.js"></script>
+
+    <script>
+      var peer = new Peer('calvin2', {key: 'q1349jdr8bw6d2t9'});
+      var conn = peer.connect('calvin1', {reliable: true});
+      var mirror = new Mirror({'conn': conn});
+      conn.on('open', function() {
+        mirror.shareScreen();
+      });
+    </script>
+
+  </head>
+  <body>
+    <h1> tits </h1>
+  </body>
+</html>
