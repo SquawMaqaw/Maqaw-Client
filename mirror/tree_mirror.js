@@ -33,7 +33,7 @@ TreeMirror.prototype = {
     if (typeof nodeData == 'number')
       return this.idMap[nodeData];
 
-    var doc = this.root instanceof HTMLDocument ? this.root : this.root.ownerDocument;
+    var doc = this.root; //instanceof HTMLDocument ? this.root : this.root.ownerDocument;
 
     var node;
     switch(nodeData.nodeType) {

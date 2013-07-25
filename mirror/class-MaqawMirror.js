@@ -2,20 +2,23 @@ function Mirror(options) {
   // stores connection object if exists
   this.conn = options && options.conn;
   this.base;
+}
 
+Mirror.prototype.openMirror = function() {
   var _this = this;   
+  this.mirrorDocument = window.open().document;
 
-  this._mirror = new TreeMirror(document, {
+  this._mirror = new TreeMirror(this.mirrorDocument, {
     createElement: function(tagName) {
       if (tagName == 'SCRIPT') {
-        var node = document.createElement('NO-SCRIPT');
+        var node = _this.mirrorDocument.createElement('NO-SCRIPT');
         node.style.display = 'none';
         return node;
       }
 
       if (tagName == 'HEAD') {
-        var node = document.createElement('HEAD');
-        node.appendChild(document.createElement('BASE'));
+        var node = _this.mirrorDocument.createElement('HEAD');
+        node.appendChild(_this.mirrorDocument.createElement('BASE'));
         node.firstChild.href = _this.base;
         return node;
       }
@@ -64,8 +67,8 @@ Mirror.prototype.mirrorScreen = function(data) {
   var _this = this;
 
   function clearPage() {
-    while (document.firstChild) {
-      document.removeChild(document.firstChild);
+    while (_this.mirrorDocument.firstChild) {
+      _this.mirrorDocument.removeChild(_this.mirrorDocument.firstChild);
     }
   }
 

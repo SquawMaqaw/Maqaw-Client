@@ -6,7 +6,7 @@
     <script src="../class-MaqawMirror.js"></script>
 
     <script>
-      var peer = new Peer('calvin2', {key: 'q1349jdr8bw6d2t9'});
+      var peer = new Peer('calvin', {key: 'q1349jdr8bw6d2t9'});
       var conn = peer.connect('calvin1', {reliable: true});
       var mirror = new Mirror({'conn': conn});
       conn.on('open', function() {

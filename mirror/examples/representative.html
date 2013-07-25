@@ -26,6 +26,9 @@ limitations under the License.
     var mirror = new Mirror();
 
     peer.on('connection', function(conn) {
+
+      mirror.openMirror();
+
       conn.on('data', function(data){
         mirror.mirrorScreen(data); 
       });
