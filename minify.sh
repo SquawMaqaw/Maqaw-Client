@@ -10,4 +10,4 @@ yui-compressor minifier_temp.css > maqaw.min.css
 yui-compressor minifier_temp.js > maqaw.min.js 
 
 #remove temp file
-rm minifier_temp.*
+#rm minifier_temp.*
