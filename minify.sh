@@ -6,8 +6,8 @@ cat class-ChatManager.js class-LoginPage.js peer.js maqaw-toolbelt.js class-Chat
 
 cat  maqaw.css > minifier_temp.css
 
-yuicompressor minifier_temp.css > maqaw.min.css
-yuicompressor minifier_temp.js > maqaw.min.js 
+yui-compressor minifier_temp.css > maqaw.min.css
+yui-compressor minifier_temp.js > maqaw.min.js 
 
 #remove temp file
 rm minifier_temp.*

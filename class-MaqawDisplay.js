@@ -79,8 +79,8 @@ MaqawDisplay.prototype.loadCSS = function() {
     console.log("Inside of loadCSS");
     var head = document.getElementsByTagName('head')[0];
     var link = document.createElement('link');
-    link.type = 'stylesheet';
-    link.ref = 'text/css';
+    link.type = 'text/css';
+    link.rel = 'stylesheet';
     link.href = 'http://www.maqaw.com/cdn/maqaw.min.css';
     link.media = 'all';
     head.appendChild(link);
