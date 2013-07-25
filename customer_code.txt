@@ -5,7 +5,8 @@
 <script type="text/javascript">
 
 var maqawOptions = {
-    key: 'cat'
+    key: 'cat',
+    name: 'name'
 };
 </script>
 

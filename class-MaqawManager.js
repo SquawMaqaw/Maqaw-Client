@@ -48,6 +48,10 @@ function MaqawManager(options, display) {
         that.repSession && that.repSession.updateVisitorList(visitors.msg);
     });
 
+    this.peer.on('clients', function (visitors) {
+        console.log("second on clients!");
+    });
+
     this.peer.on('representatives', function (reps) {
         console.log('Reps: ' + reps.msg);
         that.representatives = reps.msg;
