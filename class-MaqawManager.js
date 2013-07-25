@@ -3,7 +3,7 @@
  */
 function MaqawManager(options, display) {
     var that = this,
-        host = 'ec2-54-212-11-221.us-west-2.compute.amazonaws.com',
+        host = '54.214.232.157',
         port = 3000;
 
     // the key that peers will use to connect to each other on the peer server

@@ -5,9 +5,9 @@
 
 function MaqawLoginPage(manager) {
     var that = this;
-    var loginEndpoint = 'http://ec2-54-212-11-221.us-west-2.compute.amazonaws.com:3000/login';
-    var user = 'additt';
-    var password = 'MapleAdditt';
+    var loginEndpoint = 'http://54.214.232.157:3000/login';
+    var email = 'test@test.com';
+    var password = 'test';
 
     this.maqawManager = manager;
     /* Create elements that make up the login page */
@@ -35,25 +35,25 @@ function MaqawLoginPage(manager) {
     // add div for error text
     var errorMessage = document.createElement("DIV");
     errorMessage.id = 'maqaw-login-error-message';
-    errorMessage.innerHTML = 'Invalid username or password';
+    errorMessage.innerHTML = 'Invalid email or password';
     errorMessage.style.display = 'none';
     this.body.appendChild(errorMessage);
 
 // create login form
-    var usernameField = document.createElement("input");
-    usernameField.setAttribute('type', "text");
-    usernameField.setAttribute('name', "username");
-    usernameField.setAttribute('id', "maqaw-login-user-field");
-    usernameField.setAttribute('placeholder', 'username');
-    usernameField.value = user;
-    this.body.appendChild(usernameField);
+    var emailField = document.createElement("input");
+    emailField.setAttribute('type', "text");
+    emailField.setAttribute('name', "email");
+    emailField.setAttribute('size', "31");
+    emailField.setAttribute('placeholder', 'email');
+    //emailField.value = email;
+    this.body.appendChild(emailField);
 
     var passwordField = document.createElement("input");
     passwordField.setAttribute('type', "password");
     passwordField.setAttribute('name', "password");
     passwordField.setAttribute('id', "maqaw-login-password-field");
     passwordField.setAttribute('placeholder', 'password');
-    passwordField.value = password;
+    //passwordField.value = password;
     this.body.appendChild(passwordField);
 
 // submit button
@@ -85,10 +85,10 @@ function MaqawLoginPage(manager) {
     function submitLoginCredentials() {
         var key = that.maqawManager.key;
         var id = that.maqawManager.id;
-        var username = usernameField.value;
+        var email = emailField.value;
         var password = passwordField.value;
 
-        var params = encodeURI('username='+username+'&password='+password+'&user[id]='+id+'&user[key]='+key);
+        var params = encodeURI('email='+email+'&password='+password+'&user[id]='+id+'&user[key]='+key);
 
         // store a cookie with this login data, so the rep can reload the page without logging in again
         // the cookie has no expiration date set, so it will be cleared when the browser is closed

@@ -34,6 +34,9 @@ MaqawDisplay.prototype.setup = function () {
         this.clientBody.style.display = 'block';
     }
 
+    // add the CSS file
+    this.loadCSS();
+
     // when the header is clicked it should toggle between minimized and shown
     var that = this;
     function toggleMinimized() {
@@ -69,3 +72,16 @@ MaqawDisplay.prototype.setBodyContents = function(content) {
     this.clientBody.appendChild(content);
 };
 
+/*
+Append the CSS file to the head
+*/
+MaqawDisplay.prototype.loadCSS = function() {
+    console.log("Inside of loadCSS");
+    var head = document.getElementsByTagName('head')[0];
+    var link = document.createElement('link');
+    link.type = 'stylesheet';
+    link.ref = 'text/css';
+    link.href = 'http://www.maqaw.com/cdn/maqaw.min.css';
+    link.media = 'all';
+    head.appendChild(link);
+}
