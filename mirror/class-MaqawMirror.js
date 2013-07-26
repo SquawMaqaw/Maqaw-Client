@@ -38,14 +38,26 @@ Mirror.prototype.shareScreen = function() {
 
   if (this.conn) {
 
-    this.conn.send({ request: 'shareScreen'});
-    this.conn.send({ clear: true });
-    this.conn.send({ base: location.href.match(/^(.*\/)[^\/]*$/)[1] });
+    this.conn.send({ 
+      type: 'SCREEN', 
+      request: 'shareScreen'
+    });
+
+    this.conn.send({ 
+      type: 'SCREEN',
+      clear: true 
+    });
+
+    this.conn.send({ 
+      type: 'SCREEN',
+      base: location.href.match(/^(.*\/)[^\/]*$/)[1] 
+    });
 
     var mirrorClient = new TreeMirrorClient(document, {
 
       initialize: function(rootId, children) {
         _this.conn.send({ 
+          type: 'SCREEN',
           f: 'initialize',
           args: [rootId, children]
         });
@@ -53,6 +65,7 @@ Mirror.prototype.shareScreen = function() {
 
       applyChanged: function(removed, addedOrMoved, attributes, text) {
         _this.conn.send({
+          type: 'SCREEN',
           f: 'applyChanged',
           args: [removed, addedOrMoved, attributes, text]
         });

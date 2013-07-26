@@ -47,8 +47,13 @@ function MaqawVisitor(id, name, visitorList) {
     this.chatSession = new MaqawChatSession(document.createElement("DIV"), sendTextFromChat, 'You', this.name);
 
     // create a new connection
-    this.connection = this.connectionManager.newConnection(this.id, connectionDataCallback, connectionStatusCallback);
+    this.connection = this.repSession.maqawManager.connectionManager.newConnection(this.id);
 
+    this.connection.on('data', connectionDataCallback)
+      .on('change', connectionStatusCallback);
+
+    // create a new screen sharing session after connection is made //
+    
     /*
      * This function is passed to the chat session, which calls it every time it has text
      * to send across the connection
@@ -66,8 +71,9 @@ function MaqawVisitor(id, name, visitorList) {
      */
     function connectionDataCallback(data) {
         // handle text
+
         if (data.text) {
-            that.chatSession.newTextReceived(data.text);
+          that.chatSession.newTextReceived(data.text);
         }
     }
 

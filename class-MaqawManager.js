@@ -60,6 +60,11 @@ function MaqawManager(options, display) {
         that.connectionManager.setVisitors(visitors);
     };
 
+    this.screenShareClicked = function(event) {
+      event.preventDefault();  
+      event.stopPropagation();
+      
+    };
 
     // function called the VisitorSession when the login button is clicked
     this.loginClicked = function () {
@@ -172,8 +177,3 @@ function MaqawManager(options, display) {
     // Add listener to save session state on exit so it can be reloaded later.
     window.addEventListener('unload', saveSession, false);
 }
-
-
-
-
-

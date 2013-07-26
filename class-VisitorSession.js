@@ -34,20 +34,16 @@ function MaqawVisitorSession(manager) {
 
     // set up a connection listener to wait for a rep to make a connection with us
     this.connection;
-    this.maqawManager.connectionManager.setConnectionListener(newConnectionListener, connectionDataCallback, connectionStatusCallback);
 
-    /*
-     * If another peer connects to us, this function will be called with the MaqawConnection
-     * object as an argument
-     */
-    function newConnectionListener(maqawConnection) {
-        // if another connection already exists, something probably went wrong
-        if (that.connection) {
-            console.log("Warning: Overwriting existing connection");
-        }
-        // save the new connection
-        that.connection = maqawConnection;
-    }
+    this.maqawManager.connectionManager.on('connection', function(maqawConnection) {
+      if (that.connection) {
+        console.log("Error: Overwriting existing connectino");
+      }
+      that.connection = maqawConnection;
+
+      maqawConnection.on('data', connectionDataCallback)
+        .on('change', connectionStatusCallback) 
+    }); 
 
     /*
      * For a connection received from the newConnectionListener, this function will be called by the connection
@@ -193,7 +189,3 @@ MaqawVisitorSession.prototype.getBodyContents = function () {
 MaqawVisitorSession.prototype.getHeaderContents = function () {
     return this.header;
 };
-
-
-
-

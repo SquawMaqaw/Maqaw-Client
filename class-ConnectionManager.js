@@ -10,6 +10,8 @@ function MaqawConnectionManager(peer) {
     this.peer = peer;
     this.visitors;
     this.representatives;
+    this.connectionDirectives = []; 
+
 
     // a list of all current connections, where the key is the connecting peer id
     // and the value is the MaqawConnection object
@@ -33,19 +35,19 @@ function MaqawConnectionManager(peer) {
             }
     };
 
-    /* Set a callback function that will be called if a connection
-     * is established with this peer. That callback function will
-     * be passed a MaqawConnection object.
-     */
-    this.setConnectionListener = function (connectionListener, dataCallback, connectionCallback) {
-        // use the peer onConnection event to listen for connections
-        that.peer.on('connection', function (conn) {
-            // when a peer connection is opened, use it to set up a MaqawConnection
-            var maqawConnection = new MaqawConnection(that.peer, null, dataCallback, connectionCallback, conn);
-            // return the new connection to the callback listener
-            connectionListener(maqawConnection);
-        });
+    this.on = function(_event, directive) {
+      if (_event === 'connection') this.connectionDirectives.push(directive);  
+
+      return this;
     };
+
+    this.peer.on('connection', function(conn) {
+      var i, len = that.connectionDirectives.length,
+          maqawConnection = new MaqawConnection(that.peer, null, conn);
+      for (i = 0; i < len; i ++) {
+        that.connectionDirectives[i](maqawConnection);
+      }
+    });   
 
     /*
      * Create and return a new MaqawConnection object that connects to the
@@ -53,8 +55,8 @@ function MaqawConnectionManager(peer) {
      * every time the state of the connection changes. Undetermined functionality
      * when you call this with the same id multiple times. Don't do it.
      */
-    this.newConnection = function (id, dataCallback, connectionCallback) {
-        var connection = new MaqawConnection(that.peer, id, dataCallback, connectionCallback);
+    this.newConnection = function (id) {
+        var connection = new MaqawConnection(that.peer, id);
         that.connectionList[id] = connection;
         return connection;
     };
@@ -83,6 +85,4 @@ function MaqawConnectionManager(peer) {
     this.loadConnectionState = function (connectionData) {
 
     };
-
-
 }
