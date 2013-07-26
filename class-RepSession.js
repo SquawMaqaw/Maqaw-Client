@@ -63,8 +63,7 @@ function MaqawRepSession(manager, rep) {
     this.chatManager = new MaqawChatManager(chatSessions);
 
     // create new visitor list
-
-    this.visitorList = new MaqawVisitorList(visitorListContainer, this.chatManager, this.maqawManager);
+    this.visitorList = new MaqawVisitorList(visitorListContainer, this);
 
     // takes an array of ids representing visitors on the site
     this.updateVisitorList = function(visitors){

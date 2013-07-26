@@ -6,8 +6,8 @@
 function MaqawLoginPage(manager) {
     var that = this;
     var loginEndpoint = 'http://54.214.232.157:3000/login';
-    var email = 'test@test.com';
-    var password = 'test';
+    var email = 'konakid@gmail.com';
+    var password = 'asdfasdf';
 
     this.maqawManager = manager;
     /* Create elements that make up the login page */
@@ -46,7 +46,9 @@ function MaqawLoginPage(manager) {
     emailField.setAttribute('id', "maqaw-login-user-field")
     emailField.setAttribute('size', "31");
     emailField.setAttribute('placeholder', 'email');
-    //emailField.value = email;
+    if(maqawDebug){
+        emailField.value = email;
+    }
     this.body.appendChild(emailField);
 
     var passwordField = document.createElement("input");
@@ -54,7 +56,9 @@ function MaqawLoginPage(manager) {
     passwordField.setAttribute('name', "password");
     passwordField.setAttribute('id', "maqaw-login-password-field");
     passwordField.setAttribute('placeholder', 'password');
-    //passwordField.value = password;
+    if(maqawDebug){
+        passwordField.value = password;
+    }
     this.body.appendChild(passwordField);
 
 // submit button

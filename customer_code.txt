@@ -15,7 +15,7 @@ var maqawOptions = {
 <script type="text/javascript" src="class-LoginPage.js"></script>
 <script type="text/javascript" src="peer.js"></script>
 <script type="text/javascript" src="maqaw-toolbelt.js"></script>
-<script type="text/javascript" src="class-ChatSessions.js"></script>
+<script type="text/javascript" src="class-ChatSession.js"></script>
 <script type="text/javascript" src="class-VisitorSession.js"></script>
 <script type="text/javascript" src="class-MaqawManager.js"></script>
 <script type="text/javascript" src="class-MaqawDisplay.js"></script>
