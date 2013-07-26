@@ -45,7 +45,7 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
         var visitorName = 'Visitor ' + that.visitorCounter;
         that.visitorCounter++;
         // use rowIndex of -1 so the row is added at the end of the table
-        return new MaqawVisitor(id, visitorName, that.repSession);
+        return new MaqawVisitor(id, visitorName, that);
     }
 
     this.setSelectedVisitor = function (visitor) {
@@ -68,7 +68,7 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
     };
 
 
-    // a visitorwrapper calls this to tell the MaqawVisitorList that it is going inactive
+    // a visitor calls this to tell the MaqawVisitorList that it is going inactive
     // the visitor list needs to make sure that it doesn't have this visitor set
     // as selected
     this.hideVisitor = function (visitor) {
@@ -86,10 +86,9 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
             var visitor = that.visitors[visitorId];
             // save the data that is important to state
             var visitorData = {
-                name: visitor.visitor.name,
-                id: visitor.getId(),
+                name: visitor.name,
+                id: visitor.id,
                 isSelected: visitor.isSelected,
-                rowIndex: visitor.row.rowIndex,
                 chatText: visitor.chatSession.getText()
             };
             data[counter] = visitorData;
@@ -104,8 +103,8 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
         that.visitors = {};
         that.tBody.innerHTML = '';
 
-        // set the visitor counter to be the number of visitors stored
-        that.visitorCounter = listData.length + 1;
+        // reset the visitor counter
+        that.visitorCounter = 1;
 
         // go through each entry in the list data and restore it
         for(var index in listData){
@@ -117,6 +116,9 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
                 that.selectedVisitor = visitor;
                 visitor.select();
             }
+
+            // increment the visitor counter
+            that.visitorCounter++;
 
             // load the chat history
             visitor.chatSession.setText(dataObject['chatText']);

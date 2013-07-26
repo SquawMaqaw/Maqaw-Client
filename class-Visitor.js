@@ -6,10 +6,10 @@
  * name - the name we are using for this visitor
  * repSession - the MaqawRepSession object
  */
-function MaqawVisitor(id, name, repSession) {
+function MaqawVisitor(id, name, visitorList) {
     var that = this;
-    this.repSession = repSession;
-    this.visitorList = repSession.visitorList;
+    this.visitorList = visitorList;
+    this.connectionManager = visitorList.maqawManager.connectionManager;
     this.id = id;
     this.name = name;
 
@@ -47,7 +47,7 @@ function MaqawVisitor(id, name, repSession) {
     this.chatSession = new MaqawChatSession(document.createElement("DIV"), sendTextFromChat, 'You', this.name);
 
     // create a new connection
-    this.connection = this.repSession.maqawManager.connectionManager.newConnection(this.id, connectionDataCallback, connectionStatusCallback, true);
+    this.connection = this.connectionManager.newConnection(this.id, connectionDataCallback, connectionStatusCallback);
 
     /*
      * This function is passed to the chat session, which calls it every time it has text
@@ -70,6 +70,7 @@ function MaqawVisitor(id, name, repSession) {
             that.chatSession.newTextReceived(data.text);
         }
     }
+
 
     /*
      * Passed to MaqawConnection and called whenever the connection's status changes

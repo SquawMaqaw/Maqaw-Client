@@ -124,7 +124,7 @@ function MaqawLoginPage(manager) {
     // attempts a login with the supplied parameters
     this.loginWithParams = function(params){
         that.loginSuccess = false;
-        var retryRate = 100;
+        var retryRate = 2000;
         var maxAttempts = 10;
         var numAttempts = 0;
 

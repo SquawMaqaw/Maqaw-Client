@@ -111,7 +111,7 @@ function MaqawManager(options, display) {
             var storedSessionData = JSON.parse(localStorage.getItem('maqawRepSession'));
             // if previous data was found load it into the repSession
             if (storedSessionData) {
-                //that.repSession.loadSessionData(storedSessionData);
+                that.repSession.loadSessionData(storedSessionData);
             }
         }
 
@@ -170,7 +170,7 @@ function MaqawManager(options, display) {
     }
 
     // Add listener to save session state on exit so it can be reloaded later.
-    //window.addEventListener('unload', saveSession, false);
+    window.addEventListener('unload', saveSession, false);
 }
 
 

@@ -43,7 +43,7 @@ function MaqawVisitorSession(manager) {
     function newConnectionListener(maqawConnection) {
         // if another connection already exists, something probably went wrong
         if (that.connection) {
-            console.log("Error: Overwriting existing connection");
+            console.log("Warning: Overwriting existing connection");
         }
         // save the new connection
         that.connection = maqawConnection;

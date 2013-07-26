@@ -76,7 +76,6 @@ MaqawDisplay.prototype.setBodyContents = function(content) {
 Append the CSS file to the head
 */
 MaqawDisplay.prototype.loadCSS = function() {
-    console.log("Inside of loadCSS");
     var head = document.getElementsByTagName('head')[0];
     var link = document.createElement('link');
     link.type = 'text/css';

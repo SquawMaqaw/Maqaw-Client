@@ -41,7 +41,7 @@ function MaqawConnectionManager(peer) {
         // use the peer onConnection event to listen for connections
         that.peer.on('connection', function (conn) {
             // when a peer connection is opened, use it to set up a MaqawConnection
-            var maqawConnection = new MaqawConnection(that.peer, null, dataCallback, connectionCallback, false, conn);
+            var maqawConnection = new MaqawConnection(that.peer, null, dataCallback, connectionCallback, conn);
             // return the new connection to the callback listener
             connectionListener(maqawConnection);
         });
@@ -53,8 +53,8 @@ function MaqawConnectionManager(peer) {
      * every time the state of the connection changes. Undetermined functionality
      * when you call this with the same id multiple times. Don't do it.
      */
-    this.newConnection = function (id, dataCallback, connectionCallback, attemptReconnect) {
-        var connection = new MaqawConnection(that.peer, id, dataCallback, connectionCallback, attemptReconnect);
+    this.newConnection = function (id, dataCallback, connectionCallback) {
+        var connection = new MaqawConnection(that.peer, id, dataCallback, connectionCallback);
         that.connectionList[id] = connection;
         return connection;
     };
