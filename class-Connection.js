@@ -21,10 +21,12 @@ function MaqawConnection(peer, dstId, conn) {
     var that = this;
     this.peer = peer;
     this.dstId = dstId;
-    
+
     //  Callback arrays //
-    this.closeDirectives = [];  this.openDirectives = [];
-    this.dataDirectives = []; this.errorDirectives = []; 
+    this.closeDirectives = [];
+    this.openDirectives = [];
+    this.dataDirectives = [];
+    this.errorDirectives = [];
     this.changeDirectives = [];
     //          
 
@@ -47,17 +49,19 @@ function MaqawConnection(peer, dstId, conn) {
 
     // check the current status of the connection. It may already be open if one was passed in
     setConnectionStatus(this.conn.open);
-    
+
+    setConnectionCallbacks();
+
     /*
      * Handle data that was received by this connection. Extract any meta data we need
      * and pass the rest of it on to the data callback
      */
     function handleData(data) {
         // for now we are just sending text
-      var i, dataLen = that.dataDirectives.length;
-      for (i = 0; i < dataLen; i ++) {
-        that.dataDirectives[i](data); 
-      }
+        var i, dataLen = that.dataDirectives.length;
+        for (i = 0; i < dataLen; i++) {
+            that.dataDirectives[i](data);
+        }
     }
 
     /*
@@ -65,24 +69,24 @@ function MaqawConnection(peer, dstId, conn) {
      * the connectionListener
      */
     function setConnectionStatus(connectionStatus) {
-      var i, 
-          changeLen = that.changeDirectives.length,
-          openLen = that.openDirectives.length,
-          closeLen = that.closeDirectives.length;
+        var i,
+            changeLen = that.changeDirectives.length,
+            openLen = that.openDirectives.length,
+            closeLen = that.closeDirectives.length;
 
-      for (i = 0; i < changeLen; i ++) {
-        that.changeDirectives[i](connectionStatus);
-      }
+        for (i = 0; i < changeLen; i++) {
+            that.changeDirectives[i](connectionStatus);
+        }
 
-      if (connectionStatus === false) {
-        for (i = 0; i < closeLen; i ++) {
-          that.closeDirectives[i](connectionStatus);
+        if (connectionStatus === false) {
+            for (i = 0; i < closeLen; i++) {
+                that.closeDirectives[i](connectionStatus);
+            }
+        } else if (connectionStatus === true) {
+            for (i = 0; i < openLen; i++) {
+                that.openDirectives[i](connectionStatus);
+            }
         }
-      } else if (connectionStatus === true) {
-         for (i = 0; i < openLen; i ++) {
-          that.openDirectives[i](connectionStatus);
-        }
-      }
         that.isConnected = Boolean(connectionStatus);
     }
 
@@ -94,18 +98,18 @@ function MaqawConnection(peer, dstId, conn) {
      * connectionStatus - true if the peer is connected and false otherwise
      */
     this.setServerConnectionStatus = function (connectionStatus) {
-            // if our peer is not connected to the server, disconnect our DataChannel with them
-            if (!connectionStatus) {
-                setConnectionStatus(false);
-            }
-            // if the peer was previously disconnected but is now connected, try to reopen a DataChannel
-            // with them
-            if (!that.isPeerConnectedToServer && connectionStatus) {
-                attemptConnection();
-            }
+        // if our peer is not connected to the server, disconnect our DataChannel with them
+        if (!connectionStatus) {
+            setConnectionStatus(false);
+        }
+        // if the peer was previously disconnected but is now connected, try to reopen a DataChannel
+        // with them
+        if (!that.isPeerConnectedToServer && connectionStatus) {
+            attemptConnection();
+        }
 
-            // save connection status
-            that.isPeerConnectedToServer = connectionStatus;
+        // save connection status
+        that.isPeerConnectedToServer = connectionStatus;
     };
 
     /*
@@ -114,7 +118,7 @@ function MaqawConnection(peer, dstId, conn) {
      */
     function attemptConnection() {
         // how many milliseconds we will wait until trying to connect again
-        
+
         /* TODO: Exponential backoff instead? */
 
         var retryInterval = 8000;
@@ -123,11 +127,11 @@ function MaqawConnection(peer, dstId, conn) {
         var retryLimit = 5;
         var numAttempts = 0;
 
-        /** TODO: We should look into running web workers **/ 
+        /** TODO: We should look into running web workers **/
 
-        // create a function that will attempt to open a connection, and will retry
-        // every retryInterval milliseconds until a connection is established
-        // this function is immediately invoked
+            // create a function that will attempt to open a connection, and will retry
+            // every retryInterval milliseconds until a connection is established
+            // this function is immediately invoked
         (function tryOpeningConnection() {
             // start the connection opening process
             if (!that.isConnected && numAttempts < retryLimit) {
@@ -150,10 +154,10 @@ function MaqawConnection(peer, dstId, conn) {
      * Send text through this connection
      */
     this.sendText = function (text) {
-      that.conn.send({
-        'type': 'text',
-        'text': text
-      });
+        that.conn.send({
+            'type': 'text',
+            'text': text
+        });
     };
 
     /*
@@ -168,38 +172,40 @@ function MaqawConnection(peer, dstId, conn) {
      */
     this.sendScreen = function (screenData) {
 
+    };
+
+    this.on = function (_event, directive) {
+        // bind callback
+        if (_event === 'data')   this.dataDirectives.push(directive);
+        else if (_event === 'open')   this.openDirectives.push(directive);
+        else if (_event === 'close')  this.closeDirectives.push(directive);
+        else if (_event === 'error')  this.errorDirectives.push(directive);
+        else if (_event === 'change') this.changeDirectives.push(directive);
+
+        return this;
+    };
+
+    function setConnectionCallbacks() {
+        that.conn.on('open', function () {
+            setConnectionStatus(true);
+        });
+
+        that.conn.on('data', function (data) {
+            // if we are receiving data the connection is definitely open
+            setConnectionStatus(true);
+            handleData(data);
+        });
+
+        that.conn.on('close', function (err) {
+            setConnectionStatus(false);
+        });
+
+        that.conn.on('error', function (err) {
+            console.log("Connection error: " + err);
+            var i, errorLen = that.errorDirectives.length;
+            for (i = 0; i < errorLen; i++) {
+                that.errorDirectives[i](err);
+            }
+        });
     }
-
-    this.on = function(_event, directive) {
-      // bind callback
-           if (_event === 'data')   this.dataDirectives.push(directive);   
-      else if (_event === 'open')   this.openDirectives.push(directive);   
-      else if (_event === 'close')  this.closeDirectives.push(directive);   
-      else if (_event === 'error')  this.errorDirectives.push(directive);   
-      else if (_event === 'change') this.changeDirectives.push(directive);   
-
-      return this;
-    }
-
-    this.conn.on('open', function () {
-      setConnectionStatus(true);
-    });
-    
-    this.conn.on('data', function (data) {
-      // if we are receiving data the connection is definitely open
-      setConnectionStatus(true);
-      handleData(data);
-    });
-
-    this.conn.on('close', function (err) {
-      setConnectionStatus(false);
-    });
-
-    this.conn.on('error', function (err) {
-      console.log("Connection error: " + err);
-      var i, errorLen = that.errorDirectives.length; 
-      for (i = 0; i < errorLen; i ++) {
-        that.errorDirectives[i](err);
-      }
-    });
 }

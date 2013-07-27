@@ -11,7 +11,7 @@ function MaqawManager(options, display) {
     this.chatName = options.name;
 
     // list of all visitors connected to the server
-    this.visitor = [];
+    this.visitors = [];
 
     // this id is used whenever the client makes a connection with peerjs
     this.id = maqawCookies.getItem('peerId');

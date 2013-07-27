@@ -47,7 +47,7 @@ function MaqawVisitor(id, name, visitorList) {
     this.chatSession = new MaqawChatSession(document.createElement("DIV"), sendTextFromChat, 'You', this.name);
 
     // create a new connection
-    this.connection = this.repSession.maqawManager.connectionManager.newConnection(this.id);
+    this.connection = this.connectionManager.newConnection(this.id);
 
     this.connection.on('data', connectionDataCallback)
       .on('change', connectionStatusCallback);
