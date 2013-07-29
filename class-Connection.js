@@ -137,6 +137,11 @@ function MaqawConnection(peer, dstId, conn) {
             if (!that.isConnected && numAttempts < retryLimit) {
                 numAttempts++;
 
+                // close old connection
+                if(that.conn){
+                    that.conn.close();
+                }
+
                 // open a new connection
                 that.conn = that.peer.connect(that.dstId);
 
@@ -149,6 +154,21 @@ function MaqawConnection(peer, dstId, conn) {
             }
         })();
     }
+
+    /*
+     * Handle a new peerjs connection request from our peer
+     */
+    this.newConnectionRequest = function(conn){
+        console.log("erasing old connection");
+        // close the old connection
+        if(that.conn){
+            that.conn.close();
+        }
+
+        // set up the new connection with callbacks
+        that.conn = conn;
+        setConnectionCallbacks();
+    };
 
     /*
      * Send text through this connection

@@ -91,12 +91,13 @@ function MaqawChatSession(chatSessionContainer, sendTextFunction, srcName, dstNa
     /*
      * Whether or not the the chat session should allow the user to send text. If set to true
      * they can send text normally. If set to false the text input box is disabled
+     * displayMessage - Optional. A message to display to the rep
      */
-    this.setAllowMessageSending = function (allowMessageSending) {
+    this.setAllowMessageSending = function (allowMessageSending, displayMessage) {
         if (allowMessageSending) {
             allowMessages();
         } else {
-            disallowMessages();
+            disallowMessages(displayMessage);
         }
 
     };
@@ -106,13 +107,18 @@ function MaqawChatSession(chatSessionContainer, sendTextFunction, srcName, dstNa
     var savedTextValue = null;
     disallowMessages();
 
-    function disallowMessages() {
+    function disallowMessages(displayMessage) {
         that.textInput.disabled = true;
         // save any text the user is tying, if it hasn't already been saved
         if (savedTextValue === null) {
             savedTextValue = that.textInput.value;
         }
-        that.textInput.value = "Connecting to peer...";
+
+        if(displayMessage){
+            that.textInput.value = displayMessage;
+        }   else {
+            that.textInput.value = "Connecting to peer...";
+        }
     }
 
     // allow messages to be sent

@@ -34,8 +34,11 @@ MaqawDisplay.prototype.setup = function () {
         this.clientBody.style.display = 'block';
     }
 
-    // add the CSS file
-    this.loadCSS();
+    // add the CSS file if the loadCss flag is true. This can be set to false if you
+    // want to use a local css file
+    if(maqawLoadCss){
+        this.loadCSS();
+    }
 
     // when the header is clicked it should toggle between minimized and shown
     var that = this;

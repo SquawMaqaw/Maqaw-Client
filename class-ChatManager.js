@@ -20,6 +20,8 @@ MaqawChatManager.prototype.showVisitorChat = function(visitor) {
     // reset chat window and then show this visitor's chat session
     this.chatWindow.innerHTML = '';
     this.chatWindow.appendChild(visitor.chatSession.getContainer());
+    // scroll chat window to the latest text
+    visitor.chatSession.scrollToBottom();
 };
 
 // Clears the displayed chat session.

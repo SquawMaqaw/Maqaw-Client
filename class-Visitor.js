@@ -50,10 +50,10 @@ function MaqawVisitor(id, name, visitorList) {
     this.connection = this.connectionManager.newConnection(this.id);
 
     this.connection.on('data', connectionDataCallback)
-      .on('change', connectionStatusCallback);
+        .on('change', connectionStatusCallback);
 
     // create a new screen sharing session after connection is made //
-    
+
     /*
      * This function is passed to the chat session, which calls it every time it has text
      * to send across the connection
@@ -71,30 +71,67 @@ function MaqawVisitor(id, name, visitorList) {
      */
     function connectionDataCallback(data) {
         // handle text
-
         if (data.text) {
-          that.chatSession.newTextReceived(data.text);
+            that.chatSession.newTextReceived(data.text);
+            // show an alert that new text has been received
+            alertNewText();
         }
     }
 
+    /*
+     * Display an alert to the rep that new text has been received
+     */
+    function alertNewText() {
+        // only show an alert if the visitor is not currently selected
+        var flashSpeed = 1000;
+        var on = true;
+        (function flashRow() {
+            if (!that.isSelected) {
+                if (on) {
+                    that.row.className = 'maqaw-alert-visitor';
+                } else {
+                    that.row.className = 'maqaw-visitor-list-entry';
+                }
+                on = !on;
+                setTimeout(flashRow, flashSpeed);
+            }
+        })();
+
+    }
 
     /*
      * Passed to MaqawConnection and called whenever the connection's status changes
      */
     function connectionStatusCallback(connectionStatus) {
-        that.isConnected = connectionStatus;
-
         // tell the chatsession whether or not to accept text based on the connection status
-        that.chatSession.setAllowMessageSending(connectionStatus);
+        that.chatSession.setAllowMessageSending(connectionStatus, 'Waiting for visitor...');
 
         // update row display to reflect connection status
+        var timeoutId;
         if (!connectionStatus) {
-            hide();
+            // if the connection was previously active, allow a few seconds for the visitor to
+            // return before hiding them in the list
+            var timeout = 5000;
+            timeoutId = setTimeout(function () {
+                // if the visitor is still not connected after the timeout period then hide them
+                if (!that.isConnected) {
+                    hide();
+                }
+                timeoutId = null;
+            }, timeout);
+
         } else {
+            // cancel any timeout that was started
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+            }
             show();
         }
-    }
 
+        // save status
+        that.isConnected = connectionStatus;
+    }
 
 
     /*
