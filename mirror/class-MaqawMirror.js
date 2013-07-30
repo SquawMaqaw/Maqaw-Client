@@ -8,7 +8,10 @@ Mirror.prototype = {
   SHARE_SCREEN: 0, 
   SHARE_SCREEN_OK: 1,
   SHARE_SCREEN_REFUSE: 2,
-  SCREEN_DATA: 3
+  SCREEN_DATA: 3,
+  MOUSE_MOVE: 4,
+  MOUSE_CLICK: 5,
+  SCROLL: 6
 }
 
 Mirror.prototype.data = function(_data) {
@@ -32,6 +35,16 @@ Mirror.prototype.data = function(_data) {
     case this.SCREEN_DATA:
       //  Screen Data.
       this.mirrorScreen(_data);
+      break;
+    case this.MOUSE_MOVE:
+      // TODO:  Update fake mouse positions. 
+      // There's a working example of mouse movement that we built a few weeks ago.
+      break;
+    case this.MOUSE_CLICK:
+      // TODO: Trigger some sort of fake mouse click. (could be a UI event or something more complicated)
+      break;
+    case this.SCROLL:
+      // TODO: Scroll mirror screen to reflect peer.
       break;
     default: 
       // Unknown
