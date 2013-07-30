@@ -1,13 +1,5 @@
-function Mirror(options) {
-  // stores connection object if exists
-  this.conn = options && options.conn;
-  this.mirrorDocument;
-  this.mirrorWindow;
-  this.base;
-}
-
-Mirror.prototype = {
-  SHARE_SCREEN: 0,
+var DATA_ENUMS = {
+  SHARE_SCREEN: 0, 
   SHARE_SCREEN_OK: 1,
   SHARE_SCREEN_REFUSE: 2,
   SCREEN_DATA: 3,
@@ -15,6 +7,16 @@ Mirror.prototype = {
   MOUSE_CLICK: 5,
   SCROLL: 6
 };
+
+function Mirror(options) {
+  // stores connection object if exists
+  this.conn = options && options.conn;
+  this.base;
+
+  this.mirrorDocument;
+  this.mirrorWindow;
+  this.mouseMirror;
+}
 
 Mirror.prototype.data = function(_data) {
   //
@@ -24,29 +26,26 @@ Mirror.prototype.data = function(_data) {
   // data to mirrorScreen
   //
   switch(_data.request) {
-    case this.SHARE_SCREEN:
-      // Request from peer to view this screen
-      this.conn.send({ type: 'SCREEN', request: this.SHARE_SCREEN_OK });
+    case DATA_ENUMS.SHARE_SCREEN: 
+      // Request from peer to view this screen  
+      this.conn.send({ type: 'SCREEN', request: DATA_ENUMS.SHARE_SCREEN_OK });
       this.shareScreen();
       break;
-    case this.SHARE_SCREEN_OK:
-      //  Share screen request received and
-      //  validated open a screen mirror
+    case DATA_ENUMS.SHARE_SCREEN_OK:
+      //  Share screen request received and 
+      //  validated open a screen mirror 
       this.openMirror();
       break;
-    case this.SCREEN_DATA:
+    case DATA_ENUMS.SCREEN_DATA:
       //  Screen Data.
-      this.mirrorScreen(_data);
-      break;
-    case this.MOUSE_MOVE:
-      // TODO:  Update fake mouse positions.
-      // There's a working example of mouse movement that we built a few weeks ago.
-      break;
-    case this.MOUSE_CLICK:
+    case DATA_ENUMS.MOUSE_MOVE:
+      // Mouse move event
+    case DATA_ENUMS.MOUSE_CLICK:
       // TODO: Trigger some sort of fake mouse click. (could be a UI event or something more complicated)
+      this.mirrorScreen(_data);  
       break;
     case this.SCROLL:
-       this.mirrorWindow.scrollTo(_data.left, _data.top);
+      this.mirrorWindow.scrollTo(_data.left, _data.top);
       break;
     default:
       // Unknown
@@ -76,6 +75,19 @@ Mirror.prototype.openMirror = function() {
       }
     }
   });
+  
+  this.mouseMirror = new MouseMirror(this.mirrorDocument, {
+    mousemove: function(event) {
+      _this.conn.send({ 
+        type: 'SCREEN', 
+        request: DATA_ENUMS.MOUSE_MOVE,
+        coords: {x: event.pageX, y: event.pageY}
+      });
+    }, 
+    click: function(event) {
+      console.log("clicked"); 
+    }
+  }); 
 };
 
 Mirror.prototype.setConnection = function(conn) {
@@ -88,10 +100,9 @@ Mirror.prototype.requestScreen = function() {
   //  Sends share screen request to peer
   //
   if (this.conn) {
-      console.log("sending screen request");
-    this.conn.send({
-      type: 'SCREEN',
-      request: this.SHARE_SCREEN
+    this.conn.send({ 
+      type: 'SCREEN', 
+      request: DATA_ENUMS.SHARE_SCREEN 
     });
   }
 };
@@ -106,14 +117,14 @@ Mirror.prototype.shareScreen = function() {
 
     this.conn.send({
       type: 'SCREEN',
-      request: this.SCREEN_DATA,
-      clear: true
+      request: DATA_ENUMS.SCREEN_DATA,
+      clear: true 
     });
 
     this.conn.send({
       type: 'SCREEN',
-      request: this.SCREEN_DATA,
-      base: location.href.match(/^(.*\/)[^\/]*$/)[1]
+      request: DATA_ENUMS.SCREEN_DATA,
+      base: location.href.match(/^(.*\/)[^\/]*$/)[1] 
     });
 
     var mirrorClient = new TreeMirrorClient(document, {
@@ -121,7 +132,7 @@ Mirror.prototype.shareScreen = function() {
       initialize: function(rootId, children) {
         _this.conn.send({
           type: 'SCREEN',
-          request: _this.SCREEN_DATA,
+          request: DATA_ENUMS.SCREEN_DATA,
           f: 'initialize',
           args: [rootId, children]
         });
@@ -130,27 +141,39 @@ Mirror.prototype.shareScreen = function() {
       applyChanged: function(removed, addedOrMoved, attributes, text) {
         _this.conn.send({
           type: 'SCREEN',
-          request: _this.SCREEN_DATA,
+          request: DATA_ENUMS.SCREEN_DATA,
           f: 'applyChanged',
           args: [removed, addedOrMoved, attributes, text]
         });
       }
     });
 
-    // Set up scroll listener
-      function scrollListener(){
-          var top = window.pageYOffset;
-          var left = window.pageXOffset;
-          _this.conn.send({
-              type: 'SCREEN',
-              request: _this.SCROLL,
-              top: top,
-              left: left
-          })
+    this.mouseMirror = new MouseMirror(document, {
+      mousemove: function(event) {
+        _this.conn.send({ 
+          type: 'SCREEN', 
+          request: DATA_ENUMS.MOUSE_MOVE,
+          coords: {x: event.pageX, y: event.pageY}
+        });
+      }, 
+      click: function(event) {
+        console.log("clicked"); 
       }
+    });
+  
+    // Set up scroll listener
+    function scrollListener(){
+      var top = window.pageYOffset;
+      var left = window.pageXOffset;
+      _this.conn.send({
+        type: 'SCREEN',
+        request: _this.SCROLL,
+        top: top,
+        left: left
+      })
+    }
+
     window.addEventListener('scroll', scrollListener, false);
-
-
   } else {
     console.log("Error: Connection not established. Unable to stream screen");
   }
@@ -160,6 +183,7 @@ Mirror.prototype.mirrorScreen = function(data) {
   var _this = this;
 
   function clearPage() {
+    // clear page //
     while (_this.mirrorDocument.firstChild) {
       _this.mirrorDocument.removeChild(_this.mirrorDocument.firstChild);
     }
@@ -170,8 +194,10 @@ Mirror.prototype.mirrorScreen = function(data) {
       clearPage();
     else if (msg.base)
       _this.base = msg.base;
-    else if (msg.request === _this.SCREEN_DATA)
+    else if (msg.request === DATA_ENUMS.SCREEN_DATA) 
       _this._mirror[msg.f].apply(_this._mirror, msg.args);
+    else if (msg.request === DATA_ENUMS.MOUSE_MOVE || msg.request === DATA_ENUMS.MOUSE_CLICK)
+      _this.mouseMirror.data(msg);
   }
 
   var msg = data;
@@ -182,4 +208,58 @@ Mirror.prototype.mirrorScreen = function(data) {
   } else {
     handleMessage(msg);
   }
+}
+
+function MouseMirror(doc, options) {
+
+  this.moveEvent = options.mousemove;
+  this.clickEvent = options.click;
+  this.doc = doc; 
+
+  this.cursor = this.doc.createElement('div'); 
+  this.cursor.style.width = '20px';
+  this.cursor.style.height = '20px';
+  this.cursor.style.backgroundColor = 'red';
+  this.cursor.style.position = 'absolute';
+  this.cursor.style.top = '0px';
+  this.cursor.style.left = '0px';
+
+  this.doc.addEventListener('mousemove', this.moveEvent, false); 
+  this.doc.addEventListener('click', this.clickEvent, false);
+  
+  this.isDrawn = false;
+
+  return this;
+}
+
+MouseMirror.prototype.data = function(_data) {
+
+  if (!this.isDrawn) {
+    //  Hack that appends cursor only  
+    //  once a document.body exists
+    if (this.doc.body) {
+      this.doc.body.appendChild(this.cursor)
+        this.isDrawn = true;
+    }
+  }
+
+  if (_data.request === DATA_ENUMS.MOUSE_MOVE) {
+    this.moveMouse(_data);
+  } else if (_data.request === DATA_ENUMS.MOUSE_CLICK) {
+    this.clickMouse(_data);
+  } 
+}
+
+MouseMirror.prototype.moveMouse = function(_data) {
+  this.cursor.style.top = _data.coords.y + 'px';
+  this.cursor.style.left = _data.coords.x + 'px';
+}
+
+MouseMirror.prototype.clickMouse = function(_data) {
+  // TODO: Click mouse or something
+}
+
+MouseMirror.prototype.off = function() {
+  this.doc.removeEventListener('mousemove', this.moveEvent, false);
+  this.doc.removeEventListener('click', this.clickEvent, false);
 };
