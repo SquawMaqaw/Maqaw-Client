@@ -37,6 +37,7 @@ function MaqawManager(options, display) {
     /* listen for peer js events */
     this.peer.on('open', function (id) {
         console.log("My id: " + id);
+        that.id = id
         maqawCookies.setItem('peerId', id, Infinity);
     });
 

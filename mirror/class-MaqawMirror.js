@@ -4,6 +4,41 @@ function Mirror(options) {
   this.base;
 }
 
+Mirror.prototype = {
+  SHARE_SCREEN: 0, 
+  SHARE_SCREEN_OK: 1,
+  SHARE_SCREEN_REFUSE: 2,
+  SCREEN_DATA: 3
+}
+
+Mirror.prototype.data = function(_data) {
+  //
+  // handle new data. For a new share screen
+  // request, function opens a new mirror 
+  // for all other requests, function passes 
+  // data to mirrorScreen
+  //
+  switch(_data.request) {
+    case this.SHARE_SCREEN: 
+      // Request from peer to view this screen  
+      this.conn.send({ type: 'SCREEN', request: this.SHARE_SCREEN_OK });
+      this.shareScreen();
+      break;
+    case this.SHARE_SCREEN_OK:
+      //  Share screen request received and 
+      //  validated open a screen mirror 
+      this.openMirror();
+      break;
+    case this.SCREEN_DATA:
+      //  Screen Data.
+      this.mirrorScreen(_data);
+      break;
+    default: 
+      // Unknown
+      break;
+  }
+}
+
 Mirror.prototype.openMirror = function() {
   var _this = this;   
   this.mirrorDocument = window.open().document;
@@ -31,25 +66,35 @@ Mirror.prototype.setConnection = function(conn) {
   this.conn = conn;
 }
 
-Mirror.prototype.shareScreen = function() {
-  // shares your screen with the associated connection
+Mirror.prototype.requestScreen = function() {
   //
+  //  Sends share screen request to peer
+  //
+  if (this.conn) {
+    this.conn.send({ 
+      type: 'SCREEN', 
+      request: this.SHARE_SCREEN 
+    });
+  }
+}
+
+Mirror.prototype.shareScreen = function() {
+  //
+  // streams screen to peer
+  // 
   var _this = this;
 
   if (this.conn) {
 
     this.conn.send({ 
-      type: 'SCREEN', 
-      request: 'shareScreen'
-    });
-
-    this.conn.send({ 
       type: 'SCREEN',
+      request: this.SCREEN_DATA,
       clear: true 
     });
 
     this.conn.send({ 
       type: 'SCREEN',
+      request: this.SCREEN_DATA,
       base: location.href.match(/^(.*\/)[^\/]*$/)[1] 
     });
 
@@ -58,6 +103,7 @@ Mirror.prototype.shareScreen = function() {
       initialize: function(rootId, children) {
         _this.conn.send({ 
           type: 'SCREEN',
+          request: _this.SCREEN_DATA,
           f: 'initialize',
           args: [rootId, children]
         });
@@ -66,11 +112,13 @@ Mirror.prototype.shareScreen = function() {
       applyChanged: function(removed, addedOrMoved, attributes, text) {
         _this.conn.send({
           type: 'SCREEN',
+          request: _this.SCREEN_DATA,
           f: 'applyChanged',
           args: [removed, addedOrMoved, attributes, text]
         });
       }
     });
+  
   } else {
     console.log("Error: Connection not established. Unable to stream screen");
   }
@@ -90,9 +138,7 @@ Mirror.prototype.mirrorScreen = function(data) {
       clearPage();
     else if (msg.base)
       _this.base = msg.base;
-    else if (msg.request) 
-      return;
-    else 
+    else if (msg.request === _this.SCREEN_DATA) 
       _this._mirror[msg.f].apply(_this._mirror, msg.args);
   }
 

@@ -26,6 +26,16 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
     // checks which of the ids are new, which already exist, and which previous ids aren't active any more
     // the visitor display is updated accordingly
     // visitorIds - an array of ids of visitors on the site
+    this.requestScreenClicked = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (that.selectedVisitor) {
+        that.selectedVisitor.requestScreen();
+      } else {
+        console.log("No visitor currently selected");
+      } 
+    }
+
     this.setVisitorList = function (visitorIds) {
             // go through each id in the list
             for (var i = 0; i < visitorIds.length; i++) {

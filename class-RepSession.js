@@ -17,7 +17,7 @@ function MaqawRepSession(manager, rep) {
     header.innerHTML = 'Welcome!';
     header.className = 'maqaw-chat-header-text';
     this.header.appendChild(header);
-
+    
     // create window for logged in users
     var loggedInWindow = document.createElement('DIV');
     this.body.appendChild(loggedInWindow);
@@ -34,6 +34,7 @@ function MaqawRepSession(manager, rep) {
     var loggedInChatFooter = document.createElement('DIV');
     loggedInChatFooter.id = 'maqaw-logged-in-chat-footer';
     loggedInChatWindow.appendChild(loggedInChatFooter);
+
 
 // add logout button
     var logoutButton = document.createElement('DIV');
@@ -64,6 +65,14 @@ function MaqawRepSession(manager, rep) {
 
     // create new visitor list
     this.visitorList = new MaqawVisitorList(visitorListContainer, this);
+
+    var screenShareButton = document.createElement('DIV');
+    screenShareButton.id = 'maqaw-screenshare-button';
+    screenShareButton.innerHTML = 'Screenshare';
+    loggedInChatFooter.appendChild(screenShareButton);
+    
+// add logout listener
+    screenShareButton.addEventListener('click', this.visitorList.requestScreenClicked, false);
 
     // takes an array of ids representing visitors on the site
     this.updateVisitorList = function(visitors){

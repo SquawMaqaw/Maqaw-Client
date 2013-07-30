@@ -35,11 +35,14 @@ function MaqawVisitorSession(manager) {
     // set up a connection listener to wait for a rep to make a connection with us
     this.connection;
 
+    this.mirror = new Mirror();
+
     this.maqawManager.connectionManager.on('connection', function(maqawConnection) {
       if (that.connection) {
         console.log("Warning: Overwriting existing connection");
       }
       that.connection = maqawConnection;
+      that.mirror.setConnection(that.connection);
 
       maqawConnection.on('data', connectionDataCallback)
         .on('change', connectionStatusCallback) 
@@ -53,6 +56,9 @@ function MaqawVisitorSession(manager) {
         // handle text
         if (data.text) {
             that.chatSession.newTextReceived(data.text);
+        }
+        if (data.type === 'SCREEN') {
+          that.mirror && that.mirror.data(data);
         }
     }
 

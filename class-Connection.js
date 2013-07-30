@@ -44,7 +44,7 @@ function MaqawConnection(peer, dstId, conn) {
     if (conn) {
         this.conn = conn;
     } else {
-        this.conn = this.peer.connect(this.dstId);
+        this.conn = this.peer.connect(this.dstId, {reliable: true});
     }
 
     // check the current status of the connection. It may already be open if one was passed in
@@ -193,6 +193,13 @@ function MaqawConnection(peer, dstId, conn) {
     this.sendScreen = function (screenData) {
 
     };
+
+    this.send = function(data) {
+      //  unopinionated, unreliable
+      //  send function. packets 
+      //  may arrive, packets may not
+      that.conn.send(data);  
+    }
 
     this.on = function (_event, directive) {
         // bind callback
