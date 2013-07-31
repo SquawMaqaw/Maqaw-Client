@@ -125,6 +125,8 @@ function MaqawVisitor(id, name, visitorList) {
                 timeoutId = null;
             }, timeout);
 
+            // TODO: Tell mirror to stop sending data
+
         } else {
             // cancel any timeout that was started
             if (timeoutId) {
@@ -132,6 +134,12 @@ function MaqawVisitor(id, name, visitorList) {
                 timeoutId = null;
             }
             show();
+        }
+
+        // if we were previously disconnected but are now connected then restart the mirror
+        // if applicable
+        if(!that.isConnected && connectionStatus){
+            that.mirror && that.mirror.connectionReset();
         }
 
         // save status
