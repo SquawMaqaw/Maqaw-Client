@@ -50,6 +50,10 @@ TreeMirror.prototype = {
         break;
 
       case Node.ELEMENT_NODE:
+        //  Check if node has ignore attribute  if so, do not render. //
+        if (nodeData.attributes && nodeData.attributes["ignore"])
+          return;
+
         if (this.delegate && this.delegate.createElement)
           node = this.delegate.createElement(nodeData.tagName);
         if (!node)

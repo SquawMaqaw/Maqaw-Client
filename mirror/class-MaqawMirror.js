@@ -248,6 +248,7 @@ function MouseMirror(doc, options) {
   this.cursor.style.position = 'absolute';
   this.cursor.style.top = '0px';
   this.cursor.style.left = '0px';
+  this.cursor.setAttribute("ignore", "true");
 
   this.doc.addEventListener('mousemove', this.moveEvent, false); 
   this.doc.addEventListener('click', this.clickEvent, false);
