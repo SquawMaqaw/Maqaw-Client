@@ -104,14 +104,18 @@ Mirror.prototype.openMirror = function() {
   
   this.mouseMirror = new MouseMirror(this.mirrorDocument, {
     mousemove: function(event) {
-      _this.conn.send({ 
-        type: 'SCREEN', 
+      _this.conn.send({
+        type: 'SCREEN',
         request: DATA_ENUMS.MOUSE_MOVE,
         coords: {x: event.pageX, y: event.pageY}
       });
     }, 
     click: function(event) {
-      console.log("clicked"); 
+        _this.conn.send({
+            type: 'SCREEN',
+            request: DATA_ENUMS.MOUSE_CLICK,
+            coords: {x: event.pageX, y: event.pageY}
+        });
     }
   }); 
 };
@@ -182,7 +186,11 @@ Mirror.prototype.shareScreen = function() {
         });
       }, 
       click: function(event) {
-        console.log("clicked"); 
+          _this.conn.send({
+              type: 'SCREEN',
+              request: DATA_ENUMS.MOUSE_CLICK,
+              coords: {x: event.pageX, y: event.pageY}
+          });
       }
     });
   
@@ -236,23 +244,40 @@ Mirror.prototype.mirrorScreen = function(data) {
 };
 
 function MouseMirror(doc, options) {
-
+  this.CURSOR_RADIUS = 10;
   this.moveEvent = options.mousemove;
   this.clickEvent = options.click;
-  this.doc = doc; 
+  this.doc = doc;
+  var _this = this;
 
   this.cursor = this.doc.createElement('div'); 
-  this.cursor.style.width = '20px';
-  this.cursor.style.height = '20px';
+  this.cursor.style.width = 2*this.CURSOR_RADIUS + 'px';
+  this.cursor.style.height = 2*this.CURSOR_RADIUS + 'px';
   this.cursor.style.backgroundColor = 'red';
+  this.cursor.style.borderRadius = '999px';
+  this.cursor.style.zIndex = 10000;
   this.cursor.style.position = 'absolute';
   this.cursor.style.top = '0px';
   this.cursor.style.left = '0px';
   this.cursor.setAttribute("ignore", "true");
 
-  this.doc.addEventListener('mousemove', this.moveEvent, false); 
+    // maximum number of times per second mouse movement data will be sent
+    var MAX_SEND_RATE = 10;
+    // has enough time elapsed to send data again?
+    var isMouseTimeUp = true;
+    function moveMouse(event){
+      if(isMouseTimeUp){
+          _this.moveEvent(event);
+          isMouseTimeUp = false;
+          setTimeout(function(){isMouseTimeUp = true;}, 1000 / MAX_SEND_RATE);
+      }
+    }
+
+
+  this.doc.addEventListener('mousemove', moveMouse, false);
   this.doc.addEventListener('click', this.clickEvent, false);
-  
+
+
   this.isDrawn = false;
 
   return this;
@@ -277,12 +302,65 @@ MouseMirror.prototype.data = function(_data) {
 };
 
 MouseMirror.prototype.moveMouse = function(_data) {
-  this.cursor.style.top = _data.coords.y + 'px';
-  this.cursor.style.left = _data.coords.x + 'px';
+  this.cursor.style.top = _data.coords.y - this.CURSOR_RADIUS + 'px';
+  this.cursor.style.left = _data.coords.x - this.CURSOR_RADIUS + 'px';
 };
 
 MouseMirror.prototype.clickMouse = function(_data) {
-  // TODO: Click mouse or something
+    var x = _data.coords.x;
+    var y = _data.coords.y;
+    var _this = this;
+
+    function makeExpandingRing(){
+        var radius = 1;
+        var click = _this.doc.createElement('div');
+        click.style.width = 2*radius + 'px';
+        click.style.height = 2*radius + 'px';
+        click.style.backgroundColor = 'transparent';
+        click.style.border = '2px solid rgba(255, 255, 0, 1)';
+        click.style.borderRadius = '999px';
+        click.style.zIndex = 10000;
+        click.style.position = 'absolute';
+        click.style.top = y - radius + 'px';
+        click.style.left = x - radius + 'px';
+        click.setAttribute("ignore", "true");
+        _this.doc.body.appendChild(click);
+
+        var rate = 50;
+        var radiusIncrease = 2;
+        var transparency = 1;
+        var transparencyRate = .03;
+
+        (function expand() {
+            radius += radiusIncrease;
+            transparency -= transparencyRate;
+            click.style.border = '2px solid rgba(255, 255, 0, ' + transparency + ')';
+            click.style.width = 2*radius + 'px';
+            click.style.height = 2*radius + 'px';
+            click.style.top = y - radius + 'px';
+            click.style.left = x - radius + 'px';
+
+            if(transparency > 0){
+                setTimeout(expand, rate);
+            } else {
+                _this.doc.body.removeChild(click);
+            }
+        })();
+    }
+
+    var numRings = 6;
+    var ringSpacing = 300;
+    var ringCounter = 0;
+
+    (function doRings (){
+        if(ringCounter < numRings){
+            makeExpandingRing();
+            ringCounter++;
+            setTimeout(doRings, ringSpacing);
+        }
+    })();
+
+
 };
 
 MouseMirror.prototype.off = function() {

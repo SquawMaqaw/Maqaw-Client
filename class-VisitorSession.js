@@ -68,7 +68,7 @@ function MaqawVisitorSession(manager) {
      * with true representing an open connection and false representing closed.
      */
     function connectionStatusCallback(connectionStatus) {
-        console.log("Visitor Session connection status: "+connectionStatus);
+        //console.log("Visitor Session connection status: "+connectionStatus);
         that.isConnected = connectionStatus;
 
         // update chat session to reflect connection status
