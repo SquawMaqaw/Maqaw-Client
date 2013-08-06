@@ -175,7 +175,7 @@ function MaqawConnection(peer, dstId, conn) {
      */
     this.sendText = function (text) {
         that.conn.send({
-            'type': 'text',
+            'type': MAQAW_DATA_TYPE.TEXT,
             'text': text
         });
     };
@@ -199,7 +199,7 @@ function MaqawConnection(peer, dstId, conn) {
       //  send function. packets 
       //  may arrive, packets may not
       that.conn.send(data);  
-    }
+    };
 
     this.on = function (_event, directive) {
         // bind callback

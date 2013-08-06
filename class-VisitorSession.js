@@ -54,10 +54,10 @@ function MaqawVisitorSession(manager) {
      */
     function connectionDataCallback(data) {
         // handle text
-        if (data.text) {
+        if (data.type === MAQAW_DATA_TYPE.TEXT) {
             that.chatSession.newTextReceived(data.text);
         }
-        if (data.type === 'SCREEN') {
+        if (data.type === MAQAW_DATA_TYPE.SCREEN) {
           that.mirror && that.mirror.data(data);
         }
     }

@@ -73,12 +73,12 @@ function MaqawVisitor(id, name, visitorList) {
      */
     function connectionDataCallback(data) {
         // handle text
-        if (data.text) {
+        if (data.type === MAQAW_DATA_TYPE.TEXT) {
             that.chatSession.newTextReceived(data.text);
             // show an alert that new text has been received
             alertNewText();
         }
-        if (data.type === 'SCREEN') {
+        if (data.type === MAQAW_DATA_TYPE.SCREEN) {
           that.mirror && that.mirror.data(data);
         }
     }
