@@ -355,10 +355,9 @@ function MouseMirror(doc, options) {
   this.lastElementClicked;
 
   this.cursor = this.doc.createElement('div'); 
-  this.cursor.style.width = 2*this.CURSOR_RADIUS + 'px';
-  this.cursor.style.height = 2*this.CURSOR_RADIUS + 'px';
-  this.cursor.style.backgroundColor = 'red';
-  this.cursor.style.borderRadius = '999px';
+  this.cursor.style.backgroundImage = "url('http://gohapuna.com/wp/wp-content/uploads/2013/08/cursor.png')";
+  this.cursor.style.height = '30px';
+  this.cursor.style.width = '20px';
   this.cursor.style.zIndex = 10000;
   this.cursor.style.position = 'absolute';
   this.cursor.style.top = '0px';
