@@ -6,7 +6,9 @@ var MAQAW_MIRROR_ENUMS = {
   MOUSE_MOVE: 4,
   MOUSE_CLICK: 5,
   SCROLL: 6,
-  INPUT: 7
+  INPUT: 7,
+  SIZE_REQUEST: 8,
+  SIZE: 9
 };
 
 function Mirror(options) {
@@ -61,14 +63,20 @@ Mirror.prototype.data = function(_data) {
       // Mouse click event
     case MAQAW_MIRROR_ENUMS.INPUT:
       // Interactions with input elements
-    case MAQAW_MIRROR_ENUMS.SELECT:
-      // Interactions with select elements
-    case MAQAW_MIRROR_ENUMS.TEXT_AREA:
-     // Interactions with textarea elements
       this.mirrorScreen(_data);  
       break;
     case MAQAW_MIRROR_ENUMS.SCROLL:
       this.mirrorWindow.scrollTo(_data.left, _data.top);
+      break;
+    case MAQAW_MIRROR_ENUMS.SIZE:
+      this.mirrorDocument.body.style.width = _data.width;
+      break;
+    case MAQAW_MIRROR_ENUMS.SIZE_REQUEST:
+      this.conn.send({
+        type: MAQAW_DATA_TYPE.SCREEN,
+        request: MAQAW_MIRROR_ENUMS.SIZE,
+        width: document.body.clientWidth
+      });
       break;
     default:
       // Unknown
@@ -89,6 +97,13 @@ Mirror.prototype.openMirror = function() {
             // TODO: implement me
             _this.isViewingScreen = false;
         }, false);
+
+        // request dimensions for body
+        _this.conn.send({
+            type: MAQAW_DATA_TYPE.SCREEN,
+            request: MAQAW_MIRROR_ENUMS.SIZE_REQUEST
+        });
+
     }
 
     this.isViewingScreen = true;
@@ -305,6 +320,22 @@ Mirror.prototype.shareScreen = function() {
           }
       });
 
+      // listener for window resize
+      var oldResize = window.onresize;
+      function newResize (){
+          _this.conn.send({
+              type: MAQAW_DATA_TYPE.SCREEN,
+              request: MAQAW_MIRROR_ENUMS.SIZE,
+              width: document.body.clientWidth
+          });
+
+          // call the old resize function as well if we overwrote one
+          if(oldResize){
+              oldResize();
+          }
+      }
+      window.onresize = newResize;
+
   } else {
     console.log("Error: Connection not established. Unable to stream screen");
   }
@@ -406,8 +437,8 @@ MouseMirror.prototype.data = function(_data) {
 };
 
 MouseMirror.prototype.moveMouse = function(_data) {
-  this.cursor.style.top = _data.coords.y - this.CURSOR_RADIUS + 'px';
-  this.cursor.style.left = _data.coords.x - this.CURSOR_RADIUS + 'px';
+  this.cursor.style.top = _data.coords.y + 'px';
+  this.cursor.style.left = _data.coords.x + 'px';
 };
 
 MouseMirror.prototype.clickMouse = function(_data) {
