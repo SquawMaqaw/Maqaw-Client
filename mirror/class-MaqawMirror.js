@@ -544,40 +544,39 @@ function MaqawInputMirror(doc, options){
     this.multipleSelect = options.multipleSelect;
     this.inputDefault = options.inputDefault;
 
-    // attach listeners for form data
-    var inputs, index;
-    inputs = this.doc.getElementsByTagName('input');
-    inputs = Array.prototype.slice.call(inputs);
-    // include textareas
-    var textareas = this.doc.getElementsByTagName('textarea');
-    textareas = Array.prototype.slice.call(textareas);
-    inputs = inputs.concat(textareas);
-    for (index = 0; index < inputs.length; ++index) {
-        var elem = inputs[index];
-
-        // attach change listeners for radio and check buttons
-        if(elem.type === 'radio' || elem.type === 'checkbox'){
-            elem.addEventListener('change', this.radioAndCheckbox, false);
+    function keyUpEvent(event){
+        var target = event.target;
+        if(target.tagName === 'INPUT'){
+            (_this.inputDefault.bind(target))();
         }
 
-        // listen to value for other input types
-        else {
-            elem.addEventListener('keyup', this.inputDefault, false);
+        else if(target.tagName === 'TEXTAREA'){
+            console.log("text area changed");
+            (_this.inputDefault.bind(target))();
         }
     }
 
-    // listen for select fields
-    // We need to differentiate between single select and multiple select
-    var selects = this.doc.getElementsByTagName('select');
-    for(index = 0; index < selects.length; index++){
-        var selectNode = selects[index];
-        if(selectNode.type === 'select-one'){
-            selectNode.addEventListener('change', this.singleSelect, false);
-        } else if (selectNode.type === 'select-multiple'){
-            selectNode.addEventListener('change', _this.multipleSelect, false);
+    function changeEvent(event){
+        var target = event.target;
+        if(target.tagName === 'INPUT'){
+            if(target.type === 'radio' || target.type === 'checkbox'){
+                (_this.radioAndCheckbox.bind(target))();
+            } else {
+                (_this.inputDefault.bind(target))();
+            }
         }
 
+        else if(target.tagName === 'SELECT'){
+            if(target.type === 'select-one'){
+                (_this.singleSelect.bind(target))();
+            } else if(target.type === 'select-multiple'){
+                (_this.multipleSelect.bind(target))();
+            }
+        }
     }
+
+    this.doc.addEventListener('keyup', keyUpEvent, false);
+    this.doc.addEventListener('change', changeEvent, false);
 }
 
 MaqawInputMirror.prototype.data = function(data){
