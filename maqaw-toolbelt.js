@@ -91,9 +91,9 @@ var maqawCookies = {
 /*
  * Returns an array containing the position of the given node in the dom
  */
-function maqawGetNodeHierarchy(node) {
+function maqawGetNodeHierarchy(doc, node) {
     var index = [];
-    while (node !== document.body) {
+    while (node !== doc.body) {
         index.unshift(Array.prototype.indexOf.call(node.parentElement.children, node));
         node = node.parentElement;
     }

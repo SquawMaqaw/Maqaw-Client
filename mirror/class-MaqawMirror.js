@@ -57,10 +57,10 @@ Mirror.prototype.data = function(_data) {
       break;
     case MAQAW_MIRROR_ENUMS.SCREEN_DATA:
       //  Screen Data.
-    case MAQAW_MIRROR_ENUMS.MOUSE_MOVE:
-      // Mouse move event
     case MAQAW_MIRROR_ENUMS.MOUSE_CLICK:
       // Mouse click event
+    case MAQAW_MIRROR_ENUMS.MOUSE_MOVE:
+      // Mouse move event
     case MAQAW_MIRROR_ENUMS.INPUT:
       // Interactions with input elements
       this.mirrorScreen(_data);  
@@ -139,9 +139,10 @@ Mirror.prototype.openMirror = function() {
             type: MAQAW_DATA_TYPE.SCREEN,
             request: MAQAW_MIRROR_ENUMS.MOUSE_CLICK,
             coords: {x: event.pageX, y: event.pageY},
-            target: maqawGetNodeHierarchy(event.target)
+            target: maqawGetNodeHierarchy(_this.mirrorDocument, event.target)
         });
-    }
+    },
+    rep: true
   });
 
   this.inputMirror = new MaqawInputMirror(this.mirrorDocument, {
@@ -154,7 +155,7 @@ Mirror.prototype.openMirror = function() {
           _this.conn.send({
               type: MAQAW_DATA_TYPE.SCREEN,
               request: MAQAW_MIRROR_ENUMS.INPUT,
-              index: maqawGetNodeHierarchy(this),
+              index: maqawGetNodeHierarchy(_this.mirrorDocument, this),
               selectedOptions: selectedOptions
           });
       },
@@ -162,7 +163,7 @@ Mirror.prototype.openMirror = function() {
           _this.conn.send({
               type: MAQAW_DATA_TYPE.SCREEN,
               request: MAQAW_MIRROR_ENUMS.INPUT,
-              index: maqawGetNodeHierarchy(this),
+              index: maqawGetNodeHierarchy(_this.mirrorDocument, this),
               selectedIndex: this.selectedIndex
           });
       }
@@ -171,7 +172,7 @@ Mirror.prototype.openMirror = function() {
           _this.conn.send({
               type: MAQAW_DATA_TYPE.SCREEN,
               request: MAQAW_MIRROR_ENUMS.INPUT,
-              index: maqawGetNodeHierarchy(this),
+              index: maqawGetNodeHierarchy(_this.mirrorDocument, this),
               text: this.value
           });
       }
@@ -180,7 +181,7 @@ Mirror.prototype.openMirror = function() {
           _this.conn.send({
               type: MAQAW_DATA_TYPE.SCREEN,
               request: MAQAW_MIRROR_ENUMS.INPUT,
-              index: maqawGetNodeHierarchy(this),
+              index: maqawGetNodeHierarchy(_this.mirrorDocument, this),
               checked: this.checked
           });
       }
@@ -257,7 +258,7 @@ Mirror.prototype.shareScreen = function() {
               type: MAQAW_DATA_TYPE.SCREEN,
               request: MAQAW_MIRROR_ENUMS.MOUSE_CLICK,
               coords: {x: event.pageX, y: event.pageY},
-              target: maqawGetNodeHierarchy(event.target)
+              target: maqawGetNodeHierarchy(document, event.target)
           });
       }
     });
@@ -288,7 +289,7 @@ Mirror.prototype.shareScreen = function() {
               _this.conn.send({
                   type: MAQAW_DATA_TYPE.SCREEN,
                   request: MAQAW_MIRROR_ENUMS.INPUT,
-                  index: maqawGetNodeHierarchy(this),
+                  index: maqawGetNodeHierarchy(document, this),
                   selectedOptions: selectedOptions
               });
           },
@@ -296,7 +297,7 @@ Mirror.prototype.shareScreen = function() {
               _this.conn.send({
                   type: MAQAW_DATA_TYPE.SCREEN,
                   request: MAQAW_MIRROR_ENUMS.INPUT,
-                  index: maqawGetNodeHierarchy(this),
+                  index: maqawGetNodeHierarchy(document, this),
                   selectedIndex: this.selectedIndex
               });
           }
@@ -305,7 +306,7 @@ Mirror.prototype.shareScreen = function() {
               _this.conn.send({
                   type: MAQAW_DATA_TYPE.SCREEN,
                   request: MAQAW_MIRROR_ENUMS.INPUT,
-                  index: maqawGetNodeHierarchy(this),
+                  index: maqawGetNodeHierarchy(document, this),
                   text: this.value
               });
           }
@@ -314,7 +315,7 @@ Mirror.prototype.shareScreen = function() {
               _this.conn.send({
                   type: MAQAW_DATA_TYPE.SCREEN,
                   request: MAQAW_MIRROR_ENUMS.INPUT,
-                  index: maqawGetNodeHierarchy(this),
+                  index: maqawGetNodeHierarchy(document, this),
                   checked: this.checked
               });
           }
@@ -352,14 +353,18 @@ Mirror.prototype.mirrorScreen = function(data) {
   }
 
   function handleMessage(msg) {
-    if (msg.clear)
+    if (msg.clear){
       clearPage();
-    else if (msg.base)
+    }
+    else if (msg.base){
       _this.base = msg.base;
-    else if (msg.request === MAQAW_MIRROR_ENUMS.SCREEN_DATA)
+    }
+    else if (msg.request === MAQAW_MIRROR_ENUMS.SCREEN_DATA){
       _this._mirror[msg.f].apply(_this._mirror, msg.args);
-    else if (msg.request === MAQAW_MIRROR_ENUMS.MOUSE_MOVE || msg.request === MAQAW_MIRROR_ENUMS.MOUSE_CLICK)
-      _this.mouseMirror.data(msg);
+    }
+    else if (msg.request === MAQAW_MIRROR_ENUMS.MOUSE_MOVE || msg.request === MAQAW_MIRROR_ENUMS.MOUSE_CLICK){
+        _this.mouseMirror.data(msg);
+    }
     else if (msg.request === MAQAW_MIRROR_ENUMS.INPUT) {
       _this.inputMirror.data(msg);
     }
@@ -381,6 +386,7 @@ function MouseMirror(doc, options) {
   this.clickEvent = options.click;
   this.doc = doc;
   var _this = this;
+  this.isRep = Boolean(options.rep);
 
     // keep track of the last element that was clicked on
   this.lastElementClicked;
@@ -450,11 +456,20 @@ MouseMirror.prototype.clickMouse = function(_data) {
     var target = maqawGetNodeFromHierarchy(this.doc, _data.target);
     // remove highlight from last clicked element
     if(this.lastElementClicked){
-        this.lastElementClicked.className = this.lastElementClicked.className.replace(/\bmaqaw-mirror-clicked-element\b/,'');
+        if(this.isRep){
+            this.lastElementClicked.className = this.lastElementClicked.className.replace(/\bmaqaw-mirror-clicked-element-rep\b/,'');
+        }
+        else {
+            this.lastElementClicked.className = this.lastElementClicked.className.replace(/\bmaqaw-mirror-clicked-element\b/,'');
+        }
     }
     // highlight the element that was clicked if it wasn't the body
     if(target.tagName !== 'BODY'){
-        target.className = target.className + ' maqaw-mirror-clicked-element';
+        if(this.isRep){
+            target.className = target.className + ' maqaw-mirror-clicked-element-rep';
+        } else {
+            target.className = target.className + ' maqaw-mirror-clicked-element';
+        }
         this.lastElementClicked = target;
     }
 
