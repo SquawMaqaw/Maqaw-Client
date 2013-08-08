@@ -37,6 +37,7 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
     }
 
     this.setVisitorList = function (visitorIds) {
+            console.log("inside of setvisitorlist");
             // go through each id in the list
             for (var i = 0; i < visitorIds.length; i++) {
                 var id = visitorIds[i];
@@ -47,6 +48,7 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
                     that.visitors[id] = createNewVisitor(id);
                 }
             }
+            console.log(this.visitors);
     };
 
     // create a new visitor using the specified id, and wrap the visitor in a MaqawVisitorWrapper object

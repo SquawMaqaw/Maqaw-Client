@@ -28,6 +28,8 @@ function MaqawConnection(peer, dstId, conn) {
     this.dataDirectives = [];
     this.errorDirectives = [];
     this.changeDirectives = [];
+
+    console.log("inside of MaqawConnection");
     //          
 
     // whether or not this connection is open. True if open and false otherwise
@@ -47,7 +49,11 @@ function MaqawConnection(peer, dstId, conn) {
         this.conn = this.peer.connect(this.dstId, {reliable: true});
     }
 
+    console.log(this.conn);
+
     // check the current status of the connection. It may already be open if one was passed in
+    console.log("this.conn.open");
+    console.log(this.conn.open);
     setConnectionStatus(this.conn.open);
 
     setConnectionCallbacks();
@@ -214,6 +220,7 @@ function MaqawConnection(peer, dstId, conn) {
 
     function setConnectionCallbacks() {
         that.conn.on('open', function () {
+            console.log("we have reached the open event");
             setConnectionStatus(true);
         });
 
@@ -229,6 +236,7 @@ function MaqawConnection(peer, dstId, conn) {
 
         that.conn.on('error', function (err) {
             console.log("Connection error: " + err);
+            console.log(err);
             var i, errorLen = that.errorDirectives.length;
             for (i = 0; i < errorLen; i++) {
                 that.errorDirectives[i](err);
