@@ -13,7 +13,7 @@ function MaqawVisitorSession(manager, visitorInfo) {
 
     // Visitor info was passed in if it was previously stored. Otherwise it is undefined
     this.visitorInfo = null;
-    if(visitorInfo){
+    if (visitorInfo) {
         this.visitorInfo = new MaqawVisitorInfo(visitorInfo);
     }
 
@@ -29,9 +29,10 @@ function MaqawVisitorSession(manager, visitorInfo) {
     this.headerText.className = 'maqaw-header-text';
     this.header.appendChild(this.headerText);
     // function to change the header text
-    function changeHeaderText(text){
+    function changeHeaderText(text) {
         that.headerText.innerHTML = text;
     }
+
     // set default text
     changeHeaderText("Chat with us!");
 
@@ -42,13 +43,13 @@ function MaqawVisitorSession(manager, visitorInfo) {
     this.bodyContent = document.createElement('DIV');
     this.body.appendChild(this.bodyContent);
     // function to set what content is shown
-    function setBodyContent(div){
+    function setBodyContent(div) {
         that.bodyContent.innerHTML = '';
         that.bodyContent.appendChild(div);
     }
 
     /* Create chat container and session */
-     var chatSessionContainer = document.createElement("DIV");
+    var chatSessionContainer = document.createElement("DIV");
     this.chatSession = new MaqawChatSession(chatSessionContainer, sendTextFromChat, 'You', this.maqawManager.chatName);
 
     /* Create container for when no rep is available */
@@ -85,25 +86,42 @@ function MaqawVisitorSession(manager, visitorInfo) {
     visitorInfoContainer.appendChild(infoSubmitButton);
     // submit button callback
     infoSubmitButton.addEventListener('click', visitorInfoEntered, false);
-    function visitorInfoEntered(){
+    // callback function for when the visitor submits their info in the form
+    function visitorInfoEntered() {
         var name = nameField.value;
         var email = emailField.value;
         // TODO: Display error message for invalid name or email
         // check to make sure name and email aren't blank
-        if(name !== '' && email !== ''){
-            // store the visitor's info
-            that.visitorInfo = new MaqawVisitorInfo({
+        if (name !== '' && email !== '') {
+            setVisitorInfo({
                 name: name,
                 email: email
             });
+        }
+    }
+
+    // updates this visitor's personal information, shares the info with the connected rep,
+    // and allows the chat window to be shown now that we have the visitor's info
+    function setVisitorInfo(info) {
+        // store the visitor's info
+        that.visitorInfo = new MaqawVisitorInfo(info);
+        // send the info to the rep
+        sendVisitorInfo();
+        // call the connectionStatusCallback so that this visitor can be shown the chat window
+        // now that we have their info
+        connectionStatusCallback(that.isConnected);
+    }
+
+    // transmit the visitor's info to our peer
+    function sendVisitorInfo() {
+        // make sure we have info and a connection
+        if (that.visitorInfo && that.connection) {
             // send the data to the rep
-            that.connection.send({
+            that.connection.sendReliable({
                 type: MAQAW_DATA_TYPE.VISITOR_INFO,
                 request: MAQAW_VISITOR_ENUMS.INFO,
                 info: JSON.stringify(that.visitorInfo)
             });
-            // show the chat window
-            setBodyContent(chatSessionContainer);
         }
     }
 
@@ -140,7 +158,18 @@ function MaqawVisitorSession(manager, visitorInfo) {
 
         maqawConnection.on('data', connectionDataCallback)
             .on('change', connectionStatusCallback)
+            .on('open', connectionOpenCallback);
     });
+
+    /*
+     * Called whenever a new connection with our peer is established. This can happen multiple times,
+     * like when the rep changes pages and a new connection has to be made.
+     */
+    function connectionOpenCallback() {
+        // make sure the rep has this visitor's info
+        connectionStatusCallback(true);
+        sendVisitorInfo();
+    }
 
     /*
      * For a connection received from the newConnectionListener, this function will be called by the connection
@@ -170,7 +199,7 @@ function MaqawVisitorSession(manager, visitorInfo) {
         // show a different page if there is no connection with a rep
         if (connectionStatus) {
             // if they've enter their info, show them the chat window
-            if(that.visitorInfo){
+            if (that.visitorInfo) {
                 setBodyContent(chatSessionContainer);
             }
             // otherwise ask for their information
@@ -188,25 +217,36 @@ function MaqawVisitorSession(manager, visitorInfo) {
      * to send to the peer.
      */
     function sendTextFromChat(text) {
-        if (!that.connection || !that.connection.isConnected) {
+        if (!that.connection || !that.isConnected) {
             console.log("Error: Cannot send text. Bad connection");
         } else {
-            that.connection.sendText(text);
+            that.connection.sendReliable({
+                type: MAQAW_DATA_TYPE.TEXT,
+                text: text
+            });
         }
     }
 
     // returns an object containing the data that constitutes this visitors session
     this.getSessionData = function () {
         return {
-            chatText: that.chatSession.getText()
+            chatText: that.chatSession.getText(),
+            info: JSON.stringify(that.visitorInfo)
         };
     };
 
     // takes an visitor session data object (from getSessionData) and loads this visitor
     // session with it
     this.loadSessionData = function (sessionData) {
-        that.chatSession.setText(sessionData.chatText);
-    }
+        if (sessionData.chatText) {
+            that.chatSession.setText(sessionData.chatText);
+        }
+
+        var info = JSON.parse(sessionData.info);
+        if (info) {
+            setVisitorInfo(info);
+        }
+    };
 }
 
 MaqawVisitorSession.prototype.getBodyContents = function () {

@@ -37,10 +37,12 @@ function MaqawVisitor(id, visitorList, info) {
         var textNode = document.createTextNode(text);
         cell.appendChild(textNode);
     }
+    // update the row data now for the case that visitor info was loaded from storage
+    updateRowInfo();
+
     // This function is passed any data that is received from the visitor peer
     // about their personal information
     function handleVisitorInfo(data) {
-        console.log('data');
         // create a new VisitorInfo object with this data
         that.info = JSON.parse(data.info);
         // update the chat session name
@@ -98,7 +100,10 @@ function MaqawVisitor(id, visitorList, info) {
         if (!that.connection || !that.connection.isConnected) {
             console.log("Visitor Error: Cannot send text. Bad connection");
         } else {
-            that.connection.sendText(text);
+            that.connection.sendReliable({
+                type: MAQAW_DATA_TYPE.TEXT,
+                text: text
+            });
         }
     }
 
@@ -117,7 +122,6 @@ function MaqawVisitor(id, visitorList, info) {
         }
         // information about the visitor
         if (data.type === MAQAW_DATA_TYPE.VISITOR_INFO) {
-            console.log("handling visitor info");
             handleVisitorInfo(data);
         }
     }

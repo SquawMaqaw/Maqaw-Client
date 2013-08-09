@@ -58,7 +58,7 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
         };
         that.visitorCounter++;
         // use rowIndex of -1 so the row is added at the end of the table
-        return new MaqawVisitor(id, that, info);
+        return new MaqawVisitor(id, that, null);
     }
 
     this.setSelectedVisitor = function (visitor) {

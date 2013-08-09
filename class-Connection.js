@@ -57,7 +57,6 @@ function MaqawConnection(peer, dstId, conn) {
      * and pass the rest of it on to the data callback
      */
     function handleData(data) {
-        // for now we are just sending text
         var i, dataLen = that.dataDirectives.length;
         for (i = 0; i < dataLen; i++) {
             that.dataDirectives[i](data);
@@ -69,25 +68,15 @@ function MaqawConnection(peer, dstId, conn) {
      * the connectionListener
      */
     function setConnectionStatus(connectionStatus) {
-        var i,
-            changeLen = that.changeDirectives.length,
-            openLen = that.openDirectives.length,
-            closeLen = that.closeDirectives.length;
+        var i, len = that.changeDirectives.length;
 
-        for (i = 0; i < changeLen; i++) {
+        // alert all of the binded callbacks
+        for (i = 0; i < len; i++) {
             that.changeDirectives[i](connectionStatus);
         }
 
-        if (connectionStatus === false) {
-            for (i = 0; i < closeLen; i++) {
-                that.closeDirectives[i](connectionStatus);
-            }
-        } else if (connectionStatus === true) {
-            for (i = 0; i < openLen; i++) {
-                that.openDirectives[i](connectionStatus);
-            }
-        }
-        that.isConnected = Boolean(connectionStatus);
+        // save the status
+        that.isConnected = connectionStatus;
     }
 
     /*
@@ -171,35 +160,19 @@ function MaqawConnection(peer, dstId, conn) {
     };
 
     /*
-     * Send text through this connection
+     * Unreliable send function. No guarantee that the peer
+     * receives this data
      */
-    this.sendText = function (text) {
-        that.conn.send({
-            'type': MAQAW_DATA_TYPE.TEXT,
-            'text': text
-        });
-    };
-
-    /*
-     * Initializes a screen sharing session
-     */
-    this.startScreenShare = function (options) {
-
-    };
-
-    /*
-     * Sends screen data
-     */
-    this.sendScreen = function (screenData) {
-
-    };
-
     this.send = function (data) {
-        //  unopinionated, unreliable
-        //  send function. packets
-        //  may arrive, packets may not
-        console.log("connection sending data");
-        console.log(data);
+        that.conn.send(data);
+    };
+
+    /*
+     * Reliably sends data to the peer. A queue of items to send is made, and each item is resent
+     * until an ack is received
+     */
+    this.sendReliable = function (data) {
+        //TODO: implement reliable send
         that.conn.send(data);
     };
 
@@ -217,18 +190,18 @@ function MaqawConnection(peer, dstId, conn) {
     function setConnectionCallbacks() {
         that.conn.on('open', function () {
             setConnectionStatus(true);
+            handleOpen();
         });
 
         that.conn.on('data', function (data) {
             // if we are receiving data the connection is definitely open
-            console.log("connection receiving data");
-            console.log(data);
             setConnectionStatus(true);
             handleData(data);
         });
 
         that.conn.on('close', function (err) {
             setConnectionStatus(false);
+            handleClose();
         });
 
         that.conn.on('error', function (err) {
@@ -237,6 +210,23 @@ function MaqawConnection(peer, dstId, conn) {
             for (i = 0; i < errorLen; i++) {
                 that.errorDirectives[i](err);
             }
+            // try to reopen connection
+            setConnectionStatus(false);
+            attemptConnection();
         });
+    }
+
+    function handleOpen() {
+        var i, len = that.openDirectives.length;
+        for (i = 0; i < len; i++) {
+            that.openDirectives[i]();
+        }
+    }
+
+    function handleClose() {
+        var i, len = that.closeDirectives.length;
+        for (i = 0; i < len; i++) {
+            that.closeDirectives[i]();
+        }
     }
 }
