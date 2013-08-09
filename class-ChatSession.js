@@ -30,6 +30,10 @@ function MaqawChatSession(chatSessionContainer, sendTextFunction, srcName, dstNa
     // add listener to text input. Capture text when enter is pressed
     this.textInput.addEventListener("keyup", keyPress, false);
 
+    this.setPeerName = function(name){
+        that.dstName = name;
+    };
+
     function keyPress(e) {
         // check if enter was pressed
         if (e.keyCode === 13) {

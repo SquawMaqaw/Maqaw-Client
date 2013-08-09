@@ -3,25 +3,58 @@
  * has a row in the visitor display table where we can click on them to select or deselect them for chat. The
  * visitor object maintains all connection data that the rep needs to communicate with the visitor on the site.
  * id - the peerjs id of this visitor
- * name - the name we are using for this visitor
- * repSession - the MaqawRepSession object
+ * info -An object containing information about this visitor, like name and email address.
+ *      This is optional, but can be provided if we have previously saved it for later
+ * visitorList - The MaqawVisitorList object storing this visitor
  */
-function MaqawVisitor(id, name, visitorList) {
+function MaqawVisitor(id, visitorList, info) {
     var that = this;
     this.visitorList = visitorList;
     this.connectionManager = visitorList.maqawManager.connectionManager;
     this.id = id;
-    this.name = name;
+    this.info = null;
+    if (info) {
+        this.info = new MaqawVisitorInfo(info);
+    }
 
     /* Set up visitor display row in table */
     // create row to display this visitor in the table
+    // -1 inserts the row at the end of the table
     this.row = this.visitorList.table.insertRow(-1);
     this.row.className = 'maqaw-visitor-list-entry';
-    // the row contains a single cell containing the visitor name
+    // the cell containing the visitor info
     var cell = document.createElement("td");
-    var cellText = document.createTextNode(this.name);
-    cell.appendChild(cellText);
-    this.row.appendChild(cell);
+    row.appendChild(cell);
+    // function to update the visitor info in the row when we get personalized data
+    // from the visitor
+    function updateRowInfo() {
+        cell.innerHTML = '';
+        var text = "visitor";
+        // use personal information if we have it
+        if (that.info) {
+            text = that.info.name + " " + that.info.email;
+        }
+        var textNode = document.createTextNode(text);
+        cell.appendChild(textNode);
+    }
+    // This function is passed any data that is received from the visitor peer
+    // about their personal information
+    function handleVisitorData(data) {
+        // create a new VisitorInfo object with this data
+        that.info = JSON.parse(data.info);
+        // update the chat session name
+        that.chatSession.setPeerName(that.info.name);
+        //update the display in the visitor table
+        updateRowInfo();
+        // call the connectionStatusCallback so that this visitor can be
+        //shown in the list now that we have their info
+        connectionStatusCallback(that.isConnected);
+        // send an acknowledgement back
+        that.conn.send({
+            type: MAQAW_DATA_TYPE.VISITOR_INFO,
+            request: MAQAW_VISITOR_ENUMS.ACK
+        });
+    }
 
     // append row to the visitor table
     this.visitorList.tBody.appendChild(this.row);
@@ -44,7 +77,7 @@ function MaqawVisitor(id, name, visitorList) {
     this.isConnected = false;
 
     // each visitor has a unique chat session
-    this.chatSession = new MaqawChatSession(document.createElement("DIV"), sendTextFromChat, 'You', this.name);
+    this.chatSession = new MaqawChatSession(document.createElement("DIV"), sendTextFromChat, 'You', "Visitor");
 
     // create a new connection
     this.connection = this.connectionManager.newConnection(this.id);
@@ -79,7 +112,11 @@ function MaqawVisitor(id, name, visitorList) {
             alertNewText();
         }
         if (data.type === MAQAW_DATA_TYPE.SCREEN) {
-          that.mirror && that.mirror.data(data);
+            that.mirror && that.mirror.data(data);
+        }
+        // information about the visitor
+        if (data.type === MAQAW_DATA_TYPE.VISITOR_INFO) {
+            handleVisitorInfo(data);
         }
     }
 
@@ -133,12 +170,15 @@ function MaqawVisitor(id, name, visitorList) {
                 clearTimeout(timeoutId);
                 timeoutId = null;
             }
-            show();
+            // only show this visitor if we have gotten their info
+            if (that.visitorInfo) {
+                show();
+            }
         }
 
         // if we were previously disconnected but are now connected then restart the mirror
         // if applicable
-        if(!that.isConnected && connectionStatus){
+        if (!that.isConnected && connectionStatus) {
             that.mirror && that.mirror.connectionReset();
         }
 
@@ -171,19 +211,19 @@ function MaqawVisitor(id, name, visitorList) {
         that.visitorList.chatManager.clear(that);
     };
 
-    this.requestScreen = function() {
-      // Initialize new mirror if it exists. 
-      // pass mirror the connection.
-      // ----------------------------------
-      // 
-      if (this.mirror) {
-        // Start sharing dat screen //
-        this.mirror.requestScreen();
-      } else {
-        // unable to share
-       console.log("mirror unable to initialize"); 
-      }
-    }
+    this.requestScreen = function () {
+        // Initialize new mirror if it exists.
+        // pass mirror the connection.
+        // ----------------------------------
+        //
+        if (this.mirror) {
+            // Start sharing dat screen //
+            this.mirror.requestScreen();
+        } else {
+            // unable to share
+            console.log("mirror unable to initialize");
+        }
+    };
 
     /*
      * Hide this visitor from being in the visitor table. Deselect it if applicable
@@ -206,4 +246,12 @@ function MaqawVisitor(id, name, visitorList) {
     function show() {
         that.row.style.display = 'block';
     }
+}
+
+/*
+ * Store information about this visitor
+ */
+function MaqawVisitorInfo(info) {
+    this.name = info.name;
+    this.email = info.email;
 }

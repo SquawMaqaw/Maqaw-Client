@@ -117,5 +117,6 @@ function maqawGetNodeFromHierarchy(doc, hierarchy){
  */
 var MAQAW_DATA_TYPE = {
     TEXT: 0,
-    SCREEN: 1
+    SCREEN: 1,
+    VISITOR_INFO: 2
 };

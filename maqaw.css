@@ -49,6 +49,8 @@
     cursor: auto !important;
 }
 
+
+
 #maqaw-client-header {
     padding-top: 8px !important;
     padding-left: 10px !important;
@@ -57,7 +59,7 @@
     font-size: 15px !important;
 }
 
-.maqaw-visitor-session-header {
+.maqaw-default-client-header {
     cursor: pointer !important;
     width: 250px !important;
     height: 35px !important;
@@ -66,7 +68,7 @@
     border-top-right-radius: 5px !important;
 }
 
-.maqaw-visitor-session-header-text {
+.maqaw-header-text {
     padding-top: 8px !important;
     padding-left: 10px !important;
     color: white !important;

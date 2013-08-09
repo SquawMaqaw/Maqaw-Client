@@ -2,6 +2,10 @@
  VisitorSession manages a visitor's interaction with the Maqaw client. It contains the connection
  with a representative, and handles all display and transfer of communication with that rep.
  */
+var MAQAW_VISITOR_ENUMS = {
+    INFO: 0,
+    ACK: 1
+};
 function MaqawVisitorSession(manager, visitorInfo) {
     var that = this;
     this.chatSession;
@@ -19,10 +23,10 @@ function MaqawVisitorSession(manager, visitorInfo) {
 
     /* initialize header container for this session */
     this.header = document.createElement('DIV');
-    this.header.className = 'maqaw-visitor-session-header';
+    this.header.className = 'maqaw-default-client-header';
     // div to hold text in header
     this.headerText = document.createElement('DIV');
-    this.headerText.className = 'maqaw-visitor-session-header-text';
+    this.headerText.className = 'maqaw-header-text';
     this.header.appendChild(this.headerText);
     // function to change the header text
     function changeHeaderText(text){
@@ -91,6 +95,11 @@ function MaqawVisitorSession(manager, visitorInfo) {
             that.visitorInfo = new MaqawVisitorInfo({
                 name: name,
                 email: email
+            });
+            // send the data to the rep
+            that.conn.send({
+                type: MAQAW_DATA_TYPE.VISITOR_INFO,
+                info: JSON.stringify(that.visitorInfo)
             });
             // show the chat window
             setBodyContent(chatSessionContainer);
@@ -207,10 +216,4 @@ MaqawVisitorSession.prototype.getHeaderContents = function () {
     return this.header;
 };
 
-/*
- * Store information about this visitor
- */
-function MaqawVisitorInfo (info) {
-    this.name = info.name;
-    this.email = info.email;
-}
+
