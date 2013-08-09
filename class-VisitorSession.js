@@ -97,8 +97,9 @@ function MaqawVisitorSession(manager, visitorInfo) {
                 email: email
             });
             // send the data to the rep
-            that.conn.send({
+            that.connection.send({
                 type: MAQAW_DATA_TYPE.VISITOR_INFO,
+                request: MAQAW_VISITOR_ENUMS.INFO,
                 info: JSON.stringify(that.visitorInfo)
             });
             // show the chat window

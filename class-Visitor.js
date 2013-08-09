@@ -20,8 +20,8 @@ function MaqawVisitor(id, visitorList, info) {
     /* Set up visitor display row in table */
     // create row to display this visitor in the table
     // -1 inserts the row at the end of the table
-    this.row = this.visitorList.table.insertRow(-1);
-    this.row.className = 'maqaw-visitor-list-entry';
+    var row = this.visitorList.table.insertRow(-1);
+    row.className = 'maqaw-visitor-list-entry';
     // the cell containing the visitor info
     var cell = document.createElement("td");
     row.appendChild(cell);
@@ -32,14 +32,15 @@ function MaqawVisitor(id, visitorList, info) {
         var text = "visitor";
         // use personal information if we have it
         if (that.info) {
-            text = that.info.name + " " + that.info.email;
+            text = that.info.name + " (" + that.info.email+")";
         }
         var textNode = document.createTextNode(text);
         cell.appendChild(textNode);
     }
     // This function is passed any data that is received from the visitor peer
     // about their personal information
-    function handleVisitorData(data) {
+    function handleVisitorInfo(data) {
+        console.log('data');
         // create a new VisitorInfo object with this data
         that.info = JSON.parse(data.info);
         // update the chat session name
@@ -50,19 +51,19 @@ function MaqawVisitor(id, visitorList, info) {
         //shown in the list now that we have their info
         connectionStatusCallback(that.isConnected);
         // send an acknowledgement back
-        that.conn.send({
+        that.connection.send({
             type: MAQAW_DATA_TYPE.VISITOR_INFO,
             request: MAQAW_VISITOR_ENUMS.ACK
         });
     }
 
     // append row to the visitor table
-    this.visitorList.tBody.appendChild(this.row);
+    this.visitorList.tBody.appendChild(row);
 
     this.isSelected = false;
 
     // append click listener to row
-    this.row.addEventListener('click', clickCallBack, false);
+    row.addEventListener('click', clickCallBack, false);
     function clickCallBack() {
         that.visitorList.setSelectedVisitor(that);
     }
@@ -116,6 +117,7 @@ function MaqawVisitor(id, visitorList, info) {
         }
         // information about the visitor
         if (data.type === MAQAW_DATA_TYPE.VISITOR_INFO) {
+            console.log("handling visitor info");
             handleVisitorInfo(data);
         }
     }
@@ -130,9 +132,9 @@ function MaqawVisitor(id, visitorList, info) {
         (function flashRow() {
             if (!that.isSelected) {
                 if (on) {
-                    that.row.className = 'maqaw-alert-visitor';
+                    row.className = 'maqaw-alert-visitor';
                 } else {
-                    that.row.className = 'maqaw-visitor-list-entry';
+                    row.className = 'maqaw-visitor-list-entry';
                 }
                 on = !on;
                 setTimeout(flashRow, flashSpeed);
@@ -171,7 +173,7 @@ function MaqawVisitor(id, visitorList, info) {
                 timeoutId = null;
             }
             // only show this visitor if we have gotten their info
-            if (that.visitorInfo) {
+            if (that.info) {
                 show();
             }
         }
@@ -194,7 +196,7 @@ function MaqawVisitor(id, visitorList, info) {
     this.select = function () {
         that.isSelected = true;
         // change class to selected
-        that.row.className = 'maqaw-selected-visitor';
+        row.className = 'maqaw-selected-visitor';
         // show visitor chat window
         that.visitorList.chatManager.showVisitorChat(that)
     };
@@ -206,7 +208,7 @@ function MaqawVisitor(id, visitorList, info) {
     this.deselect = function () {
         that.isSelected = false;
         // change class to default
-        that.row.className = 'maqaw-visitor-list-entry';
+        row.className = 'maqaw-visitor-list-entry';
         // clear chat window
         that.visitorList.chatManager.clear(that);
     };
@@ -231,8 +233,8 @@ function MaqawVisitor(id, visitorList, info) {
     function hide() {
         that.isSelected = false;
         // change class to default
-        that.row.className = 'maqaw-visitor-list-entry';
-        that.row.style.display = 'none';
+        row.className = 'maqaw-visitor-list-entry';
+        row.style.display = 'none';
         // tell the VisitorList that we are going to hide this visitor so that it can deselect
         // it if necessary
         that.visitorList.hideVisitor(that);
@@ -244,7 +246,7 @@ function MaqawVisitor(id, visitorList, info) {
      * Show this visitor in the visitor table
      */
     function show() {
-        that.row.style.display = 'block';
+        row.style.display = 'block';
     }
 }
 

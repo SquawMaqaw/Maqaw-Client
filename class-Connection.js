@@ -138,7 +138,7 @@ function MaqawConnection(peer, dstId, conn) {
                 numAttempts++;
 
                 // close old connection
-                if(that.conn){
+                if (that.conn) {
                     that.conn.close();
                 }
 
@@ -158,10 +158,10 @@ function MaqawConnection(peer, dstId, conn) {
     /*
      * Handle a new peerjs connection request from our peer
      */
-    this.newConnectionRequest = function(conn){
+    this.newConnectionRequest = function (conn) {
         console.log("erasing old connection");
         // close the old connection
-        if(that.conn){
+        if (that.conn) {
             that.conn.close();
         }
 
@@ -194,11 +194,13 @@ function MaqawConnection(peer, dstId, conn) {
 
     };
 
-    this.send = function(data) {
-      //  unopinionated, unreliable
-      //  send function. packets 
-      //  may arrive, packets may not
-      that.conn.send(data);  
+    this.send = function (data) {
+        //  unopinionated, unreliable
+        //  send function. packets
+        //  may arrive, packets may not
+        console.log("connection sending data");
+        console.log(data);
+        that.conn.send(data);
     };
 
     this.on = function (_event, directive) {
@@ -219,6 +221,8 @@ function MaqawConnection(peer, dstId, conn) {
 
         that.conn.on('data', function (data) {
             // if we are receiving data the connection is definitely open
+            console.log("connection receiving data");
+            console.log(data);
             setConnectionStatus(true);
             handleData(data);
         });

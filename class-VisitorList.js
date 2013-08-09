@@ -52,10 +52,13 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
     // create a new visitor using the specified id, and wrap the visitor in a MaqawVisitorWrapper object
     // to help manage selecting and displaying the visitor
     function createNewVisitor(id) {
-        var visitorName = 'Visitor ' + that.visitorCounter;
+        var info = {
+            name: 'Visitor ' + that.visitorCounter,
+            email: 'no email'
+        };
         that.visitorCounter++;
         // use rowIndex of -1 so the row is added at the end of the table
-        return new MaqawVisitor(id, visitorName, that);
+        return new MaqawVisitor(id, that, info);
     }
 
     this.setSelectedVisitor = function (visitor) {
@@ -96,7 +99,7 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
             var visitor = that.visitors[visitorId];
             // save the data that is important to state
             var visitorData = {
-                name: visitor.name,
+                info: visitor.info,
                 id: visitor.id,
                 isSelected: visitor.isSelected,
                 chatText: visitor.chatSession.getText()
@@ -118,11 +121,11 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
 
         // go through each entry in the list data and restore it
         for(var index in listData){
-            var dataObject = listData[index];
+            var visitorData = listData[index];
             // create and update a visitor using this data
-            var visitor = new MaqawVisitor(dataObject['id'], dataObject['name'], that);
+            var visitor = new MaqawVisitor(visitorData.id, that, visitorData.info);
 
-            if(dataObject['isSelected']) {
+            if(visitorData.isSelected) {
                 that.selectedVisitor = visitor;
                 visitor.select();
             }
@@ -131,7 +134,7 @@ function MaqawVisitorList(listDisplayContainer, repSession) {
             that.visitorCounter++;
 
             // load the chat history
-            visitor.chatSession.setText(dataObject['chatText']);
+            visitor.chatSession.setText(visitorData['chatText']);
 
             // save this visitor in the list
             that.visitors[visitor.id] = visitor;
