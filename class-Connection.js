@@ -29,7 +29,6 @@ function MaqawConnection(peer, dstId, conn) {
     this.errorDirectives = [];
     this.changeDirectives = [];
 
-    console.log("inside of MaqawConnection");
     //          
 
     // whether or not this connection is open. True if open and false otherwise
@@ -49,11 +48,8 @@ function MaqawConnection(peer, dstId, conn) {
         this.conn = this.peer.connect(this.dstId, {reliable: true});
     }
 
-    console.log(this.conn);
 
     // check the current status of the connection. It may already be open if one was passed in
-    console.log("this.conn.open");
-    console.log(this.conn.open);
     setConnectionStatus(this.conn.open);
 
     setConnectionCallbacks();
@@ -104,6 +100,11 @@ function MaqawConnection(peer, dstId, conn) {
      * connectionStatus - true if the peer is connected and false otherwise
      */
     this.setServerConnectionStatus = function (connectionStatus) {
+        // visitor disconnects from server, so close the connection with them
+        if(that.isConnected && !connectionStatus){
+            that.conn.close();
+        }
+        
         // if our peer is not connected to the server, disconnect our DataChannel with them
         if (!connectionStatus) {
             setConnectionStatus(false);

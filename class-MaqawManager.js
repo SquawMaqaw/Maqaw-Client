@@ -45,8 +45,6 @@ function MaqawManager(options, display) {
     });
 
     this.peer.on('visitors', function (visitors) {
-        console.log('visitors: ' + visitors.msg);
-        console.log(visitors.msg)
         that.visitors = visitors.msg;
         that.handleVisitorList(that.visitors);
     });

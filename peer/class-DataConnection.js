@@ -41,17 +41,15 @@ DataConnection.prototype.on = function(event, cb) {
         }
         break;
       case "data":
-        console.log("got data event with open of");
-        console.log(that.open);
         if (that.dst == data.src && that.src == data.dst && that.open == true) {
-          console.log("success in firing data cb");
-          console.log("the open status is:");
-          console.log(that.open);
+          console.log(data.src + " sent " + data.dst + " a message");
+          console.log("data connection looks like");
+          console.log(that);
           cb(data);
         }
         break;
       case "close":
-        if (that.src == data.src && that.dst == data.dst) {
+        if (that.src == data.src) {
           console.log("success in firing close cb for");
           that.open = false;
           console.log(that);
