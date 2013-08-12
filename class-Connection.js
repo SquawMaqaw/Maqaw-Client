@@ -28,7 +28,12 @@ function MaqawConnection(peer, dstId, conn) {
     this.dataDirectives = [];
     this.errorDirectives = [];
     this.changeDirectives = [];
-    //          
+
+    // queue of messages to send reliably
+    this.reliableQueue = [];
+    // keep track of which messages we have acked and sent
+    this.ackNo = 0;
+    this.seqNo = 0;
 
     // whether or not this connection is open. True if open and false otherwise
     this.isConnected = false;
@@ -57,6 +62,11 @@ function MaqawConnection(peer, dstId, conn) {
      * and pass the rest of it on to the data callback
      */
     function handleData(data) {
+        // check if this is a reliable message
+        if (data.isReliable) {
+
+        }
+
         var i, dataLen = that.dataDirectives.length;
         for (i = 0; i < dataLen; i++) {
             that.dataDirectives[i](data);
@@ -164,17 +174,46 @@ function MaqawConnection(peer, dstId, conn) {
      * receives this data
      */
     this.send = function (data) {
-        that.conn.send(data);
+        that.conn.send({
+            isReliable: false,
+            data: data
+        });
     };
 
     /*
      * Reliably sends data to the peer. A queue of items to send is made, and each item is resent
-     * until an ack is received
+     * until an ack is received. When this is called the next item in the queue is sent. If a data
+     * argument is included it is added to the queue.
+     * data - Optional message to add to the sending queue
      */
+    var reliableMessage = null;
     this.sendReliable = function (data) {
-        //TODO: implement reliable send
-        that.conn.send(data);
+        // add data to queue
+        if(data){
+            that.reliableQueue.push(data);
+        }
+
+        // send the first message, if a message isn't already being sent
+        // and if the queue isn't empty
+        if (!reliableMessage && that.reliableQueue.length > 0) {
+            reliableMessage = {
+                isReliable: true,
+                seqNo: that.seqNo,
+                data: that.reliableQueue.shift()
+            };
+
+            // increment sequence number
+            that.seqNo++;
+
+            (function send() {
+              // if the connection is closed, try to open it
+              if(!that.conn.open){
+
+              }
+            })();
+        }
     };
+
 
     this.on = function (_event, directive) {
         // bind callback
