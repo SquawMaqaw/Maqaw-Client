@@ -31,6 +31,10 @@ function MaqawConnection(peer, dstId, conn) {
 
     // queue of messages to send reliably
     this.reliableQueue = [];
+    // message that we are currently trying to send
+    this.reliableMessage = null;
+    // timeout to resend message when we don't hear back
+    this.reliableTimeout = null;
     // keep track of which messages we have acked and sent
     this.ackNo = 0;
     this.seqNo = 0;
@@ -62,15 +66,62 @@ function MaqawConnection(peer, dstId, conn) {
      * and pass the rest of it on to the data callback
      */
     function handleData(data) {
-        // check if this is a reliable message
+        // if this is a reliable message, handle the acknowledgement
         if (data.isReliable) {
+            // check if this message is an ack and handle it if it is
+            if (data.ackNo) {
+                // if this ack includes the seqNo we have been trying to send, we can stop
+                // sending it and start sending the next one
+                if(that.reliableMessage && that.reliableMessage.seqNo < data.ackNo){
+                    // cancel timeout to resend this message
+                    if(that.reliableTimeout){
+                        clearTimeout(that.reliableTimeout);
+                        that.reliableTimeout = null;
+                    }
+                    that.reliableMessage = null;
+                    // send the next message in the queue
+                    that.sendReliable();
+                }
 
+                return;
+            }
+            // if the seqno is greater than what we are expecting, send an ack
+            // to show what we are expecting
+            else if (data.seqNo > that.ackNo) {
+                sendAck();
+                return;
+            }
+            // if the seqNo is lower than our ackNo we have already received this message so we don't
+            // have to process the data. Just send an ack
+            else if (data.seqNo < that.ackNo) {
+                sendAck();
+                return;
+            }
+            // Our ackNo is the next sequence number that we are expecting, if this seqNo matches
+            // then we increment ackNo, send an ack, and process the data
+            else if (data.seqNo === that.ackNo) {
+                that.ackNo++;
+                sendAck();
+                // remove the reliable wrapper and process the data normally
+                data = data.data;
+            }
         }
-
+        // pass the data to any onData callbacks that are binded
         var i, dataLen = that.dataDirectives.length;
         for (i = 0; i < dataLen; i++) {
             that.dataDirectives[i](data);
         }
+    }
+
+    /*
+     * Send our peer an acknowledgement of the reliable messages that we have received.
+     * Our ackNo is the next seqNo that we are expecting from our peer
+     */
+    function sendAck() {
+        that.conn.send({
+            isReliable: true,
+            ackNo: that.ackNo
+        });
     }
 
     /*
@@ -186,17 +237,16 @@ function MaqawConnection(peer, dstId, conn) {
      * argument is included it is added to the queue.
      * data - Optional message to add to the sending queue
      */
-    var reliableMessage = null;
     this.sendReliable = function (data) {
         // add data to queue
-        if(data){
+        if (data) {
             that.reliableQueue.push(data);
         }
 
         // send the first message, if a message isn't already being sent
         // and if the queue isn't empty
-        if (!reliableMessage && that.reliableQueue.length > 0) {
-            reliableMessage = {
+        if (!that.reliableMessage && that.reliableQueue.length > 0) {
+            that.reliableMessage = {
                 isReliable: true,
                 seqNo: that.seqNo,
                 data: that.reliableQueue.shift()
@@ -206,10 +256,16 @@ function MaqawConnection(peer, dstId, conn) {
             that.seqNo++;
 
             (function send() {
-              // if the connection is closed, try to open it
-              if(!that.conn.open){
 
-              }
+                // if the connection is closed, try to open it
+                if (!that.conn.open) {
+                    attemptConnection();
+                } else {
+                    that.conn.send(that.reliableMessage);
+                }
+
+                // try again soon
+                that.reliableTimeout = setTimeout(send, 1000);
             })();
         }
     };
