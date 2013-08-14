@@ -35,6 +35,9 @@ function MaqawConnection(peer, dstId, conn) {
     this.reliableMessage = null;
     // timeout to resend message when we don't hear back
     this.reliableTimeout = null;
+    // the hash of the last reliable message we processed. Keep track of this so that we don't
+    // process the data more than once for a duplicate message
+    this.reliableLastMessageReceived = null;
     // keep track of which messages we have acked and sent
     this.ackNo = 0;
     this.seqNo = 0;
@@ -91,7 +94,12 @@ function MaqawConnection(peer, dstId, conn) {
             else {
                 sendAck(hash);
                 // remove the reliable wrapper and process the data normally
-                data = data.data;
+                // if this message isn't a duplicate
+                if(that.reliableLastMessageReceived !== hash){
+                    data = data.data;
+                    that.reliableLastMessageReceived = hash;
+                }
+
             }
         }
         // pass the data to any onData callbacks that are binded
@@ -214,7 +222,6 @@ function MaqawConnection(peer, dstId, conn) {
      */
     this.send = function (data) {
         that.conn.send({
-            isReliable: false,
             data: data
         });
     };
@@ -234,10 +241,11 @@ function MaqawConnection(peer, dstId, conn) {
         // send the first message, if a message isn't already being sent
         // and if the queue isn't empty
         if (!that.reliableMessage && that.reliableQueue.length > 0) {
+            var msg = that.reliableQueue.shift();
             that.reliableMessage = {
                 isReliable: true,
-                hash: maqawHash(Date.now()),
-                data: that.reliableQueue.shift()
+                hash: maqawHash(Date.now() + JSON.stringify(msg)),
+                data: msg
             };
 
             (function send() {
