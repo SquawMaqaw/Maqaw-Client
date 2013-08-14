@@ -111,6 +111,17 @@ function maqawGetNodeFromHierarchy(doc, hierarchy){
     return node;
 }
 
+function maqawHash(str){
+    var hash = 0;
+    if (str.length == 0) return hash;
+    for (i = 0; i < str.length; i++) {
+        char = str.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}
+
 
 /*
  * Type codes for sending data with a MaqawConnection

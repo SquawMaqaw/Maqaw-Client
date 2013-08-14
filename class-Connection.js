@@ -69,10 +69,12 @@ function MaqawConnection(peer, dstId, conn) {
         // if this is a reliable message, handle the acknowledgement
         if (data.isReliable) {
             // check if this message is an ack and handle it if it is
-            if (data.ackNo) {
-                // if this ack includes the seqNo we have been trying to send, we can stop
+            var hash = data.hash;
+            // if there is no data, then the message is an ack
+            if (!data.data) {
+                // if this hash matches the message we sent, we can stop
                 // sending it and start sending the next one
-                if(that.reliableMessage && that.reliableMessage.seqNo < data.ackNo){
+                if(that.reliableMessage && that.reliableMessage.hash === hash){
                     // cancel timeout to resend this message
                     if(that.reliableTimeout){
                         clearTimeout(that.reliableTimeout);
@@ -82,26 +84,12 @@ function MaqawConnection(peer, dstId, conn) {
                     // send the next message in the queue
                     that.sendReliable();
                 }
+                // no data to process so we just return
+                return;
+            }
 
-                return;
-            }
-            // if the seqno is greater than what we are expecting, send an ack
-            // to show what we are expecting
-            else if (data.seqNo > that.ackNo) {
-                sendAck();
-                return;
-            }
-            // if the seqNo is lower than our ackNo we have already received this message so we don't
-            // have to process the data. Just send an ack
-            else if (data.seqNo < that.ackNo) {
-                sendAck();
-                return;
-            }
-            // Our ackNo is the next sequence number that we are expecting, if this seqNo matches
-            // then we increment ackNo, send an ack, and process the data
-            else if (data.seqNo === that.ackNo) {
-                that.ackNo++;
-                sendAck();
+            else {
+                sendAck(hash);
                 // remove the reliable wrapper and process the data normally
                 data = data.data;
             }
@@ -117,10 +105,10 @@ function MaqawConnection(peer, dstId, conn) {
      * Send our peer an acknowledgement of the reliable messages that we have received.
      * Our ackNo is the next seqNo that we are expecting from our peer
      */
-    function sendAck() {
+    function sendAck(hash) {
         that.conn.send({
             isReliable: true,
-            ackNo: that.ackNo
+            hash: hash
         });
     }
 
@@ -248,24 +236,20 @@ function MaqawConnection(peer, dstId, conn) {
         if (!that.reliableMessage && that.reliableQueue.length > 0) {
             that.reliableMessage = {
                 isReliable: true,
-                seqNo: that.seqNo,
+                hash: maqawHash(Date.now()),
                 data: that.reliableQueue.shift()
             };
 
-            // increment sequence number
-            that.seqNo++;
-
             (function send() {
-
                 // if the connection is closed, try to open it
                 if (!that.conn.open) {
                     attemptConnection();
                 } else {
                     that.conn.send(that.reliableMessage);
                 }
-
+                console.log("sending reliable");
                 // try again soon
-                that.reliableTimeout = setTimeout(send, 1000);
+                that.reliableTimeout = setTimeout(send, 10);
             })();
         }
     };
