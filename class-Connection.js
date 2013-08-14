@@ -28,7 +28,19 @@ function MaqawConnection(peer, dstId, conn) {
     this.dataDirectives = [];
     this.errorDirectives = [];
     this.changeDirectives = [];
-    //          
+
+    // queue of messages to send reliably
+    this.reliableQueue = [];
+    // message that we are currently trying to send
+    this.reliableMessage = null;
+    // timeout to resend message when we don't hear back
+    this.reliableTimeout = null;
+    // the hash of the last reliable message we processed. Keep track of this so that we don't
+    // process the data more than once for a duplicate message
+    this.reliableLastMessageReceived = null;
+    // keep track of which messages we have acked and sent
+    this.ackNo = 0;
+    this.seqNo = 0;
 
     // whether or not this connection is open. True if open and false otherwise
     this.isConnected = false;
@@ -57,7 +69,40 @@ function MaqawConnection(peer, dstId, conn) {
      * and pass the rest of it on to the data callback
      */
     function handleData(data) {
-        // for now we are just sending text
+        // if this is a reliable message, handle the acknowledgement
+        if (data.isReliable) {
+            // check if this message is an ack and handle it if it is
+            var hash = data.hash;
+            // if there is no data, then the message is an ack
+            if (!data.data) {
+                // if this hash matches the message we sent, we can stop
+                // sending it and start sending the next one
+                if(that.reliableMessage && that.reliableMessage.hash === hash){
+                    // cancel timeout to resend this message
+                    if(that.reliableTimeout){
+                        clearTimeout(that.reliableTimeout);
+                        that.reliableTimeout = null;
+                    }
+                    that.reliableMessage = null;
+                    // send the next message in the queue
+                    that.sendReliable();
+                }
+                // no data to process so we just return
+                return;
+            }
+
+            else {
+                sendAck(hash);
+                // remove the reliable wrapper and process the data normally
+                // if this message isn't a duplicate
+                if(that.reliableLastMessageReceived !== hash){
+                    data = data.data;
+                    that.reliableLastMessageReceived = hash;
+                }
+
+            }
+        }
+        // pass the data to any onData callbacks that are binded
         var i, dataLen = that.dataDirectives.length;
         for (i = 0; i < dataLen; i++) {
             that.dataDirectives[i](data);
@@ -65,29 +110,30 @@ function MaqawConnection(peer, dstId, conn) {
     }
 
     /*
+     * Send our peer an acknowledgement of the reliable messages that we have received.
+     * Our ackNo is the next seqNo that we are expecting from our peer
+     */
+    function sendAck(hash) {
+        that.conn.send({
+            isReliable: true,
+            hash: hash
+        });
+    }
+
+    /*
      * Update the status of the connection, and pass the status on to
      * the connectionListener
      */
     function setConnectionStatus(connectionStatus) {
-        var i,
-            changeLen = that.changeDirectives.length,
-            openLen = that.openDirectives.length,
-            closeLen = that.closeDirectives.length;
+        var i, len = that.changeDirectives.length;
 
-        for (i = 0; i < changeLen; i++) {
+        // alert all of the binded callbacks
+        for (i = 0; i < len; i++) {
             that.changeDirectives[i](connectionStatus);
         }
 
-        if (connectionStatus === false) {
-            for (i = 0; i < closeLen; i++) {
-                that.closeDirectives[i](connectionStatus);
-            }
-        } else if (connectionStatus === true) {
-            for (i = 0; i < openLen; i++) {
-                that.openDirectives[i](connectionStatus);
-            }
-        }
-        that.isConnected = Boolean(connectionStatus);
+        // save the status
+        that.isConnected = connectionStatus;
     }
 
     /*
@@ -138,7 +184,7 @@ function MaqawConnection(peer, dstId, conn) {
                 numAttempts++;
 
                 // close old connection
-                if(that.conn){
+                if (that.conn) {
                     that.conn.close();
                 }
 
@@ -158,10 +204,10 @@ function MaqawConnection(peer, dstId, conn) {
     /*
      * Handle a new peerjs connection request from our peer
      */
-    this.newConnectionRequest = function(conn){
+    this.newConnectionRequest = function (conn) {
         console.log("erasing old connection");
         // close the old connection
-        if(that.conn){
+        if (that.conn) {
             that.conn.close();
         }
 
@@ -171,35 +217,49 @@ function MaqawConnection(peer, dstId, conn) {
     };
 
     /*
-     * Send text through this connection
+     * Unreliable send function. No guarantee that the peer
+     * receives this data
      */
-    this.sendText = function (text) {
-        that.conn.send({
-            'type': MAQAW_DATA_TYPE.TEXT,
-            'text': text
-        });
+    this.send = function (data) {
+        that.conn.send(data);
     };
 
     /*
-     * Initializes a screen sharing session
+     * Reliably sends data to the peer. A queue of items to send is made, and each item is resent
+     * until an ack is received. When this is called the next item in the queue is sent. If a data
+     * argument is included it is added to the queue.
+     * data - Optional message to add to the sending queue
      */
-    this.startScreenShare = function (options) {
+    this.sendReliable = function (data) {
+        // add data to queue
+        if (data) {
+            that.reliableQueue.push(data);
+        }
 
+        // send the first message, if a message isn't already being sent
+        // and if the queue isn't empty
+        if (!that.reliableMessage && that.reliableQueue.length > 0) {
+            var msg = that.reliableQueue.shift();
+            that.reliableMessage = {
+                isReliable: true,
+                hash: maqawHash(Date.now() + JSON.stringify(msg)),
+                data: msg
+            };
+
+            (function send() {
+                // if the connection is closed, try to open it
+                if (!that.conn.open) {
+                    attemptConnection();
+                } else {
+                    that.conn.send(that.reliableMessage);
+                }
+                console.log("sending reliable");
+                // try again soon
+                that.reliableTimeout = setTimeout(send, 1000);
+            })();
+        }
     };
 
-    /*
-     * Sends screen data
-     */
-    this.sendScreen = function (screenData) {
-
-    };
-
-    this.send = function(data) {
-      //  unopinionated, unreliable
-      //  send function. packets 
-      //  may arrive, packets may not
-      that.conn.send(data);  
-    };
 
     this.on = function (_event, directive) {
         // bind callback
@@ -215,6 +275,7 @@ function MaqawConnection(peer, dstId, conn) {
     function setConnectionCallbacks() {
         that.conn.on('open', function () {
             setConnectionStatus(true);
+            handleOpen();
         });
 
         that.conn.on('data', function (data) {
@@ -225,6 +286,7 @@ function MaqawConnection(peer, dstId, conn) {
 
         that.conn.on('close', function (err) {
             setConnectionStatus(false);
+            handleClose();
         });
 
         that.conn.on('error', function (err) {
@@ -233,6 +295,23 @@ function MaqawConnection(peer, dstId, conn) {
             for (i = 0; i < errorLen; i++) {
                 that.errorDirectives[i](err);
             }
+            // try to reopen connection
+            setConnectionStatus(false);
+            attemptConnection();
         });
+    }
+
+    function handleOpen() {
+        var i, len = that.openDirectives.length;
+        for (i = 0; i < len; i++) {
+            that.openDirectives[i]();
+        }
+    }
+
+    function handleClose() {
+        var i, len = that.closeDirectives.length;
+        for (i = 0; i < len; i++) {
+            that.closeDirectives[i]();
+        }
     }
 }

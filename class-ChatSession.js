@@ -30,6 +30,10 @@ function MaqawChatSession(chatSessionContainer, sendTextFunction, srcName, dstNa
     // add listener to text input. Capture text when enter is pressed
     this.textInput.addEventListener("keyup", keyPress, false);
 
+    this.setPeerName = function(name){
+        that.dstName = name;
+    };
+
     function keyPress(e) {
         // check if enter was pressed
         if (e.keyCode === 13) {
@@ -47,10 +51,12 @@ function MaqawChatSession(chatSessionContainer, sendTextFunction, srcName, dstNa
         // test if string is not just whitespace
         if (/\S/.test(text)) {
             //send data to our chat buddy
-            sendTextFunction(text);
+            that.sendTextFunction(text);
             // append new text to existing chat text
             that.textDisplay.innerHTML = that.textDisplay.innerHTML + "<p class='maqaw-chat-paragraph'>" +
                 "<span class='maqaw-chat-src-name'>" + that.srcName + ": </span>" + text + "</p>";
+
+            that.scrollToBottom();
         }
     }
 
