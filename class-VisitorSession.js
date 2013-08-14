@@ -44,8 +44,10 @@ function MaqawVisitorSession(manager, visitorInfo) {
     this.body.appendChild(this.bodyContent);
     // function to set what content is shown
     function setBodyContent(div) {
-        that.bodyContent.innerHTML = '';
-        that.bodyContent.appendChild(div);
+        if(that.bodyContent.firstChild !== div){
+            that.bodyContent.innerHTML = '';
+            that.bodyContent.appendChild(div);
+        }
     }
 
     /* Create chat container and session */
