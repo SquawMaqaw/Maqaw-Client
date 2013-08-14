@@ -221,9 +221,7 @@ function MaqawConnection(peer, dstId, conn) {
      * receives this data
      */
     this.send = function (data) {
-        that.conn.send({
-            data: data
-        });
+        that.conn.send(data);
     };
 
     /*
@@ -257,7 +255,7 @@ function MaqawConnection(peer, dstId, conn) {
                 }
                 console.log("sending reliable");
                 // try again soon
-                that.reliableTimeout = setTimeout(send, 10);
+                that.reliableTimeout = setTimeout(send, 1000);
             })();
         }
     };

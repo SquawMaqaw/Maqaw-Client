@@ -201,6 +201,7 @@ function MaqawVisitorSession(manager, visitorInfo) {
             // if they've enter their info, show them the chat window
             if (that.visitorInfo) {
                 setBodyContent(chatSessionContainer);
+                that.chatSession.scrollToBottom();
             }
             // otherwise ask for their information
             else {
