@@ -15,7 +15,7 @@ function MaqawRepSession(manager, rep) {
     // add text to header
     var header = document.createElement("DIV");
     header.innerHTML = 'Welcome!';
-    header.className = 'maqaw-chat-header-text';
+    header.className = 'maqaw-header-text';
     this.header.appendChild(header);
     
     // create window for logged in users

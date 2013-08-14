@@ -17,7 +17,7 @@ function MaqawLoginPage(manager) {
      // add text to header
     this.loginHeader = document.createElement('DIV');
     this.loginHeader.innerHTML = "Login";
-    this.loginHeader.className = 'maqaw-chat-header-text';
+    this.loginHeader.className = 'maqaw-header-text';
     this.header.appendChild(this.loginHeader);
 
 
