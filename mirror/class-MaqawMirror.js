@@ -44,10 +44,13 @@ Mirror.prototype.data = function(_data) {
   // for all other requests, function passes
   // data to mirrorScreen
   //
+    console.log(Date.now() + " Receive tree data");
+    console.log(_data);
   switch(_data.request) {
     case MAQAW_MIRROR_ENUMS.SHARE_SCREEN:
       // Request from peer to view this screen  
       this.conn.send({ type: MAQAW_DATA_TYPE.SCREEN, request: MAQAW_MIRROR_ENUMS.SHARE_SCREEN_OK });
+      console.log(Date.now() + " Received share request. Sending OK");
       this.shareScreen();
       break;
     case MAQAW_MIRROR_ENUMS.SHARE_SCREEN_OK:
@@ -108,7 +111,7 @@ Mirror.prototype.openMirror = function() {
 
     this.isViewingScreen = true;
 
-
+  console.log(Date.now() + " Creating Tree Mirror");
   this._mirror = new TreeMirror(this.mirrorDocument, {
     createElement: function(tagName) {
       if (tagName == 'SCRIPT') {
@@ -197,6 +200,7 @@ Mirror.prototype.requestScreen = function() {
   //
   //  Sends share screen request to peer
   //
+  console.log(Date.now() + " Requesting screen share");
   if (this.conn) {
     this.conn.send({ 
       type: MAQAW_DATA_TYPE.SCREEN,
@@ -224,9 +228,11 @@ Mirror.prototype.shareScreen = function() {
       base: location.href.match(/^(.*\/)[^\/]*$/)[1] 
     });
 
+    console.log(Date.now() + " Creating Tree Mirror");
     var mirrorClient = new TreeMirrorClient(document, {
 
       initialize: function(rootId, children) {
+          console.log(Date.now() + " Initializing Tree Mirror");
         _this.conn.send({
           type: MAQAW_DATA_TYPE.SCREEN,
           request: MAQAW_MIRROR_ENUMS.SCREEN_DATA,
@@ -236,6 +242,7 @@ Mirror.prototype.shareScreen = function() {
       },
 
       applyChanged: function(removed, addedOrMoved, attributes, text) {
+          console.log(Date.now() + " Changing Tree Mirror");
         _this.conn.send({
           type: MAQAW_DATA_TYPE.SCREEN,
           request: MAQAW_MIRROR_ENUMS.SCREEN_DATA,
@@ -244,6 +251,9 @@ Mirror.prototype.shareScreen = function() {
         });
       }
     });
+
+    // remove old mouse mirror if applicable so there isn't a duplicate cursor
+    // from two screen sharing sessions
 
     this.mouseMirror = new MouseMirror(document, {
       mousemove: function(event) {
