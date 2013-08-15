@@ -228,8 +228,6 @@ function MaqawConnection(peer, dstId, conn) {
      * receives this data
      */
     this.send = function (data) {
-        console.log(Date.now() + " Connection: Sending data");
-        console.log(data);
         that.conn.send(JSON.stringify(data));
     };
 
@@ -262,7 +260,6 @@ function MaqawConnection(peer, dstId, conn) {
                 } else {
                     that.conn.send(that.reliableMessage);
                 }
-                console.log("sending reliable");
                 // try again soon
                 that.reliableTimeout = setTimeout(send, 1000);
             })();
@@ -288,8 +285,6 @@ function MaqawConnection(peer, dstId, conn) {
         });
 
         that.conn.on('data', function (data) {
-            console.log(Date.now() + " Connection: received data");
-            console.log(data);
             // if we are receiving data the connection is definitely open
             setConnectionStatus(true);
             handleData(data);
