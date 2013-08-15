@@ -108,7 +108,6 @@ Mirror.prototype.openMirror = function() {
 
     this.isViewingScreen = true;
 
-
   this._mirror = new TreeMirror(this.mirrorDocument, {
     createElement: function(tagName) {
       if (tagName == 'SCRIPT') {
@@ -244,6 +243,9 @@ Mirror.prototype.shareScreen = function() {
         });
       }
     });
+
+    // remove old mouse mirror if applicable so there isn't a duplicate cursor
+    // from two screen sharing sessions
 
     this.mouseMirror = new MouseMirror(document, {
       mousemove: function(event) {
@@ -551,7 +553,6 @@ function MaqawInputMirror(doc, options){
         }
 
         else if(target.tagName === 'TEXTAREA'){
-            console.log("text area changed");
             (_this.inputDefault.bind(target))();
         }
     }
