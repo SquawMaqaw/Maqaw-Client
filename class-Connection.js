@@ -102,6 +102,13 @@ function MaqawConnection(peer, dstId, conn) {
 
             }
         }
+
+        else {
+            // non reliable data is stringified before being sent
+            // this was done to fix the slowness of packing mirror data
+            data = JSON.parse(data);
+        }
+
         // pass the data to any onData callbacks that are binded
         var i, dataLen = that.dataDirectives.length;
         for (i = 0; i < dataLen; i++) {
@@ -221,7 +228,7 @@ function MaqawConnection(peer, dstId, conn) {
      * receives this data
      */
     this.send = function (data) {
-        that.conn.send(data);
+        that.conn.send(JSON.stringify(data));
     };
 
     /*
@@ -253,7 +260,6 @@ function MaqawConnection(peer, dstId, conn) {
                 } else {
                     that.conn.send(that.reliableMessage);
                 }
-                console.log("sending reliable");
                 // try again soon
                 that.reliableTimeout = setTimeout(send, 1000);
             })();
